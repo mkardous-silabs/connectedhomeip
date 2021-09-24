@@ -19,9 +19,9 @@
  * @brief Defines a table of fabrics that have provisioned the device.
  */
 
-#include <core/CHIPEncoding.h>
-#include <support/CHIPMem.h>
-#include <support/SafeInt.h>
+#include <lib/core/CHIPEncoding.h>
+#include <lib/support/CHIPMem.h>
+#include <lib/support/SafeInt.h>
 #include <transport/FabricTable.h>
 #if CHIP_CRYPTO_HSM
 #include <crypto/hsm/CHIPCryptoPALHsm.h>
@@ -47,7 +47,7 @@ CHIP_ERROR FabricInfo::StoreIntoKVS(PersistentStorageDelegate * kvs)
 {
     CHIP_ERROR err = CHIP_NO_ERROR;
 
-    char key[KeySize()];
+    char key[kKeySize];
     ReturnErrorOnFailure(GenerateKey(mFabric, key, sizeof(key)));
 
     StorableFabricInfo * info = chip::Platform::New<StorableFabricInfo>();
@@ -111,7 +111,7 @@ exit:
 CHIP_ERROR FabricInfo::FetchFromKVS(PersistentStorageDelegate * kvs)
 {
     CHIP_ERROR err = CHIP_NO_ERROR;
-    char key[KeySize()];
+    char key[kKeySize];
     ReturnErrorOnFailure(GenerateKey(mFabric, key, sizeof(key)));
 
     StorableFabricInfo * info = chip::Platform::New<StorableFabricInfo>();
@@ -185,7 +185,7 @@ CHIP_ERROR FabricInfo::DeleteFromKVS(PersistentStorageDelegate * kvs, FabricInde
 {
     CHIP_ERROR err = CHIP_NO_ERROR;
 
-    char key[KeySize()];
+    char key[kKeySize];
     ReturnErrorOnFailure(GenerateKey(id, key, sizeof(key)));
 
     err = kvs->SyncDeleteKeyValue(key);
@@ -196,14 +196,9 @@ CHIP_ERROR FabricInfo::DeleteFromKVS(PersistentStorageDelegate * kvs, FabricInde
     return err;
 }
 
-constexpr size_t FabricInfo::KeySize()
-{
-    return sizeof(kFabricTableKeyPrefix) + 2 * sizeof(FabricIndex);
-}
-
 CHIP_ERROR FabricInfo::GenerateKey(FabricIndex id, char * key, size_t len)
 {
-    VerifyOrReturnError(len >= KeySize(), CHIP_ERROR_INVALID_ARGUMENT);
+    VerifyOrReturnError(len >= kKeySize, CHIP_ERROR_INVALID_ARGUMENT);
     int keySize = snprintf(key, len, "%s%x", kFabricTableKeyPrefix, id);
     VerifyOrReturnError(keySize > 0, CHIP_ERROR_INTERNAL);
     VerifyOrReturnError(len > (size_t) keySize, CHIP_ERROR_INTERNAL);

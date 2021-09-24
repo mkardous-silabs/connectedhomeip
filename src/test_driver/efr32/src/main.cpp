@@ -21,6 +21,9 @@
 #include <PigweedLoggerMutex.h>
 #include <cstring>
 #include <init_efrPlatform.h>
+#include <lib/support/CHIPMem.h>
+#include <lib/support/CHIPPlatformMemory.h>
+#include <lib/support/UnitTestRegistration.h>
 #include <mbedtls/platform.h>
 #include <nl_test_service/nl_test.rpc.pb.h>
 #include <nlunit-test.h>
@@ -31,6 +34,7 @@
 #include <support/CHIPMem.h>
 #include <support/CHIPPlatformMemory.h>
 #include <support/UnitTestRegistration.h>
+
 #include <task.h>
 
 extern "C" int printf(const char * format, ...)

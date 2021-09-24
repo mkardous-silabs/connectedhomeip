@@ -16,8 +16,8 @@
  */
 
 #include <app/server/StorablePeerConnection.h>
-#include <core/CHIPEncoding.h>
-#include <support/SafeInt.h>
+#include <lib/core/CHIPEncoding.h>
+#include <lib/support/SafeInt.h>
 
 namespace chip {
 
@@ -51,11 +51,6 @@ CHIP_ERROR StorablePeerConnection::DeleteFromKVS(PersistentStorageDelegate & kvs
     ReturnErrorOnFailure(GenerateKey(keyId, key, sizeof(key)));
 
     return kvs.SyncDeleteKeyValue(key);
-}
-
-constexpr size_t StorablePeerConnection::KeySize()
-{
-    return sizeof(kStorablePeerConnectionKeyPrefix) + 2 * sizeof(uint16_t);
 }
 
 CHIP_ERROR StorablePeerConnection::GenerateKey(uint16_t id, char * key, size_t len)

@@ -17,7 +17,7 @@
 
 #pragma once
 
-#include <core/CHIPPersistentStorageDelegate.h>
+#include <lib/core/CHIPPersistentStorageDelegate.h>
 #include <protocols/secure_channel/PASESession.h>
 
 namespace chip {
@@ -47,7 +47,10 @@ public:
     FabricIndex GetFabricIndex() { return mSession.mFabric; }
 
 private:
-    static constexpr size_t KeySize();
+    // KeySize is defined in the header so we always see its definition before
+    // its uses, which is necessary for a constexpr function to actually be
+    // treated as constexpr.
+    static constexpr size_t KeySize() { return sizeof(kStorablePeerConnectionKeyPrefix) + 2 * sizeof(uint16_t); }
 
     static CHIP_ERROR GenerateKey(uint16_t id, char * key, size_t len);
 
