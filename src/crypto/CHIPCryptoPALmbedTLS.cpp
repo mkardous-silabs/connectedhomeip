@@ -660,18 +660,52 @@ CHIP_ERROR P256Keypair::Initialize()
 
     mbedtls_ecp_keypair * keypair = to_keypair(&mKeypair);
     mbedtls_ecp_keypair_init(keypair);
+    ChipLogError(Crypto, "ecp Keypair init %d, %d", keypair->grp.G.X.s, keypair->Q.X.s);
 
     result = mbedtls_ecp_gen_key(group, keypair, CryptoRNG, nullptr);
-    VerifyOrExit(result == 0, error = CHIP_ERROR_INTERNAL);
+    if(result != 0)
+    {
+        ChipLogError(Crypto, "Invalid result mbedtls_ecp_gen_key");
+        VerifyOrExit(result == 0, error = CHIP_ERROR_INVALID_ARGUMENT);
+    }
+
+    ChipLogError(Crypto, "GENKEY P.n:%d, P.s:%d, Z.n:%d, Z.s:%d, psz:%d, plen:%d", keypair->grp.P.n, keypair->grp.P.s,
+                keypair->Q.Z.n, keypair->Q.Z.s, pubkey_size, mPublicKey.Length());
 
     result = mbedtls_ecp_point_write_binary(&keypair->grp, &keypair->Q, MBEDTLS_ECP_PF_UNCOMPRESSED, &pubkey_size,
                                             Uint8::to_uchar(mPublicKey), mPublicKey.Length());
-    VerifyOrExit(result == 0, error = CHIP_ERROR_INVALID_ARGUMENT);
-    VerifyOrExit(pubkey_size == mPublicKey.Length(), error = CHIP_ERROR_INVALID_ARGUMENT);
 
-    keypair      = nullptr;
-    mInitialized = true;
+    ChipLogError(Crypto, "Point_write_binary P.n:%d, P.s:%d, Z.n:%d, Z.s:%d, psz:%d, plen:%d", keypair->grp.P.n, keypair->grp.P.s,
+                 keypair->Q.Z.n, keypair->Q.Z.s, pubkey_size, mPublicKey.Length());
 
+    // VerifyOrExit(result == 0, error = CHIP_ERROR_INVALID_ARGUMENT);
+    if(result != 0)
+    {
+        ChipLogError(Crypto, "Invalid result mbedtls_ecp_point_write_binary");
+        error = CHIP_ERROR_INVALID_ARGUMENT;
+    }
+
+    if (pubkey_size != mPublicKey.Length())
+    {
+        ChipLogError(Crypto, "key size do not match grp.P.n %d , grp.P.p[x]:", keypair->grp.P.n);
+        for (uint32_t i = 0; i < keypair->grp.P.n; i++)
+        {
+            ChipLogError(Crypto, "0x%lX", keypair->grp.P.p[i]);
+        }
+
+        ChipLogError(Crypto, "Q.Z.n=%d , Q.Z.p[x]:", keypair->Q.Z.n);
+        for (uint32_t i = 0; i < keypair->Q.Z.n; i++)
+        {
+            ChipLogError(Crypto, "0x%lX", keypair->Q.Z.p[i]);
+        }
+
+            error = CHIP_ERROR_INVALID_ARGUMENT;
+    }
+    else
+    {
+        keypair      = nullptr;
+        mInitialized = true;
+    }
 exit:
     if (keypair != nullptr)
     {

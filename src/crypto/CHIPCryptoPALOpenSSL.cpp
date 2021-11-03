@@ -1169,6 +1169,8 @@ exit:
 
 CHIP_ERROR VerifyCertificateSigningRequest(const uint8_t * csr, size_t csr_length, P256PublicKey & pubkey)
 {
+    ChipLogProgress(Controller, "SSL - VerifyCertificateSigningRequest");
+
     ERR_clear_error();
     CHIP_ERROR error = CHIP_NO_ERROR;
     int result       = 0;
@@ -1176,21 +1178,28 @@ CHIP_ERROR VerifyCertificateSigningRequest(const uint8_t * csr, size_t csr_lengt
     EVP_PKEY * evp_pkey = nullptr;
     EC_KEY * ec_key     = nullptr;
 
+    ChipLogProgress(Controller, "SSL - d2i_X509_REQ");
+
     const unsigned char * csr_buf = Uint8::to_const_uchar(csr);
     X509_REQ * x509_req           = d2i_X509_REQ(nullptr, &csr_buf, (int) csr_length);
     VerifyOrExit(x509_req != nullptr, error = CHIP_ERROR_INVALID_ARGUMENT);
 
+    ChipLogProgress(Controller, "SSL - X509_REQ_get_version");
     VerifyOrExit(X509_REQ_get_version(x509_req) == 0, error = CHIP_ERROR_INVALID_ARGUMENT);
 
+    ChipLogProgress(Controller, "SSL - X509_REQ_get0_pubkey");
     evp_pkey = X509_REQ_get0_pubkey(x509_req);
     VerifyOrExit(evp_pkey != nullptr, error = CHIP_ERROR_INVALID_ARGUMENT);
 
+    ChipLogProgress(Controller, "SSL - X509_REQ_verify");
     result = X509_REQ_verify(x509_req, evp_pkey);
     VerifyOrExit(result == 1, error = CHIP_ERROR_INVALID_ARGUMENT);
 
+    ChipLogProgress(Controller, "SSL - EVP_PKEY_get1_EC_KEY");
     ec_key = EVP_PKEY_get1_EC_KEY(evp_pkey);
     VerifyOrExit(ec_key != nullptr, error = CHIP_ERROR_INVALID_ARGUMENT);
 
+    ChipLogProgress(Controller, "SSL - P256PublicKeyFromECKey");
     error = P256PublicKeyFromECKey(ec_key, pubkey);
     SuccessOrExit(error);
 

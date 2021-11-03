@@ -147,35 +147,60 @@ CHIP_ERROR ExampleOperationalCredentialsIssuer::GenerateNOCChain(const ByteSpan 
     TLVReader reader;
     reader.Init(csrElements);
 
+    ChipLogProgress(Controller, "!!!!!!!!!!!!!!!!!! 1 !!!!!!!!!!!!!!!!!");
+
+
     if (reader.GetType() == kTLVType_NotSpecified)
     {
         ReturnErrorOnFailure(reader.Next());
     }
 
+    ChipLogProgress(Controller, "!!!!!!!!!!!!!!!!!! 2 !!!!!!!!!!!!!!!!!");
+
+
     VerifyOrReturnError(reader.GetType() == kTLVType_Structure, CHIP_ERROR_WRONG_TLV_TYPE);
+
+    ChipLogProgress(Controller, "!!!!!!!!!!!!!!!!!! 3 !!!!!!!!!!!!!!!!!");
+
+
     VerifyOrReturnError(reader.GetTag() == AnonymousTag, CHIP_ERROR_UNEXPECTED_TLV_ELEMENT);
 
     TLVType containerType;
     ReturnErrorOnFailure(reader.EnterContainer(containerType));
+
+    ChipLogProgress(Controller, "!!!!!!!!!!!!!!!!!! 4 !!!!!!!!!!!!!!!!!");
+
     ReturnErrorOnFailure(reader.Next(kTLVType_ByteString, TLV::ContextTag(1)));
+
+    ChipLogProgress(Controller, "!!!!!!!!!!!!!!!!!! 5 !!!!!!!!!!!!!!!!!");
 
     ByteSpan csr(reader.GetReadPoint(), reader.GetLength());
     reader.ExitContainer(containerType);
 
+    ChipLogProgress(Controller, "!!!!!!!!!!!!!!!!!! 6 !!!!!!!!!!!!!!!!!");
+
     P256PublicKey pubkey;
     ReturnErrorOnFailure(VerifyCertificateSigningRequest(csr.data(), csr.size(), pubkey));
+
+    ChipLogProgress(Controller, "!!!!!!!!!!!!!!!!!! 7 !!!!!!!!!!!!!!!!!");
 
     chip::Platform::ScopedMemoryBuffer<uint8_t> noc;
     ReturnErrorCodeIf(!noc.Alloc(kMaxCHIPDERCertLength), CHIP_ERROR_NO_MEMORY);
     MutableByteSpan nocSpan(noc.Get(), kMaxCHIPDERCertLength);
 
+    ChipLogProgress(Controller, "!!!!!!!!!!!!!!!!!! 8 !!!!!!!!!!!!!!!!!");
+
     chip::Platform::ScopedMemoryBuffer<uint8_t> icac;
     ReturnErrorCodeIf(!icac.Alloc(kMaxCHIPDERCertLength), CHIP_ERROR_NO_MEMORY);
     MutableByteSpan icacSpan(icac.Get(), kMaxCHIPDERCertLength);
 
+    ChipLogProgress(Controller, "!!!!!!!!!!!!!!!!!! 9 !!!!!!!!!!!!!!!!!");
+
     chip::Platform::ScopedMemoryBuffer<uint8_t> rcac;
     ReturnErrorCodeIf(!rcac.Alloc(kMaxCHIPDERCertLength), CHIP_ERROR_NO_MEMORY);
     MutableByteSpan rcacSpan(rcac.Get(), kMaxCHIPDERCertLength);
+
+    ChipLogProgress(Controller, "!!!!!!!!!!!!!!!!!! 10 !!!!!!!!!!!!!!!!!");
 
     ReturnErrorOnFailure(GenerateNOCChainAfterValidation(assignedId, mNextFabricId, pubkey, rcacSpan, icacSpan, nocSpan));
 
