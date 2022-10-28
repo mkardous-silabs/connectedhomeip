@@ -93,6 +93,8 @@ public:
      */
     static void OnIdentifyStop(Identify * identify);
 
+    static void TempWorkerFunction(TimerHandle_t xTimer);
+
 private:
     static AppTask sAppTask;
 
@@ -118,5 +120,7 @@ private:
      *
      * @param aEvent button event being processed
      */
-    static void SwitchActionEventHandler(AppEvent * aEvent);
+    static void SwitchActionEventHandler(/*AppEvent * aEvent*/);
+
+    static void startTempTimer(AppEvent * aEvent);
 };

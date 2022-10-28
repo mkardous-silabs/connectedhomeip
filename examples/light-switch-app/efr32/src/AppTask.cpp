@@ -74,6 +74,9 @@ EmberAfIdentifyEffectIdentifier sIdentifyEffect = EMBER_ZCL_IDENTIFY_EFFECT_IDEN
 
 bool mCurrentButtonState = false;
 
+TimerHandle_t sBindingTimer; // FreeRTOS app sw timer.
+
+
 /**********************************************************
  * Identify Callbacks
  *********************************************************/
@@ -169,7 +172,25 @@ CHIP_ERROR AppTask::Init()
         appError(err);
     }
 
+        // Create FreeRTOS sw timer for Function Selection.
+    sBindingTimer = xTimerCreate("BindingTmr",                  // Just a text name, not used by the RTOS kernel
+                                  200,                        // == default timer period (mS)
+                                  true,                    // no timer reload (==one-shot)
+                                  (void *) this,            // init timer id = app task obj context
+                                  TempWorkerFunction // timer callback handler
+    );
+    if (sBindingTimer == NULL)
+    {
+        EFR32_LOG("binding timer create failed");
+        appError(APP_ERROR_CREATE_TIMER_FAILED);
+    }
+
     return err;
+}
+
+void AppTask::TempWorkerFunction(TimerHandle_t xTimer)
+{
+    SwitchActionEventHandler();
 }
 
 CHIP_ERROR AppTask::StartAppTask()
@@ -223,10 +244,10 @@ void AppTask::OnIdentifyStop(Identify * identify)
 #endif
 }
 
-void AppTask::SwitchActionEventHandler(AppEvent * aEvent)
+void AppTask::SwitchActionEventHandler(/*AppEvent * aEvent*/)
 {
-    if (aEvent->Type == AppEvent::kEventType_Button)
-    {
+    // if (aEvent->Type == AppEvent::kEventType_Button)
+    // {
         BindingCommandData * data = Platform::New<BindingCommandData>();
         data->clusterId           = chip::app::Clusters::OnOff::Id;
 
@@ -246,7 +267,16 @@ void AppTask::SwitchActionEventHandler(AppEvent * aEvent)
 #endif
 
         DeviceLayer::PlatformMgr().ScheduleWork(SwitchWorkerFunction, reinterpret_cast<intptr_t>(data));
-    }
+    // }
+}
+
+void AppTask::startTempTimer(AppEvent * aEvent)
+{
+        if (pdPASS != xTimerStart(sBindingTimer, 0))
+        {
+            EFR32_LOG("Light Time start failed");
+            appError(APP_ERROR_START_TIMER_FAILED);
+        }
 }
 
 void AppTask::ButtonEventHandler(const sl_button_t * buttonHandle, uint8_t btnAction)
@@ -262,7 +292,7 @@ void AppTask::ButtonEventHandler(const sl_button_t * buttonHandle, uint8_t btnAc
 
     if (buttonHandle == APP_LIGHT_SWITCH && btnAction == SL_SIMPLE_BUTTON_PRESSED)
     {
-        button_event.Handler = SwitchActionEventHandler;
+        button_event.Handler = startTempTimer;
         sAppTask.PostEvent(&button_event);
     }
     else if (buttonHandle == APP_FUNCTION_BUTTON)
