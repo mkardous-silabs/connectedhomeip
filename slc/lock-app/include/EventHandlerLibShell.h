@@ -1,8 +1,6 @@
 /*
  *
  *    Copyright (c) 2020 Project CHIP Authors
- *    Copyright (c) 2019 Google LLC.
- *    All rights reserved.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,31 +14,27 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-
 #pragma once
 
-// ---- Door lock Example App Config ----
+#include <app/clusters/door-lock-server/door-lock-server.h>
 
-#define APP_TASK_NAME "Lock"
+class EventData
+{
+public:
+    chip::EventId eventId;
+};
 
-// Time it takes in ms for the simulated actuator to move from one
-// state to another.
-#define ACTUATOR_MOVEMENT_PERIOS_MS 10
+class AlarmEventData : public EventData
+{
+public:
+    DlAlarmCode alarmCode;
+};
 
-// EFR Logging
-#ifdef __cplusplus
-extern "C" {
-#endif
+class DoorStateEventData : public EventData
+{
+public:
+    DlDoorState doorState;
+};
 
-void efr32InitLog(void);
-
-void efr32Log(const char * aFormat, ...);
-#define EFR32_LOG(...) efr32Log(__VA_ARGS__);
-void appError(int err);
-
-#ifdef __cplusplus
-}
-
-#include <lib/core/CHIPError.h>
-void appError(CHIP_ERROR error);
-#endif
+CHIP_ERROR RegisterLockEvents();
+void EventWorkerFunction(intptr_t context);

@@ -28,8 +28,6 @@
 
 #pragma once
 
-#include "sl_component_catalog.h"
-
 // Use a default pairing code if one hasn't been provisioned in flash.
 #ifndef CHIP_DEVICE_CONFIG_USE_TEST_SETUP_PIN_CODE
 #define CHIP_DEVICE_CONFIG_USE_TEST_SETUP_PIN_CODE 20202021
@@ -98,11 +96,7 @@
  *
  * Enable support for Chip-over-BLE (CHIPoBLE).
  */
-#if defined(SL_CATALOG_MATTER_BLE_PRESENT)
 #define CHIP_DEVICE_CONFIG_ENABLE_CHIPOBLE 1
-#else
-#define CHIP_DEVICE_CONFIG_ENABLE_CHIPOBLE 0
-#endif
 
 /**
  * CHIP_DEVICE_CONFIG_ENABLE_CHIP_TIME_SERVICE_TIME_SYNC

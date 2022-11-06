@@ -1,8 +1,15 @@
 #!/bin/bash
+
+SILABS_BOARD=${1:-brd4161a}
+echo "Building for $SILABS_BOARD"
+
 MATTER_ROOT=$( cd "../.." ; pwd -P )
 GSDK_ROOT=$MATTER_ROOT/third_party/silabs/gecko_sdk
 
 # Ensure Matter repo is registered as SDK extension
+
+[ -d $GSDK_ROOT/extension ] && echo "Directory $GSDK_ROOT/extension exists." || mkdir $GSDK_ROOT/extension
+
 EXTENSION_DIR=$GSDK_ROOT/extension/matter
 if [ ! -L "$EXTENSION_DIR" ] ; then
     ln -s ../../../../ $EXTENSION_DIR
@@ -14,7 +21,9 @@ slc signature trust --sdk $GSDK_ROOT
 slc signature trust --sdk $GSDK_ROOT --extension-path "$GSDK_ROOT/extension/matter/"
 
 # Patch SDK
-echo "Patching SDK."
+# Sergei, 2022-10-14 -- Comment out patching for now
+
+#echo "Patching SDK."
 if git -C $GSDK_ROOT apply --reverse --check $MATTER_ROOT/slc/script/gsdk_matter.patch >/dev/null 2>&1; then
     echo "SDK is already patched."
 else
@@ -32,21 +41,21 @@ sed -i'.orig' \
     "$STUDIO_ADAPTER_PACK_PATH/apack.json"
 
 # Generate project
-slc generate -d $1 -p lock-app.slcp -s $GSDK_ROOT --with $1
+slc generate -d $SILABS_BOARD -p lock-app.slcp -s $GSDK_ROOT --with $SILABS_BOARD
 
 # Change to C++17 with GCC extensions
 # Matter needs GCC extensions -- strnlen() and strtok_r() are POSIX library symbols otherwise not available
 # Matter needs C++14 or higher
 # Pigweed needs C++17 or higher
 
-# Don't use MacOS-specific syntax
+# Commenting out BSD (MacOS) specific syntax
 #sed -i'.orig' \
 #    -e s"#-std=c\+\+11#-std=gnu\+\+17#g" \
-#    "$1/lock-app.project.mak"
+#    "$SILABS_BOARD/lock-app.project.mak"
 
-
+# Use GNU syntax
 sed -i'.orig' \
     's/-std=c++11/-std=gnu++17/g' \
-    $1/lock-app.project.mak
+    $SILABS_BOARD/lock-app.project.mak
 
-make -C $1 -f lock-app.Makefile -j4 
+make -C $SILABS_BOARD -f lock-app.Makefile -j4 

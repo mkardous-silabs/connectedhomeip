@@ -10,7 +10,10 @@ requires:
   - name: matter_libqrcode_common
 provides:
   - name: matter_qr_code
+include:
+-   path: examples/platform/efr32/display/
 source:
-  - path: examples/platform/efr32/display/lcd.c
+  - path: examples/platform/efr32/display/demo-ui.c
+  - path: examples/platform/efr32/display/lcd.cpp
 define:
   - name: QR_CODE_ENABLED

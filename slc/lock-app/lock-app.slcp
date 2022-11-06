@@ -33,6 +33,8 @@ component:
   - id: lock_common
     from: matter
 
+  - id: efr32_factory_data_provider
+    from: matter
 config_file:
   - path: common/lock-app.zap
     directory: zap
@@ -56,7 +58,10 @@ define:
   - name: EFR32_LOG_ENABLED
   - name: KVS_MAX_ENTRIES
     value: "75"
-
+  - name: CHIP_CRYPTO_PLATFORM
+    value: "1"
+  - name: OPENTHREAD_CONFIG_LOG_OUTPUT
+    value: OPENTHREAD_CONFIG_LOG_OUTPUT_APP
 configuration:
   - name: SL_BOARD_ENABLE_VCOM
     value: "1"

@@ -5,8 +5,9 @@ CODEOWNERS.source_branch_exclusion_pattern cherry-pick/**
 @@@MatterWatt @jumartin @jepenven @ricasall @makardou @selissia @rerasool
 @@@MatterWifi @mamehta
 @@@Documentation @wehale @caowens @rerasool
-@@@Unify @anesbens @dejensen @thbowley @dewassie @svradema
+@@@Unify @anesbens @dejensen @thbowley @dewassie @svradema @jsolesen
 @@@CICD @gbash @yushu @shmakdis @jepenven
+@@@MatterGSDK @selissia @ricasall @mirupp @curahman @huelsher
 
 # Pipeline rule
 Jenkinsfile @@MatterWatt @@CICD
@@ -16,18 +17,17 @@ silabs_ci_scripts/ @@MatterWatt @@CICD
 **/*.md @@Documentation
 
 # Shared folder with CSA
-build/ @@MatterCSA
-build_overrides/ @@MatterCSA
-config/ @@MatterCSA
-credentials/ @@MatterCSA
-docs/ @@MatterCSA
-docs/silabs/ @@Documentation @@MatterCSA
-examples/ @@MatterCSA
-integrations/ @@MatterCSA
-scripts/ @@MatterCSA
-src/ @@MatterCSA
-third_party/ @@MatterCSA
-zzz_generated/ @@MatterCSA
+build/ @@MatterGSDK
+build_overrides/ @@MatterGSDK
+config/ @@MatterGSDK
+credentials/ @@MatterGSDK
+docs/ @@MatterGSDK
+examples/ @@MatterGSDK
+integrations/ @@MatterGSDK
+scripts/ @@MatterGSDK
+src/ @@MatterGSDK
+third_party/ @@MatterGSDK
+zzz_generated/ @@MatterGSDK
 
 
 silabs_examples/ @@MatterWatt @@MatterWifi
@@ -39,9 +39,6 @@ CODEOWNERS               @@MatterWatt
 
 
 # If a group is involved, at least one reviewer of the group must approve
-(Check(@@MatterCSA >= 1))
-(Check(@@Unify >= 1))
-(Check(@@MatterWifi >= 1) | Check(@@MatterWatt >= 1))
-(Check(@@CICD >= 1) | Check(@@MatterWatt >= 2))
+(Check(@@MatterGSDK >= 1))
 
-OverallCheck(2)
+OverallCheck(1)

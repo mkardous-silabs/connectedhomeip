@@ -11,7 +11,10 @@ requires:
   - name: glib
 provides:
   - name: matter_display
+include:
+-   path: examples/platform/efr32/display/
 source:
-  - path: examples/platform/efr32/display/lcd.c
+  - path: examples/platform/efr32/display/demo-ui.c
+  - path: examples/platform/efr32/display/lcd.cpp
 define:
   - name: DISPLAY_ENABLED
