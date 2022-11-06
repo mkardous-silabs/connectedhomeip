@@ -7,12 +7,9 @@ define:
     value: <lib/address_resolve/AddressResolve_DefaultImpl.h>
 -   name: CHIP_DEVICE_CONFIG_THREAD_ENABLE_CLI
     value: '1'
--   name: CHIP_DEVICE_CONFIG_USE_TEST_SETUP_DISCRIMINATOR
-    value: '3840'
--   name: CHIP_DEVICE_CONFIG_USE_TEST_SETUP_PIN_CODE
-    value: '20202021'
 -   name: CHIP_HAVE_CONFIG_H
     value: '1'
+-   name: ENABLE_WSTK_LEDS
 -   name: HARD_FAULT_LOG_ENABLE
 -   name: OTA_PERIODIC_TIMEOUT
     value: '86400'
@@ -52,12 +49,15 @@ provides:
 quality: production
 source:
 -   path: src/platform/EFR32/BLEManagerImpl.cpp
+-   path: src/platform/EFR32/CHIPCryptoPALPsaEfr32.cpp
 -   path: src/platform/EFR32/CHIPMem-Platform.cpp
 -   path: src/platform/EFR32/ConfigurationManagerImpl.cpp
 -   path: src/platform/EFR32/ConnectivityManagerImpl.cpp
 -   path: src/platform/EFR32/DeviceNetworkProvisioningDelegateImpl.cpp
 -   path: src/platform/EFR32/DiagnosticDataProviderImpl.cpp
 -   path: src/platform/EFR32/EFR32Config.cpp
+-   path: src/platform/EFR32/Efr32PsaOpaqueKeypair.cpp
+-   path: src/platform/EFR32/Efr32PsaOperationalKeystore.cpp
 -   path: src/platform/EFR32/KeyValueStoreManagerImpl.cpp
 -   path: src/platform/EFR32/Logging.cpp
 -   path: src/platform/EFR32/OTAImageProcessorImpl.cpp

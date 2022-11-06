@@ -2,10 +2,7 @@ category: Matter|Core
 define:
 -   name: CHIP_DEVICE_CONFIG_THREAD_ENABLE_CLI
     value: '1'
--   name: CHIP_DEVICE_CONFIG_USE_TEST_SETUP_DISCRIMINATOR
-    value: '3840'
--   name: CHIP_DEVICE_CONFIG_USE_TEST_SETUP_PIN_CODE
-    value: '20202021'
+-   name: ENABLE_WSTK_LEDS
 -   name: HARD_FAULT_LOG_ENABLE
 -   name: OTA_PERIODIC_TIMEOUT
     value: '86400'
@@ -36,7 +33,9 @@ source:
 -   path: third_party/silabs/gecko_sdk/platform/driver/button/src/sl_button.c
 -   path: third_party/silabs/gecko_sdk/platform/driver/button/src/sl_simple_button.c
 -   path: third_party/silabs/gecko_sdk/platform/driver/leddrv/src/sl_led.c
+-   path: third_party/silabs/gecko_sdk/platform/driver/leddrv/src/sl_pwm_led.c
 -   path: third_party/silabs/gecko_sdk/platform/driver/leddrv/src/sl_simple_led.c
+-   path: third_party/silabs/gecko_sdk/platform/driver/leddrv/src/sl_simple_rgb_pwm_led.c
 -   path: third_party/silabs/gecko_sdk/platform/emdrv/dmadrv/src/dmadrv.c
 -   path: third_party/silabs/gecko_sdk/platform/emdrv/gpiointerrupt/src/gpiointerrupt.c
 -   path: third_party/silabs/gecko_sdk/platform/emdrv/nvm3/src/nvm3_default.c
@@ -79,6 +78,7 @@ source:
 -   path: third_party/silabs/gecko_sdk/platform/service/device_init/src/sl_device_init_dcdc_s1.c
 -   path: third_party/silabs/gecko_sdk/platform/service/device_init/src/sl_device_init_emu_s1.c
 -   path: third_party/silabs/gecko_sdk/platform/service/device_init/src/sl_device_init_hfxo_s1.c
+-   path: third_party/silabs/gecko_sdk/platform/service/device_init/src/sl_device_init_lfrco.c
 -   path: third_party/silabs/gecko_sdk/platform/service/device_init/src/sl_device_init_lfxo_s1.c
 -   path: third_party/silabs/gecko_sdk/platform/service/device_init/src/sl_device_init_nvic.c
 -   path: third_party/silabs/gecko_sdk/platform/service/hfxo_manager/src/sl_hfxo_manager.c

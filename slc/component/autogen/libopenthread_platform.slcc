@@ -8,4 +8,4 @@ provides:
 -   name: matter_libopenthread_platform
 quality: production
 source:
--   path: third_party/openthread/repo/src/lib/platform/exit_code.c
+-   path: third_party/openthread/ot-efr32/openthread/src/lib/platform/exit_code.c

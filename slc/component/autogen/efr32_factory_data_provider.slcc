@@ -6,14 +6,12 @@ define:
     value: '1'
 -   name: CHIP_HAVE_CONFIG_H
     value: '1'
--   name: CURRENT_TIME_NOT_IMPLEMENTED
-    value: '1'
 -   name: ENABLE_WSTK_LEDS
 -   name: HARD_FAULT_LOG_ENABLE
 -   name: OTA_PERIODIC_TIMEOUT
     value: '86400'
-description: libcredentials
-id: libcredentials
+description: efr32_factory_data_provider
+id: efr32_factory_data_provider
 include:
 -   path: examples/platform/efr32
 -   path: src
@@ -43,22 +41,7 @@ include:
 -   path: zzz_generated/app-common
 package: Matter
 provides:
--   name: matter_libcredentials
+-   name: matter_efr32_factory_data_provider
 quality: production
 source:
--   path: src/credentials/CHIPCert.cpp
--   path: src/credentials/CHIPCertFromX509.cpp
--   path: src/credentials/CHIPCertToX509.cpp
--   path: src/credentials/CertificationDeclaration.cpp
--   path: src/credentials/DeviceAttestationConstructor.cpp
--   path: src/credentials/DeviceAttestationCredsProvider.cpp
--   path: src/credentials/FabricTable.cpp
--   path: src/credentials/GenerateChipX509Cert.cpp
--   path: src/credentials/GroupDataProviderImpl.cpp
--   path: src/credentials/LastKnownGoodTime.cpp
--   path: src/credentials/PersistentStorageOpCertStore.cpp
--   path: src/credentials/attestation_verifier/DeviceAttestationVerifier.cpp
--   path: src/credentials/examples/DeviceAttestationCredsExample.cpp
--   path: src/credentials/examples/ExampleDACs.cpp
--   path: src/credentials/examples/ExamplePAI.cpp
--   path: src/credentials/tests/CHIPAttCert_test_vectors.cpp
+-   path: examples/platform/efr32/EFR32DeviceDataProvider.cpp

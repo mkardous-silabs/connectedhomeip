@@ -4,14 +4,13 @@ define:
     value: <lib/address_resolve/AddressResolve_DefaultImpl.h>
 -   name: CHIP_DEVICE_CONFIG_THREAD_ENABLE_CLI
     value: '1'
--   name: CHIP_DEVICE_CONFIG_USE_TEST_SETUP_DISCRIMINATOR
-    value: '3840'
--   name: CHIP_DEVICE_CONFIG_USE_TEST_SETUP_PIN_CODE
-    value: '20202021'
 -   name: CHIP_HAVE_CONFIG_H
     value: '1'
 -   name: DISPLAY_ENABLED
+-   name: ENABLE_WSTK_LEDS
 -   name: HARD_FAULT_LOG_ENABLE
+-   name: IS_DEMO_LOCK
+    value: '1'
 -   name: OPENTHREAD_CORE_CONFIG_PLATFORM_CHECK_FILE
     value: \"openthread-core-efr32-config-check.h\"
 -   name: OPENTHREAD_PROJECT_CORE_CONFIG_FILE
@@ -30,6 +29,7 @@ id: chip_efr32_lock_example
 include:
 -   path: examples/common/QRCode/repo/c
 -   path: examples/platform/efr32
+-   path: examples/platform/efr32/display
 -   path: examples/platform/efr32/project_include
 -   path: examples/providers
 -   path: src
@@ -68,9 +68,11 @@ source:
 -   path: examples/lock-app/efr32/src/LockManager.cpp
 -   path: examples/lock-app/efr32/src/ZclCallbacks.cpp
 -   path: examples/lock-app/efr32/src/main.cpp
+-   path: examples/platform/efr32/BaseApplication.cpp
 -   path: examples/platform/efr32/LEDWidget.cpp
 -   path: examples/platform/efr32/OTAConfig.cpp
--   path: examples/platform/efr32/display/lcd.c
+-   path: examples/platform/efr32/display/demo-ui.c
+-   path: examples/platform/efr32/display/lcd.cpp
 -   path: examples/platform/efr32/efr32_utils.cpp
 -   path: examples/platform/efr32/heap_4_silabs.c
 -   path: examples/platform/efr32/init_efrPlatform.cpp

@@ -2,10 +2,7 @@ category: Matter|Core
 define:
 -   name: CHIP_DEVICE_CONFIG_THREAD_ENABLE_CLI
     value: '1'
--   name: CHIP_DEVICE_CONFIG_USE_TEST_SETUP_DISCRIMINATOR
-    value: '3840'
--   name: CHIP_DEVICE_CONFIG_USE_TEST_SETUP_PIN_CODE
-    value: '20202021'
+-   name: ENABLE_WSTK_LEDS
 -   name: HARD_FAULT_LOG_ENABLE
 -   name: OPENTHREAD_CORE_CONFIG_PLATFORM_CHECK_FILE
     value: \"openthread-core-efr32-config-check.h\"
@@ -32,6 +29,7 @@ provides:
 -   name: matter_libopenthread_efr32
 quality: production
 source:
+-   path: third_party/openthread/ot-efr32/openthread/examples/apps/cli/cli_uart.cpp
 -   path: third_party/openthread/ot-efr32/src/src/alarm.c
 -   path: third_party/openthread/ot-efr32/src/src/crypto.c
 -   path: third_party/openthread/ot-efr32/src/src/entropy.c
@@ -41,4 +39,3 @@ source:
 -   path: third_party/openthread/ot-efr32/src/src/security_manager.c
 -   path: third_party/openthread/ot-efr32/src/src/sleep.c
 -   path: third_party/openthread/ot-efr32/src/src/system.c
--   path: third_party/openthread/repo/examples/apps/cli/cli_uart.cpp
