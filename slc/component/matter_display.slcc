@@ -1,0 +1,17 @@
+id: matter_display
+label: Display
+description: >
+  Display Support
+package: "Matter"
+category: "Matter|Example"
+quality: production
+requires:
+  - name: matter
+  - name: matter_platform_efr32
+  - name: glib
+provides:
+  - name: matter_display
+source:
+  - path: examples/platform/efr32/display/lcd.c
+define:
+  - name: DISPLAY_ENABLED

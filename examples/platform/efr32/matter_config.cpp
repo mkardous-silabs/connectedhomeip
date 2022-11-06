@@ -45,16 +45,6 @@ using namespace ::chip;
 using namespace ::chip::Inet;
 using namespace ::chip::DeviceLayer;
 
-#include <crypto/CHIPCryptoPAL.h>
-// If building with the EFR32-provided crypto backend, we can use the
-// opaque keystore
-#if CHIP_CRYPTO_PLATFORM
-#include <platform/EFR32/Efr32PsaOperationalKeystore.h>
-static chip::DeviceLayer::Internal::Efr32PsaOperationalKeystore gOperationalKeystore;
-#endif
-
-#include "EFR32DeviceDataProvider.h"
-
 #if CHIP_ENABLE_OPENTHREAD
 #include <inet/EndPointStateOpenThread.h>
 #include <openthread/cli.h>
@@ -130,7 +120,7 @@ void EFR32MatterConfig::ConnectivityEventCallback(const ChipDeviceEvent * event,
 
 CHIP_ERROR EFR32MatterConfig::InitMatter(const char * appName)
 {
-    mbedtls_platform_set_calloc_free(CHIPPlatformMemoryCalloc, CHIPPlatformMemoryFree);
+//    mbedtls_platform_set_calloc_free(CHIPPlatformMemoryCalloc, CHIPPlatformMemoryFree);
 
     EFR32_LOG("==================================================");
     EFR32_LOG("%s starting", appName);
@@ -143,8 +133,6 @@ CHIP_ERROR EFR32MatterConfig::InitMatter(const char * appName)
 #ifdef HEAP_MONITORING
     MemMonitoring::startHeapMonitoring();
 #endif
-    SetDeviceInstanceInfoProvider(&EFR32::EFR32DeviceDataProvider::GetDeviceDataProvider());
-    SetCommissionableDataProvider(&EFR32::EFR32DeviceDataProvider::GetDeviceDataProvider());
 
     //==============================================
     // Init Matter Stack
@@ -160,32 +148,17 @@ CHIP_ERROR EFR32MatterConfig::InitMatter(const char * appName)
     ReturnErrorOnFailure(InitOpenThread());
 #endif
 
-    // Stop Matter event handling while setting up resources
+    // Init Matter Server and Start Event Loop
     chip::DeviceLayer::PlatformMgr().LockChipStack();
-
-    // Create initParams with SDK example defaults here
     static chip::CommonCaseDeviceServerInitParams initParams;
-
-#if CHIP_CRYPTO_PLATFORM
-    // When building with EFR32 crypto, use the opaque key store
-    // instead of the default (insecure) one.
-    gOperationalKeystore.Init();
-    initParams.operationalKeystore = &gOperationalKeystore;
-#endif
-
-    // Initialize the remaining (not overridden) providers to the SDK example defaults
     (void) initParams.InitializeStaticResourcesBeforeServerInit();
-
 #if CHIP_ENABLE_OPENTHREAD
-    // Set up OpenThread configuration when OpenThread is included
     chip::Inet::EndPointStateOpenThread::OpenThreadEndpointInitParam nativeParams;
     nativeParams.lockCb                = LockOpenThreadTask;
     nativeParams.unlockCb              = UnlockOpenThreadTask;
     nativeParams.openThreadInstancePtr = chip::DeviceLayer::ThreadStackMgrImpl().OTInstance();
     initParams.endpointNativeParams    = static_cast<void *>(&nativeParams);
 #endif
-
-    // Init Matter Server and Start Event Loop
     chip::Server::GetInstance().Init(initParams);
     chip::DeviceLayer::PlatformMgr().UnlockChipStack();
 

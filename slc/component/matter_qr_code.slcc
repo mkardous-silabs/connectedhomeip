@@ -1,0 +1,16 @@
+id: matter_qr_code
+label: QR Code
+description: >
+  Show QR Code
+package: "Matter"
+category: "Matter|Example"
+quality: production
+requires:
+  - name: matter_display
+  - name: matter_libqrcode_common
+provides:
+  - name: matter_qr_code
+source:
+  - path: examples/platform/efr32/display/lcd.c
+define:
+  - name: QR_CODE_ENABLED

@@ -1,0 +1,10 @@
+id: matter
+version: "1.0.0"
+description: Matter integration for SLC
+label: Matter
+sdk:
+  id: gecko_sdk
+  version: "4.1.0"
+component_path:
+  - path: slc/component
+  - path: slc/component/autogen

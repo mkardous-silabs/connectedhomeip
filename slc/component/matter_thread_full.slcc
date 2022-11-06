@@ -1,0 +1,16 @@
+id: matter_thread_full
+label: Thread Network Layer (Full)
+description: >
+  Add Thread network layer for Matter without sleepy support.
+package: "Matter"
+category: "Matter|Network"
+quality: production
+provides:
+  - name: matter_thread_variant
+  - name: matter_thread_full
+requires:
+  - name: matter_thread
+  - name: ot_cli
+recommends:
+  - id: ot_stack_ftd
+  - id: ot_cli_source

@@ -1,0 +1,14 @@
+id: mbedtls_pkcs5
+label: mbedTLS PKCS5 fixup
+description: >
+  Add PKCS5 source to mbedTLS, since it's missing from Gecko SDK components
+package: "Matter"
+category: "Matter|Security"
+quality: production
+source:
+  - path: third_party/silabs/gecko_sdk/util/third_party/crypto/mbedtls/library/pkcs5.c
+provides:
+  - name: mbedtls_pkcs5
+template_contribution:
+  - name: mbedtls_config
+    value: MBEDTLS_PKCS5_C

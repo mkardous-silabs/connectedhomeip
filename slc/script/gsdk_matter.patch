@@ -1,0 +1,146 @@
+diff --git a/protocol/openthread/component/ot_platform_abstraction.slcc b/protocol/openthread/component/ot_platform_abstraction.slcc
+index ba707d733..9ee266d11 100644
+--- a/protocol/openthread/component/ot_platform_abstraction.slcc
++++ b/protocol/openthread/component/ot_platform_abstraction.slcc
+@@ -24,60 +24,66 @@ requires:
+   - name: ot_subghz_phy
+     condition:
+     - hardware_board_supports_ot_subghz
+   - name: gatt_configuration
+     condition:
+     - bluetooth_stack
+ config_file:
+   - path: protocol/openthread/config/sl_openthread_rtos_config.h
+     condition:
+       - kernel
++    unless: ["matter_integration"]
+   - path: protocol/openthread/config/sl_openthread_subghz_config.h
+     condition:
+       - hardware_board_supports_ot_subghz
+ toolchain_settings:
+   - option: preinclude
+     value: sl_openthread_rtos_config.h
+     condition:
+       - kernel
++    unless: ["matter_integration"]
+   - option: preinclude
+     value: sl_openthread_subghz_config.h
+     condition:
+       - hardware_board_supports_ot_subghz
+ include:
+   - path: protocol/openthread/platform-abstraction/rtos
++    unless: ["matter_integration"]
+     file_list:
+       - path: sl_ot_rtos_adaptation.h
+         condition:
+           - kernel
+ source:
+   - path: protocol/openthread/platform-abstraction/rtos/sl_ot_rtos_adaptation.c
+     condition:
+       - kernel
++    unless: ["matter_integration"]
+ define:
+   - name: RADIO_CONFIG_DMP_SUPPORT
+     value: 1
+     condition:
+       - rail_lib_multiprotocol
+   - name: "INCLUDE_xTimerPendFunctionCall"
+     value: 1
+     condition:
+       - freertos
++    unless: ["matter_integration"]
+   - name: OPENTHREAD_CONFIG_PLATFORM_RADIO_COEX_ENABLE
+     value: 1
+     condition:
+       -  rail_util_coex
+   - name: SL_OPENTHREAD_PHY_SELECT_STACK_SUPPORT
+     value: 1
+     condition:
+       - rail_util_ieee802154_phy_select
+ template_contribution:
+   - name: event_handler
+     value:
+       event: internal_app_init
+       include: sl_ot_rtos_adaptation.h
+       handler: sl_ot_rtos_init
+     condition:
+       - kernel
++    unless: ["matter_integration"]
+   - name: ot_init
+     value: sl_ot_create_instance
+     priority: 0
+diff --git a/protocol/openthread/component/ot_platform_abstraction_core.slcc b/protocol/openthread/component/ot_platform_abstraction_core.slcc
+index f075c92e0..d86e06446 100644
+--- a/protocol/openthread/component/ot_platform_abstraction_core.slcc
++++ b/protocol/openthread/component/ot_platform_abstraction_core.slcc
+@@ -63,34 +63,38 @@ source:
+       - path: util/third_party/openthread/examples/platforms/utils/link_metrics.cpp
+       - path: util/third_party/openthread/examples/platforms/utils/logging_rtt.c
+       - path: util/third_party/openthread/examples/platforms/utils/mac_frame.cpp
+       - path: util/third_party/openthread/examples/platforms/utils/settings_ram.c
+       - path: util/third_party/openthread/examples/platforms/utils/soft_source_match_table.c
+       - path: protocol/openthread/platform-abstraction/efr32/alarm.c
+       - path: protocol/openthread/platform-abstraction/efr32/diag.c
+       - path: protocol/openthread/platform-abstraction/efr32/entropy.c
+       - path: protocol/openthread/platform-abstraction/efr32/flash.c
+       - path: protocol/openthread/platform-abstraction/efr32/logging.c
++        unless: ["matter_integration"]
+       - path: protocol/openthread/platform-abstraction/efr32/memory.c
++        unless: ["matter_integration"]
+       - path: protocol/openthread/platform-abstraction/efr32/misc.c
+       - path: protocol/openthread/platform-abstraction/efr32/crypto.c
+       - path: protocol/openthread/platform-abstraction/efr32/ieee802154-packet-utils.cpp
+       - path: protocol/openthread/platform-abstraction/efr32/radio.c
+       - path: protocol/openthread/platform-abstraction/efr32/security_manager.c
+       - path: protocol/openthread/platform-abstraction/efr32/startup-gcc.c
+       - path: protocol/openthread/platform-abstraction/efr32/system.c
+       - path: protocol/openthread/platform-abstraction/efr32/uartdrv_uart.c
+         condition:
+           - uartdrv_usart
++        unless: ["matter_integration"]
+       - path: protocol/openthread/platform-abstraction/efr32/iostream_uart.c
+         condition:
+           - iostream_usart
++        unless: ["matter_integration"]
+       - path: protocol/openthread/platform-abstraction/efr32/sleep.c
+         condition:
+           - power_manager
+ library:
+   - path: "protocol/openthread/libs/libsl_openthread_efr32mg1x_gcc.a"
+     condition:
+       - toolchain_gcc
+       - device_series_1
+   - path: "protocol/openthread/libs/libsl_openthread_efr32mg2x_gcc.a"
+     condition:
+diff --git a/util/third_party/crypto/sl_component/sl_mbedtls_support/config/template/mbedtls_config_autogen.h.jinja b/util/third_party/crypto/sl_component/sl_mbedtls_support/config/template/mbedtls_config_autogen.h.jinja
+index 321418382..80317974a 100644
+--- a/util/third_party/crypto/sl_component/sl_mbedtls_support/config/template/mbedtls_config_autogen.h.jinja
++++ b/util/third_party/crypto/sl_component/sl_mbedtls_support/config/template/mbedtls_config_autogen.h.jinja
+@@ -21,21 +21,26 @@
+           || defined(MBEDTLS_ECP_DP_SECP384R1_ENABLED) \
+           || defined(MBEDTLS_ECP_DP_SECP521R1_ENABLED))
+         #undef MBEDTLS_ECDH_C
+         #undef MBEDTLS_ECP_C
+         #undef MBEDTLS_BIGNUM_C
+     #endif /* !MBEDTLS_ECP_DP_SECPxR1_ENABLED */
+ #endif /* SL_SE_ASSUME_FW_AT_LEAST_x */
+ 
+ #if !defined(TEST_SUITE_MEMORY_BUFFER_ALLOC)
+ #if !defined(MBEDTLS_PLATFORM_FREE_MACRO) && !defined(MBEDTLS_PLATFORM_CALLOC_MACRO)
+-#if defined(CONFIG_MBEDTLS_USE_FREERTOS_PVCALLOC)
++#if defined(CONFIG_MBEDTLS_USE_CHIP_PVCALLOC)
++    #include <lib/support/CHIPPlatformMemory.h>
++    #define MBEDTLS_PLATFORM_CALLOC_MACRO CHIPPlatformMemoryCalloc
++    #define MBEDTLS_PLATFORM_FREE_MACRO   CHIPPlatformMemoryFree
++
++#elif defined(CONFIG_MBEDTLS_USE_FREERTOS_PVCALLOC)
+     /* In FreeRTOS, use pvCalloc (and vPortFree) for dynamic memory allocation.
+        E.g. Amazon FreeRTOS implements pvCalloc for dynamic memory allocation. */
+     #include <stddef.h>
+ 
+     extern void * pvCalloc( size_t xNumElements,
+                             size_t xSize ) ;
+     extern void vPortFree( void *pv );
+     #define MBEDTLS_PLATFORM_CALLOC_MACRO pvCalloc
+     #define MBEDTLS_PLATFORM_FREE_MACRO   vPortFree
+ #else

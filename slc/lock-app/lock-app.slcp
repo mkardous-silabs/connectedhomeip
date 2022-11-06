@@ -1,0 +1,65 @@
+project_name: lock-app
+label: Matter Lock
+description: >
+  Matter Lock App
+quality: production
+
+sdk_extension:
+  - id: matter
+    version: "1.0.0"
+
+component:
+  - id: device_init
+  - id: simple_button
+    instance: [btn0, btn1]
+  - id: simple_led
+    instance: [led0, led1]
+  - id: uartdrv_usart
+    instance: [vcom]
+
+  - id: matter
+    from: matter
+  - id: matter_ble
+    from: matter
+  - id: matter_thread_full
+    from: matter
+  - id: matter_display
+    from: matter
+  - id: matter_qr_code
+    from: matter
+  - id: matter_ota_support
+    from: matter
+
+  - id: lock_common
+    from: matter
+
+config_file:
+  - path: common/lock-app.zap
+    directory: zap
+
+include:
+  - path: include
+
+source:
+  - path: src/AppTask.cpp
+  - path: src/LockManager.cpp
+  - path: src/main.cpp
+  - path: src/ZclCallbacks.cpp
+
+define:
+  - name: BOARD_ID
+    value: BRD4161A
+    condition: [brd4161a]
+  - name: BRD4161A
+    condition: [brd4161a]
+
+  - name: EFR32_LOG_ENABLED
+  - name: KVS_MAX_ENTRIES
+    value: "75"
+
+configuration:
+  - name: SL_BOARD_ENABLE_VCOM
+    value: "1"
+  - name: SL_BOARD_ENABLE_DISPLAY
+    value: "1"
+    condition: [glib]
