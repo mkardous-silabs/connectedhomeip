@@ -180,7 +180,7 @@ void AppTask::AppTaskMain(void * pvParameter)
     }
 
 #if !(defined(CHIP_DEVICE_CONFIG_ENABLE_SED) && CHIP_DEVICE_CONFIG_ENABLE_SED)
-    sAppTask.StartStatusLEDTimer();
+    // sAppTask.StartStatusLEDTimer();
 #endif
 
     EFR32_LOG("App Task started");
@@ -201,7 +201,7 @@ void AppTask::OnIdentifyStart(Identify * identify)
     ChipLogProgress(Zcl, "onIdentifyStart");
 
 #if CHIP_DEVICE_CONFIG_ENABLE_SED == 1
-    sAppTask.StartStatusLEDTimer();
+    // sAppTask.StartStatusLEDTimer();
 #endif
 }
 

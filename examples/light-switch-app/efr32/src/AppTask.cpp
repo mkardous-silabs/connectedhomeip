@@ -174,7 +174,7 @@ CHIP_ERROR AppTask::Init()
 
         // Create FreeRTOS sw timer for Function Selection.
     sBindingTimer = xTimerCreate("BindingTmr",                  // Just a text name, not used by the RTOS kernel
-                                  200,                        // == default timer period (mS)
+                                  45,                        // == default timer period (mS)
                                   true,                    // no timer reload (==one-shot)
                                   (void *) this,            // init timer id = app task obj context
                                   TempWorkerFunction // timer callback handler
@@ -250,6 +250,7 @@ void AppTask::SwitchActionEventHandler(/*AppEvent * aEvent*/)
     // {
         BindingCommandData * data = Platform::New<BindingCommandData>();
         data->clusterId           = chip::app::Clusters::OnOff::Id;
+        // data->isGroup = true;
 
         if (mCurrentButtonState)
         {
