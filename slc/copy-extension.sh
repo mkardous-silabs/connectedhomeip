@@ -21,9 +21,9 @@ mkdir  $DEST_DIR/matter
 mkdir  $DEST_DIR/matter/examples/
 mkdir  $DEST_DIR/matter/examples/platform/
 
-cp -R $MATTER_ROOT/src/ $DEST_DIR/matter
-cp -R $MATTER_ROOT/slc/ $DEST_DIR/matter
-cp -R $MATTER_ROOT/examples/platform/efr32/ $DEST_DIR/matter/examples/platform/
+cp -R $MATTER_ROOT/src $DEST_DIR/matter
+cp -R $MATTER_ROOT/slc $DEST_DIR/matter
+cp -R $MATTER_ROOT/examples/platform/efr32 $DEST_DIR/matter/examples/platform/
 cp $MATTER_ROOT/matter.slce $DEST_DIR/matter
 cp $MATTER_ROOT/matter.slsdk $DEST_DIR/matter
 cp $MATTER_ROOT/matter_templates.xml $DEST_DIR/matter
