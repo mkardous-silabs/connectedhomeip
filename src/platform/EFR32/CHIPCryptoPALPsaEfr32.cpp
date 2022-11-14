@@ -22,7 +22,7 @@
  */
 
 #include <crypto/CHIPCryptoPAL.h>
-
+ 
 #include <type_traits>
 
 // Include version header to get configuration information
@@ -98,7 +98,9 @@ static void _log_mbedTLS_error(int error_code)
 {
     if (error_code != 0)
     {
-#if defined(MBEDTLS_ERROR_C)
+// MATTER_GSDK_TODO
+// #if defined(MBEDTLS_ERROR_C)
+#if 0
         char error_str[MAX_ERROR_STR_LEN];
         mbedtls_strerror(error_code, error_str, sizeof(error_str));
         ChipLogError(Crypto, "mbedTLS error: %s", error_str);

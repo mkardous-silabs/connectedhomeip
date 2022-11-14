@@ -23,7 +23,7 @@ slc signature trust --sdk $GSDK_ROOT --extension-path "$GSDK_ROOT/extension/matt
 # Patch SDK
 # Sergei, 2022-10-14 -- Comment out patching for now
 
-#echo "Patching SDK."
+echo "Patching SDK."
 if git -C $GSDK_ROOT apply --reverse --check $MATTER_ROOT/slc/script/gsdk_matter.patch >/dev/null 2>&1; then
     echo "SDK is already patched."
 else

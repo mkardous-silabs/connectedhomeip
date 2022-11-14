@@ -1,8 +1,8 @@
 diff --git a/protocol/openthread/component/ot_platform_abstraction.slcc b/protocol/openthread/component/ot_platform_abstraction.slcc
-index ba707d733..9ee266d11 100644
+index 82c0be7ba27a..645f1ac54e44 100644
 --- a/protocol/openthread/component/ot_platform_abstraction.slcc
 +++ b/protocol/openthread/component/ot_platform_abstraction.slcc
-@@ -31,6 +31,7 @@ config_file:
+@@ -33,6 +33,7 @@ config_file:
    - path: protocol/openthread/config/sl_openthread_rtos_config.h
      condition:
        - kernel
@@ -10,7 +10,7 @@ index ba707d733..9ee266d11 100644
    - path: protocol/openthread/config/sl_openthread_subghz_config.h
      condition:
        - hardware_board_supports_ot_subghz
-@@ -39,12 +40,14 @@ toolchain_settings:
+@@ -41,12 +42,14 @@ toolchain_settings:
      value: sl_openthread_rtos_config.h
      condition:
        - kernel
@@ -25,15 +25,15 @@ index ba707d733..9ee266d11 100644
      file_list:
        - path: sl_ot_rtos_adaptation.h
          condition:
-@@ -53,6 +56,7 @@ source:
+@@ -55,6 +58,7 @@ source:
    - path: protocol/openthread/platform-abstraction/rtos/sl_ot_rtos_adaptation.c
      condition:
        - kernel
 +    unless: ["matter_integration"]
- define:
-   - name: RADIO_CONFIG_DMP_SUPPORT
-     value: 1
-@@ -62,6 +66,7 @@ define:
+ library:
+   - path: "protocol/openthread/libs/libsl_openthread_efr32mg1x_gcc.a"
+     condition:
+@@ -73,6 +77,7 @@ define:
      value: 1
      condition:
        - freertos
@@ -41,7 +41,7 @@ index ba707d733..9ee266d11 100644
    - name: OPENTHREAD_CONFIG_PLATFORM_RADIO_COEX_ENABLE
      value: 1
      condition:
-@@ -78,6 +83,7 @@ template_contribution:
+@@ -89,6 +94,7 @@ template_contribution:
        handler: sl_ot_rtos_init
      condition:
        - kernel
@@ -50,10 +50,10 @@ index ba707d733..9ee266d11 100644
      value: sl_ot_create_instance
      priority: 0
 diff --git a/protocol/openthread/component/ot_platform_abstraction_core.slcc b/protocol/openthread/component/ot_platform_abstraction_core.slcc
-index b71fb6dc1..6442d0710 100644
+index 59ff26dcf9c8..9d40d3c7e09e 100644
 --- a/protocol/openthread/component/ot_platform_abstraction_core.slcc
 +++ b/protocol/openthread/component/ot_platform_abstraction_core.slcc
-@@ -55,9 +55,11 @@ source:
+@@ -56,9 +56,11 @@ source:
        - path: protocol/openthread/platform-abstraction/efr32/uartdrv_uart.c
          condition:
            - uartdrv_usart
@@ -66,10 +66,10 @@ index b71fb6dc1..6442d0710 100644
          condition:
            - power_manager
 diff --git a/protocol/openthread/component/ot_platform_abstraction_source.slcc b/protocol/openthread/component/ot_platform_abstraction_source.slcc
-index 6e42c698a..774cc9c13 100644
+index b7f22731345c..83934e91a244 100644
 --- a/protocol/openthread/component/ot_platform_abstraction_source.slcc
 +++ b/protocol/openthread/component/ot_platform_abstraction_source.slcc
-@@ -38,7 +38,9 @@ source:
+@@ -39,7 +39,9 @@ source:
        - path: protocol/openthread/platform-abstraction/efr32/entropy.c
        - path: protocol/openthread/platform-abstraction/efr32/flash.c
        - path: protocol/openthread/platform-abstraction/efr32/logging.c
@@ -79,21 +79,3 @@ index 6e42c698a..774cc9c13 100644
        - path: protocol/openthread/platform-abstraction/efr32/misc.c
        - path: protocol/openthread/platform-abstraction/efr32/crypto.c
        - path: protocol/openthread/platform-abstraction/efr32/ieee802154-packet-utils.cpp
-diff --git a/util/third_party/crypto/sl_component/sl_mbedtls_support/config/template/mbedtls_config_autogen.h.jinja b/util/third_party/crypto/sl_component/sl_mbedtls_support/config/template/mbedtls_config_autogen.h.jinja
-index 321418382..80317974a 100644
---- a/util/third_party/crypto/sl_component/sl_mbedtls_support/config/template/mbedtls_config_autogen.h.jinja
-+++ b/util/third_party/crypto/sl_component/sl_mbedtls_support/config/template/mbedtls_config_autogen.h.jinja
-@@ -28,7 +28,12 @@
- 
- #if !defined(TEST_SUITE_MEMORY_BUFFER_ALLOC)
- #if !defined(MBEDTLS_PLATFORM_FREE_MACRO) && !defined(MBEDTLS_PLATFORM_CALLOC_MACRO)
--#if defined(CONFIG_MBEDTLS_USE_FREERTOS_PVCALLOC)
-+#if defined(CONFIG_MBEDTLS_USE_CHIP_PVCALLOC)
-+    #include <lib/support/CHIPPlatformMemory.h>
-+    #define MBEDTLS_PLATFORM_CALLOC_MACRO CHIPPlatformMemoryCalloc
-+    #define MBEDTLS_PLATFORM_FREE_MACRO   CHIPPlatformMemoryFree
-+
-+#elif defined(CONFIG_MBEDTLS_USE_FREERTOS_PVCALLOC)
-     /* In FreeRTOS, use pvCalloc (and vPortFree) for dynamic memory allocation.
-        E.g. Amazon FreeRTOS implements pvCalloc for dynamic memory allocation. */
-     #include <stddef.h>
