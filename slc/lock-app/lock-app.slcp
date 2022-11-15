@@ -47,6 +47,11 @@ source:
   - path: src/LockManager.cpp
   - path: src/main.cpp
   - path: src/ZclCallbacks.cpp
+  - path: include/AppConfig.h
+  - path: include/AppEvent.h
+  - path: include/AppTask.h
+  - path: include/LockManager.h  
+  - path: include/CHIPProjectConfig.h
 
 define:
   - name: BOARD_ID
