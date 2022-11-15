@@ -20,9 +20,6 @@ echo "Ensure SDK and Matter extension are trusted by SLC."
 slc signature trust --sdk $GSDK_ROOT
 slc signature trust --sdk $GSDK_ROOT --extension-path "$GSDK_ROOT/extension/matter/"
 
-# Patch SDK
-# Sergei, 2022-10-14 -- Comment out patching for now
-
 echo "Patching SDK."
 if git -C $GSDK_ROOT apply --reverse --check $MATTER_ROOT/slc/script/gsdk_matter.patch >/dev/null 2>&1; then
     echo "SDK is already patched."
@@ -32,13 +29,6 @@ fi
 
 # Make ZAP available to SLC-CLI
 export STUDIO_ADAPTER_PACK_PATH="$MATTER_ROOT/third_party/zap/repo/"
-
-# Ensure adapter pack integration for ZAP references Matter templates, and outputs into the zap-generated subdirectory as required by the Matter source code
-sed -i'.orig' \
-    -e 's#app/zcl/zcl-zap.json#extension/matter/src/app/zap-templates/zcl/zcl.json#g' \
-    -e 's#protocol/zigbee/app/framework/gen-template/gen-templates.json#extension/matter/src/app/zap-templates/app-templates.json#g' \
-    -e 's#generationOutput} #generationOutput}/zap-generated #g' \
-    "$STUDIO_ADAPTER_PACK_PATH/apack.json"
 
 # Generate project
 slc generate -d $SILABS_BOARD -p lock-app.slcp -s $GSDK_ROOT --with $SILABS_BOARD
