@@ -17,13 +17,27 @@ if [ ! -d "$DEST_DIR" ]; then
     exit 1
 fi
 
-mkdir  $DEST_DIR/matter
-mkdir  $DEST_DIR/matter/examples/
-mkdir  $DEST_DIR/matter/examples/platform/
+mkdir $DEST_DIR/matter
+mkdir $DEST_DIR/matter/examples/
+mkdir $DEST_DIR/matter/examples/platform/
+mkdir $DEST_DIR/matter/examples/common/
+mkdir $DEST_DIR/matter/examples/common/QRCode/
+mkdir $DEST_DIR/matter/examples/common/QRCode/repo/
+mkdir $DEST_DIR/matter/third_party/
+mkdir $DEST_DIR/matter/examples/providers/
+mkdir $DEST_DIR/matter/zzz_generated
 
 cp -R $MATTER_ROOT/src $DEST_DIR/matter
 cp -R $MATTER_ROOT/slc $DEST_DIR/matter
-cp -R $MATTER_ROOT/examples/platform/efr32 $DEST_DIR/matter/examples/platform/
+cp -R $MATTER_ROOT/examples/platform/efr32 $DEST_DIR/matter/examples/platform
+cp -R $MATTER_ROOT/examples/providers/ $DEST_DIR/matter/examples/providers
+cp -R $MATTER_ROOT/examples/common/QRCode/repo/c $DEST_DIR/matter/examples/common/QRCode/repo
+cp -R $MATTER_ROOT/third_party/nlassert $DEST_DIR/matter/third_party/nlassert
+cp -R $MATTER_ROOT/third_party/pigweed $DEST_DIR/matter/third_party/pigweed
+cp -R $MATTER_ROOT/third_party/nlio $DEST_DIR/matter/third_party/nlio
+cp -R $MATTER_ROOT/zzz_generated/app-common $DEST_DIR/matter/zzz_generated
+cp -R $MATTER_ROOT/zzz_generated/controller-clusters $DEST_DIR/matter/zzz_generated
+
 cp $MATTER_ROOT/matter.slce $DEST_DIR/matter
 cp $MATTER_ROOT/matter.slsdk $DEST_DIR/matter
 cp $MATTER_ROOT/matter_templates.xml $DEST_DIR/matter
