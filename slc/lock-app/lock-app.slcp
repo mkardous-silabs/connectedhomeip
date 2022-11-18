@@ -75,4 +75,6 @@ configuration:
   - name: SL_BOARD_ENABLE_DISPLAY
     value: "1"
     condition: [glib]
- 
+toolchain_settings:
+  - option: gcc_c++_compiler_option
+    value: -std=gnu++17
