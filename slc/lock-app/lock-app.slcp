@@ -78,3 +78,9 @@ configuration:
 toolchain_settings:
   - option: gcc_c++_compiler_option
     value: -std=gnu++17
+readme:
+  - path: ./readme.html
+ui_hints:
+  highlight:
+    - path: readme.html
+      focus: false
