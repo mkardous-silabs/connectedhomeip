@@ -29,6 +29,8 @@ component:
     from: matter
   - id: matter_ota_support
     from: matter
+  - id: matter_mbedtls
+    from: matter
 
   - id: lock_common
     from: matter

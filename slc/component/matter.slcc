@@ -39,9 +39,6 @@ toolchain_settings:
   - option: gcc_compiler_option
     value: -fno-common
 
-define:
-  - name: CONFIG_MBEDTLS_USE_CHIP_PVCALLOC
-
 provides:
   # Set provide used by SDK to suppress content that Matter provides
   - name: matter_integration
@@ -50,18 +47,6 @@ provides:
 requires:
   - name: bootloader_interface
   - name: cpp_support
-  - name: mbedtls_aes
-  - name: mbedtls_ccm
-  - name: mbedtls_cmac
-  - name: mbedtls_ecc
-  - name: mbedtls_ecdh
-  - name: mbedtls_ecdsa
-  - name: mbedtls_ecdsa_deterministic
-  - name: mbedtls_sha
-  - name: mbedtls_hash
-  - name: mbedtls_hkdf
-  - name: mbedtls_entropy_default
-  - name: mbedtls_x509
   - name: sl_system
   - name: freertos
   - name: power_manager
@@ -82,7 +67,6 @@ requires:
   - name: bluetooth_feature_scanner
   - name: bluetooth_feature_connection
 
-  - name: mbedtls_pkcs5
   - name: matter_platform_efr32
     condition: [device_series_1]
   - name: matter_platform_efr32

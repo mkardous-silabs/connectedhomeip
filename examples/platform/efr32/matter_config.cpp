@@ -129,7 +129,7 @@ void EFR32MatterConfig::ConnectivityEventCallback(const ChipDeviceEvent * event,
 
 CHIP_ERROR EFR32MatterConfig::InitMatter(const char * appName)
 {
-//    mbedtls_platform_set_calloc_free(CHIPPlatformMemoryCalloc, CHIPPlatformMemoryFree);
+    mbedtls_platform_set_calloc_free(CHIPPlatformMemoryCalloc, CHIPPlatformMemoryFree);
 
     EFR32_LOG("==================================================");
     EFR32_LOG("%s starting", appName);
