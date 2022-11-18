@@ -30,7 +30,7 @@ mkdir $DEST_DIR/matter/zzz_generated
 cp -R $MATTER_ROOT/src $DEST_DIR/matter
 cp -R $MATTER_ROOT/slc $DEST_DIR/matter
 cp -R $MATTER_ROOT/examples/platform/efr32 $DEST_DIR/matter/examples/platform
-cp -R $MATTER_ROOT/examples/providers/ $DEST_DIR/matter/examples/providers
+cp -R $MATTER_ROOT/examples/providers/ $DEST_DIR/matter/examples
 cp -R $MATTER_ROOT/examples/common/QRCode/repo/c $DEST_DIR/matter/examples/common/QRCode/repo
 cp -R $MATTER_ROOT/third_party/nlassert $DEST_DIR/matter/third_party/nlassert
 cp -R $MATTER_ROOT/third_party/pigweed $DEST_DIR/matter/third_party/pigweed

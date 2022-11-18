@@ -8,6 +8,11 @@ quality: production
 config_file:
   - path: slc/config/sl_matter_config.h
     file_id: matter_config
+  - path: "examples/platform/efr32/FreeRTOSConfig.h"
+    override:
+      component: freertos
+      file_id: freertos_config
+
 include:
   - path: slc/inc
 

@@ -73,6 +73,4 @@ configuration:
   - name: SL_BOARD_ENABLE_DISPLAY
     value: "1"
     condition: [glib]
-toolchain_settings:
-  - option: cxx_standard
-    value: "gnu++17"
+ 
