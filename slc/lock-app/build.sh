@@ -20,32 +20,10 @@ echo "Ensure SDK and Matter extension are trusted by SLC."
 slc signature trust --sdk $GSDK_ROOT
 slc signature trust --sdk $GSDK_ROOT --extension-path "$GSDK_ROOT/extension/matter/"
 
-echo "Patching SDK."
-if git -C $GSDK_ROOT apply --reverse --check $MATTER_ROOT/slc/script/gsdk_matter.patch >/dev/null 2>&1; then
-    echo "SDK is already patched."
-else
-    git -C $GSDK_ROOT apply $MATTER_ROOT/slc/script/gsdk_matter.patch && echo "Patch successful."
-fi
-
 # Make ZAP available to SLC-CLI
 export STUDIO_ADAPTER_PACK_PATH="$MATTER_ROOT/third_party/zap/repo/"
 
 # Generate project
 slc generate -d $SILABS_BOARD -p lock-app.slcp -s $GSDK_ROOT --with $SILABS_BOARD
 
-# Change to C++17 with GCC extensions
-# Matter needs GCC extensions -- strnlen() and strtok_r() are POSIX library symbols otherwise not available
-# Matter needs C++14 or higher
-# Pigweed needs C++17 or higher
-
-# Commenting out BSD (MacOS) specific syntax
-#sed -i'.orig' \
-#    -e s"#-std=c\+\+11#-std=gnu\+\+17#g" \
-#    "$SILABS_BOARD/lock-app.project.mak"
-
-# Use GNU syntax
-sed -i'.orig' \
-    's/-std=c++11/-std=gnu++17/g' \
-    $SILABS_BOARD/lock-app.project.mak
-
-make -C $SILABS_BOARD -f lock-app.Makefile -j4 
+make -C $SILABS_BOARD -f lock-app.Makefile -j4
