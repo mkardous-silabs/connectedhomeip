@@ -20,8 +20,6 @@ source:
   - path: examples/platform/efr32/heap_4_silabs.c
   - path: examples/platform/efr32/init_efrPlatform.cpp
   - path: examples/platform/efr32/matter_config.cpp
-  - path: examples/platform/efr32/uart.cpp
-
 toolchain_settings:
   - option: gcc_linker_option
     value: "-Wl,--wrap=malloc"

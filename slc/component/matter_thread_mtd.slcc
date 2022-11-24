@@ -1,0 +1,21 @@
+id: matter_thread_mtd
+label: Thread Network Layer (MTD)
+description: >
+  Add Thread network layer for minimal thread device.
+package: "Matter"
+category: "Matter|Network"
+quality: production
+requires:
+  - name: matter_thread
+  - name: ot_stack_mtd
+  - name: ot_cli
+provides:
+  - name: matter_thread_variant
+  - name: matter_thread_mtd
+source:
+  - path: examples/platform/efr32/uart.cpp
+    condition: [ot_cli]
+recommends:
+  - id: ot_cli_source
+conflicts:
+  - name: matter_thread_ftd

@@ -10,8 +10,10 @@ requires:
   - name: matter_libqrcode_common
 provides:
   - name: matter_qr_code
+conflicts:
+  - name: matter_low_power
 include:
--   path: examples/platform/efr32/display/
+  - path: examples/platform/efr32/display/
 source:
   - path: examples/platform/efr32/display/demo-ui.c
   - path: examples/platform/efr32/display/lcd.cpp

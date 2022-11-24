@@ -16,7 +16,6 @@ requires:
   - name: bluetooth_feature_legacy_advertiser
   - name: bluetooth_feature_periodic_advertiser
   - name: bluetooth_feature_extended_advertiser
-
 provides:
   - name: matter_ble
 template_contribution:

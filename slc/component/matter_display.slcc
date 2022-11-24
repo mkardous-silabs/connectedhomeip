@@ -11,6 +11,8 @@ requires:
   - name: glib
 provides:
   - name: matter_display
+conflicts:
+  - name: matter_low_power
 include:
 -   path: examples/platform/efr32/display/
 source:
