@@ -64,7 +64,6 @@ define:
   - name: BRD4161A
     condition: [brd4161a]
 
-  - name: EFR32_LOG_ENABLED
   - name: KVS_MAX_ENTRIES
     value: "75"
   - name: CHIP_CRYPTO_PLATFORM

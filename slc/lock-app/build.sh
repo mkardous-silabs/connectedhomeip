@@ -11,7 +11,7 @@ GSDK_ROOT=$MATTER_ROOT/third_party/silabs/gecko_sdk
 [ -d $GSDK_ROOT/extension ] && echo "Directory $GSDK_ROOT/extension exists." || mkdir $GSDK_ROOT/extension
 
 EXTENSION_DIR=$GSDK_ROOT/extension/matter
-if [ ! -L "$EXTENSION_DIR" ] ; then
+if [ ! -L "$EXTENSION_DIR" ]; then
     ln -s ../../../../ $EXTENSION_DIR
 fi
 
@@ -22,6 +22,18 @@ slc signature trust --sdk $GSDK_ROOT --extension-path "$GSDK_ROOT/extension/matt
 
 # Make ZAP available to SLC-CLI
 export STUDIO_ADAPTER_PACK_PATH="$MATTER_ROOT/third_party/zap/repo/"
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+    --clean)
+        rm -rf $SILABS_BOARD
+        shift
+        ;;
+    *)
+        shift
+        ;;
+    esac
+done
 
 # Generate project
 slc generate -d $SILABS_BOARD -p lock-app.slcp -s $GSDK_ROOT --with $SILABS_BOARD
