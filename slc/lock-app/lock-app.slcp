@@ -58,12 +58,6 @@ source:
   - path: include/CHIPProjectConfig.h
 
 define:
-  - name: BOARD_ID
-    value: BRD4161A
-    condition: [brd4161a]
-  - name: BRD4161A
-    condition: [brd4161a]
-
   - name: KVS_MAX_ENTRIES
     value: "75"
   - name: CHIP_CRYPTO_PLATFORM

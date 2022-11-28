@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+# This script generates Matter SLC components out of the output of a Matter GN build (compile_commands.json).
+# The compile_commands.json file must reside in the directory where it is placed by the GN build.
+# Example usage:
+#./slc/script/gen_components.py out/lock-app/BRD4161A/compile_commands.json
+
 import os
 import sys
 import yaml
@@ -20,16 +25,24 @@ if __name__ == '__main__':
                                              # but not I/O operations, cross-platform way of dealing with paths.
 
         file = (dir / cmd['file']).resolve() # concatenates the 'directory' and 'file' fields and resolves the resulting path which makes the path absolute, without any symlinks .. etc
-        
+
         command = cmd['command'] # extracts the 'command' field from the dictionary entry and stores it in command var
 
-        obj_path = pathlib.Path(command.split(' ')[-1])  # splits the command at every white space and grabs the last component of the command which is the path to the generated object file 
+        obj_path = pathlib.Path(command.split(' ')[-1])  # splits the command at every white space and grabs the last component of the command which is the path to the generated object file
 
         lib = obj_path.stem.split('.')[0] # splits the path of the generated object file at every '.' and grabs the first element which
 
         # skips the command if it has anything to do with pigweed ..
         if 'pigweed' in obj_path.parts and not lib.startswith('pw_') and lib not in PIGWEED_ALLOW_LIST:
             # internal pigweed stuff that we don't care about -- skip creating library
+            continue
+
+        # Skip the sdk component
+        if lib == 'sdk':
+            continue
+
+        # Skip our example app
+        if 'chip-efr32-' in lib and 'example' in lib:
             continue
 
         # creates a dictionary with the following entries, checks if lib entry exists, if not, its added
@@ -106,11 +119,13 @@ if __name__ == '__main__':
                 else:
                     component['source'].append({'path': src})
             component['include'] = [] # creates an 'includes' entry in the component dict and assigns it an empty list 
-            for inc in sorted(data['inc']): # sorts the 'inc' set entry in the data dict and loops it 
-                if any(path in inc for path in ['openthread', 'out/lock-app/BRD4161A/gen/include', 'RTT', 'zzz_generated/lock-app', 'examples/lock-app/efr32/include']):
-                    # Skip includes related to Gecko SDK and sample apps
+            for inc in sorted(data['inc']): # sorts the 'inc' set entry in the data dict and loops it
+                # Skip includes related to Gecko SDK and sample apps
+                if any(path in inc for path in ['openthread', sys.argv[1].removesuffix('compile_commands.json')+'gen/include', sys.argv[1].removesuffix('compile_commands.json')+'protocol_buffer', 'RTT', 'zzz_generated/lock-app', 'examples/lock-app/efr32/include']):
                     continue
-
+                # Skip any references to third_party/silabs
+                if 'third_party/silabs' in inc:
+                    continue
                 component['include'].append({'path': inc}) # appends a dict with a 'path: inc' entry to the list of includes 
             component['define'] = [] # creates a 'define' entry in the component dict and assigns it an empty list 
             for define in sorted(data['defines']): # sorts the 'define' set in the data dict and loops it 

@@ -14,7 +14,6 @@ description: pw_rpc
 id: pw_rpc
 include:
 -   path: examples/platform/efr32
--   path: out/lock-app/BRD4161A/protocol_buffer/gen/third_party/connectedhomeip/third_party/pigweed/repo/pw_rpc/protos.proto_library/pwpb
 -   path: src
 -   path: src/include
 -   path: src/lib

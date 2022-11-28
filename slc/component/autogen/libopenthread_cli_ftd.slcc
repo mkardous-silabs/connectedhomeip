@@ -29,7 +29,6 @@ include:
 -   path: examples/platform/efr32/project_include
 -   path: src/lib
 -   path: src/platform/EFR32
--   path: third_party/silabs/matter_support/matter/efr32/efr32mg12/BRD4161A
 package: Matter
 provides:
 -   name: matter_libopenthread_cli_ftd
