@@ -4,9 +4,9 @@
                description="This project builds a Matter Lock that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.lock-app.lock-app.slcp"/>
-    <properties key="projectFilePaths" value="slc/lock-app/lock-app.slcp"/>
-    <properties key="readmeFiles" value="slc/lock-app/readme.html"/>
+    <properties key="solutionReferenceId" value="slc.sample-app.lock-app.lock-app.slcp"/>
+    <properties key="projectFilePaths" value="slc/sample-app/lock-app/lock-app.slcp"/>
+    <properties key="readmeFiles" value="slc/sample-app/lock-app/readme.html"/>
     <properties key="boardCompatibility" value="brd4316a brd4317a brd4319a brd4161a brd4162a brd4163a brd4164a brd4166a brd4170a brd4186a brd4186c brd4187a brd4187c brd2703a brd2601b"/>
     <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide"/>

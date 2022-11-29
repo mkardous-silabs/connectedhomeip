@@ -6,5 +6,5 @@ sdk:
   id: gecko_sdk
   version: 4.1.1
 component_path:
-  - path: slc/component
-  - path: slc/component/autogen
+  - path: slc/component/matter-core
+  - path: slc/component/matter-silabs

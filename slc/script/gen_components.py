@@ -93,10 +93,10 @@ if __name__ == '__main__':
 
         libs[lib]['defines'] |= set(defines) # update 'defines' entry of the dict
 
-    os.makedirs('slc/component/autogen', exist_ok=True) # creates directories recursively 
+    os.makedirs('slc/component/matter-core', exist_ok=True) # creates directories recursively 
     for name, data in libs.items():
         name = name.lower().replace('-', '_') # takes name of library and replaces char '-' with '_'
-        with open(f"slc/component/autogen/{name}.slcc", 'w') as f: # creates an SLCC file and opens in write mode 
+        with open(f"slc/component/matter-core/{name}.slcc", 'w') as f: # creates an SLCC file and opens in write mode 
             component = {} #creates a dict called component 
             component['id'] = name # creates an "id" entry and sets its value to 'name'
             component['description'] = name # does the same thing as the line above

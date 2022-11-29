@@ -3,7 +3,7 @@
 SILABS_BOARD=${1:-brd4161a}
 echo "Building for $SILABS_BOARD"
 
-MATTER_ROOT=$( cd "../.." ; pwd -P )
+MATTER_ROOT=$( cd "../../.." ; pwd -P )
 GSDK_ROOT=$MATTER_ROOT/third_party/silabs/gecko_sdk
 
 # Ensure Matter repo is registered as SDK extension
@@ -12,7 +12,7 @@ GSDK_ROOT=$MATTER_ROOT/third_party/silabs/gecko_sdk
 
 EXTENSION_DIR=$GSDK_ROOT/extension/matter
 if [ ! -L "$EXTENSION_DIR" ]; then
-    ln -s ../../../../ $EXTENSION_DIR
+    ln -s ../../../../../ $EXTENSION_DIR
 fi
 
 # Trust SDK and Matter extension
