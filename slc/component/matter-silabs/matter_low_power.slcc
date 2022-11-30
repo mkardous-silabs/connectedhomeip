@@ -7,3 +7,8 @@ category: "Matter|Network"
 quality: production
 provides:
   - name: matter_low_power
+conflicts:
+  - name: matter_lcd
+  - name: matter_qr_code
+  - name: matter_shell
+  - name: matter_thread_cli

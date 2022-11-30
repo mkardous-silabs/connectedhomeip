@@ -1,16 +1,17 @@
-id: matter_display
+id: matter_lcd
 label: Display
 description: >
-  Display Support
+  SUpport for liquid crystal display on matter devboards
 package: "Matter"
 category: "Matter|Example"
 quality: production
 requires:
   - name: matter
   - name: matter_platform_efr32
+  - name: matter_uart
   - name: glib
 provides:
-  - name: matter_display
+  - name: matter_lcd
 conflicts:
   - name: matter_low_power
 include:
@@ -20,3 +21,6 @@ source:
   - path: examples/platform/efr32/display/lcd.cpp
 define:
   - name: DISPLAY_ENABLED
+recommends:
+  - name: memlcd_eusart
+  - name: memlcd_usart

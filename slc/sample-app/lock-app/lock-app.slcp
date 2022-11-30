@@ -23,7 +23,7 @@ component:
     from: matter
   - id: matter_thread_ftd
     from: matter
-  - id: matter_display
+  - id: matter_lcd
     from: matter
   - id: matter_qr_code
     from: matter
@@ -31,7 +31,9 @@ component:
     from: matter
   - id: matter_mbedtls
     from: matter
-
+  - id: matter_thread_cli
+    from: matter
+    
   - id: lock_common
     from: matter
 

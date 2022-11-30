@@ -133,7 +133,7 @@ if __name__ == '__main__':
                 if '=' in define: # looks for defines and splits the string to a define, value pair 
                     define, value = define.split('=')
                 
-                if define.startswith(('__', 'SL_', 'NVM3_', 'MBEDTLS_', 'EFR32', 'CORTEXM3', 'CONFIG', 'BOARD', 'BRD', 'PLATFORM', 'KVS')) or define in ['USE_NVM3', 'MICRO', 'PLAT', 'PHY']:
+                if define.startswith(('__', 'SL_', 'NVM3_', 'MBEDTLS_', 'EFR32', 'CORTEXM3', 'CONFIG', 'BOARD', 'BRD', 'PLATFORM', 'KVS')) or define in ['USE_NVM3', 'MICRO', 'PLAT', 'PHY', 'CHIP_DEVICE_CONFIG_THREAD_ENABLE_CLI']:
                     # Skip defines related to Gecko SDK
                     continue
 

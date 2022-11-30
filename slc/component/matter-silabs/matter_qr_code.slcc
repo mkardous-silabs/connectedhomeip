@@ -6,16 +6,12 @@ package: "Matter"
 category: "Matter|Example"
 quality: production
 requires:
-  - name: matter_display
+  - name: matter_lcd
   - name: matter_libqrcode_common
+  - name: matter_uart
 provides:
   - name: matter_qr_code
 conflicts:
   - name: matter_low_power
-include:
-  - path: examples/platform/efr32/display/
-source:
-  - path: examples/platform/efr32/display/demo-ui.c
-  - path: examples/platform/efr32/display/lcd.cpp
 define:
   - name: QR_CODE_ENABLED

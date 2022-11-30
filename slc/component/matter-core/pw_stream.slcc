@@ -1,7 +1,5 @@
 category: Matter|Core
 define:
--   name: CHIP_DEVICE_CONFIG_THREAD_ENABLE_CLI
-    value: '1'
 -   name: CHIP_HAVE_CONFIG_H
     value: '1'
 -   name: ENABLE_WSTK_LEDS

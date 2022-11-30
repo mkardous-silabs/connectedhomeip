@@ -7,9 +7,9 @@ category: "Matter|Core"
 quality: production
 requires:
   - name: matter_thread
-  - name: ot_cli
+  - name: matter_uart
+  - name: matter_thread_cli
 source:
-  - path: examples/platform/efr32/uart.cpp
   - path: examples/platform/efr32/matter_shell.cpp
   - path: examples/shell/shell_common/cmd_misc.cpp
   - path: examples/shell/shell_common/cmd_otcli.cpp
@@ -42,8 +42,6 @@ define:
   - name: ENABLE_CHIP_SHELL
   - name: OPENTHREAD_CONFIG_CLI_TRANSPORT
     value: OT_CLI_TRANSPORT_CONSOLE
-  - name: CHIP_DEVICE_CONFIG_THREAD_ENABLE_CLI
-    value: 1
 provides:
   - name: matter_shell
 conflicts:

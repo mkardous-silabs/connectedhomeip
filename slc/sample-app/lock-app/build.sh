@@ -12,7 +12,7 @@ GSDK_ROOT=$MATTER_ROOT/third_party/silabs/gecko_sdk
 
 EXTENSION_DIR=$GSDK_ROOT/extension/matter
 if [ ! -L "$EXTENSION_DIR" ]; then
-    ln -s ../../../../../ $EXTENSION_DIR
+    ln -s ../../../../ $EXTENSION_DIR
 fi
 
 # Trust SDK and Matter extension

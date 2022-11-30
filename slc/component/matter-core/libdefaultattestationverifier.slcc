@@ -2,8 +2,6 @@ category: Matter|Core
 define:
 -   name: CHIP_ADDRESS_RESOLVE_IMPL_INCLUDE_HEADER
     value: <lib/address_resolve/AddressResolve_DefaultImpl.h>
--   name: CHIP_DEVICE_CONFIG_THREAD_ENABLE_CLI
-    value: '1'
 -   name: CHIP_HAVE_CONFIG_H
     value: '1'
 -   name: CURRENT_TIME_NOT_IMPLEMENTED
