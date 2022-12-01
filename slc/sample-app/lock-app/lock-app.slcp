@@ -66,6 +66,8 @@ define:
     value: "1"
   - name: OPENTHREAD_CONFIG_LOG_OUTPUT
     value: OPENTHREAD_CONFIG_LOG_OUTPUT_APP
+  - name: _WANT_REENT_SMALL
+    value: "1"
 configuration:
   - name: SL_BOARD_ENABLE_VCOM
     value: "1"
@@ -75,10 +77,6 @@ configuration:
 toolchain_settings:
   - option: gcc_c++_compiler_option
     value: -std=gnu++17
-  - option: gcc_c_compiler_option
-    value: --specs=nano.specs
-  - option: gcc_c++_compiler_option
-    value: --specs=nano.specs
 readme:
   - path: ./readme.html
 ui_hints:
