@@ -68,6 +68,8 @@ define:
     value: OPENTHREAD_CONFIG_LOG_OUTPUT_APP
   - name: _WANT_REENT_SMALL
     value: "1"
+  - name: IS_DEMO_LOCK
+    value: "1"
 configuration:
   - name: SL_BOARD_ENABLE_VCOM
     value: "1"
