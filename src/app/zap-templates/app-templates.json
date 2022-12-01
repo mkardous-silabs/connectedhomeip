@@ -1,6 +1,12 @@
 {
     "name": "CHIP Application templates",
+    "category":"matter",
     "version": "chip-v1",
+    "options": {
+        "generator": {
+            "appendDirectory": "zap-generated"
+        }
+    },
     "helpers": [
         "partials/helper.js",
         "common/ListHelper.js",
