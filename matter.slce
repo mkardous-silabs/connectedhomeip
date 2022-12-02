@@ -1,7 +1,7 @@
 id: matter
-version: 1.0.0
-description: Matter integration for SLC
-label: Matter
+version: 0.0.2
+description: "Matter extension for Gecko SDK Suite"
+label: "Silicon Labs Matter"
 sdk:
   id: gecko_sdk
   version: 4.2.0
