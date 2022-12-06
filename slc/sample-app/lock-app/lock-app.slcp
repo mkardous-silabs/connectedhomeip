@@ -58,6 +58,7 @@ source:
   - path: include/AppTask.h
   - path: include/LockManager.h
   - path: include/CHIPProjectConfig.h
+  - path: include/app.h
 
 define:
   - name: KVS_MAX_ENTRIES
