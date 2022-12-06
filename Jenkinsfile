@@ -11,6 +11,11 @@ chiptoolPath = ''
 bootloaderPath = ''
 buildFarmLabel = 'Build-Farm'
 buildFarmLargeLabel = 'Build-Farm-Large'
+//This object will be populated by reading the pipeline_metadata.yml file
+pipelineMetadata = null 
+//change to NINJA if it's for SMG
+buildTool = ''
+extensionPath = ''
 
 secrets = [[path: 'teams/gecko-sdk/app/svc_gsdk', engineVersion: 2,
             secretValues: [[envVar: 'SL_PASSWORD', vaultKey: 'password'],
@@ -46,6 +51,106 @@ def initWorkspaceAndScm()
 
         // Matter Init --Checkout relevant submodule
         sh 'scripts/checkout_submodules.py --shallow --recursive --platform efr32 linux'
+
+    }
+
+    dir(buildOverlayDir+'/matter-scripts'){
+        checkout scm: [$class                     : 'GitSCM',
+                 branches                         : [[name: 'master']],
+                 browser                          : [$class: 'Stash',
+                                                     repoUrl: 'https://stash.silabs.com/scm/wmn_sqa/matter-scripts/'],
+                //  extensions                       : [$class: 'ScmName', name: 'matter-scripts'],
+                 userRemoteConfigs                : [[credentialsId: 'svc_gsdk',
+                                                      url: 'https://stash.silabs.com/scm/wmn_sqa/matter-scripts.git']]]
+    }
+
+    dir(buildOverlayDir+'/sqa-tools'){
+        checkout scm: [$class                     : 'GitSCM',
+                 branches                         : [[name: 'master']],
+                 browser                          : [$class: 'Stash',
+                                                     repoUrl: 'https://stash.silabs.com/scm/wmn_sqa/sqa-tools/'],
+                //  extensions                       : [$class: 'ScmName', name: 'sqa-tools'],
+                 userRemoteConfigs                : [[credentialsId: 'svc_gsdk',
+                                                      url: 'https://stash.silabs.com/scm/wmn_sqa/sqa-tools.git']]]
+    }
+    dir(buildOverlayDir+"/overlay/unify"){
+        checkout scm: [$class: 'GitSCM',
+                 branches:   [[name: 'ver_1.2.1-103-g34db9516-unify-matter-bridge']],
+                 extensions: [[$class: 'CloneOption', depth: 1, noTags: false, reference: '', shallow: true],
+                                [$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: true,
+                                recursiveSubmodules: true, reference: '', shallow: true, trackingSubmodules: false]],
+                    userRemoteConfigs: [[credentialsId: 'svc_gsdk', url: 'https://bitbucket-cph.silabs.com/scm/stash/uic/uic.git']]]
+    }
+}
+
+def   initExtensionWorkspaceAndScm()
+{
+    buildOverlayDir = sh( script: '/srv/jenkins/createSuperOverlay.sh '+
+                                  'createbuildoverlay '+
+                                  '/srv/workspaces '+
+                                  '/srv/jenkins/reference',
+                                  returnStdout: true ).trim()
+    echo "Build overlay directory: ${buildOverlayDir}"
+
+    checkout scm: [$class                     : 'GitSCM',
+                branches                         : scm.branches,
+                browser: [$class: 'Stash',
+                            repoUrl: 'https://stash.silabs.com/projects/WMN_TOOLS/repos/matter/'],
+                doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations,
+                extensions                       : scm.extensions << [$class: 'ScmName', name: 'matter'],
+                userRemoteConfigs                : scm.userRemoteConfigs]
+   
+    // Get pipeline metadata
+    sh 'pwd && ls -al'
+    pipelineMetadata = readYaml(file: 'pipeline_metadata.yml')
+
+    dir(buildOverlayDir+createWorkspaceOverlay.overlayMatterPath)
+    {
+        checkout scm: [$class: 'GitSCM', 
+                     branches: [[name: pipelineMetadata.toolchain_info.gsdk.gsdkBranch]],
+                     browser: [$class: 'Stash', 
+                                repoUrl: 'https://stash.silabs.com/scm/embsw/gecko_sdk_release.git'], 
+                     userRemoteConfigs: [[credentialsId: 'svc_gsdk',
+                                          url: 'https://stash.silabs.com/scm/embsw/gecko_sdk_release.git']]]
+
+        echo "after check out gsdk ....."
+        sh 'pwd && ls -al'
+     
+        dir('extension/matter')
+        {
+            checkout scm: [$class                     : 'GitSCM',
+                branches                         : scm.branches,
+                browser: [$class: 'Stash',
+                            repoUrl: 'https://stash.silabs.com/projects/WMN_TOOLS/repos/matter/'],
+                doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations,
+                extensions                       : scm.extensions << [$class: 'ScmName', name: 'matter'],
+                userRemoteConfigs                : scm.userRemoteConfigs]
+
+            
+                sh 'scripts/checkout_submodules.py --shallow --recursive --platform efr32 linux'
+                sh 'scripts/checkout_submodules.py --shallow --platform linux'
+                sh 'pwd && ls -la'
+        }
+
+        dir(buildOverlayDir+createWorkspaceOverlay.overlayUcCliPath)
+        {
+            checkout scm: [$class: 'GitSCM', 
+                     branches: [[name: pipelineMetadata.toolchain_info.ucCliBranch]],
+                     browser: [$class: 'Stash', 
+                                repoUrl: 'https://stash.silabs.com/projects/SIMPLICITY_STUDIO/repos/uc_cli'], 
+                     userRemoteConfigs: [[credentialsId: 'svc_gsdk',
+                                            url: 'ssh://git@stash.silabs.com/simplicity_studio/uc_cli.git']]]
+    
+            sh 'python3 slc -downloadOnly -deleteOutdated -noDownloadPrinting -forceDownload'
+            ucCliCommitFound = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+        }
+
+        dir(buildOverlayDir+createWorkspaceOverlay.overlayPrebuiltZapPath)
+        {
+            packageManagers.downloadLatestZapBuild('pipelineMetadata.toolchain_info.zap.zapBranch')
+        }
+        
+        sh 'du -sk'
 
     }
 
@@ -119,6 +224,77 @@ def runInWorkspace(Map args, Closure cl)
     }
 }
 
+def slcGeneration(board)
+{
+    
+    node(buildFarmLabel)
+    {
+       
+            def workspaceTmpDir = createWorkspaceOverlay(advanceStageMarker.getBuildStagesList(),
+                                                            buildOverlayDir)
+            def dirPath = workspaceTmpDir + createWorkspaceOverlay.overlayMatterPath
+            def saveDir = 'matter/'
+        
+            dir(dirPath) 
+            {
+              
+                withEnv(['PATH+UC_CLI='+ workspaceTmpDir + createWorkspaceOverlay.overlayUcCliPath,
+                        'ARM_GCC_DIR='+pipelineMetadata.toolchain_info.gccToolLocation,
+                        'STUDIO_ADAPTER_PACK_PATH='+workspaceTmpDir + createWorkspaceOverlay.overlayPrebuiltZapPath])
+                { 
+            
+                    try 
+                    {
+                        echo board
+                        echo "${env.STUDIO_ADAPTER_PACK_PATH}"
+                        sh  'slc configuration --sdk $PWD -data out/dmp_uc.data' 
+                        sh  'slc signature trust --sdk $PWD -data out/dmp_uc.data'
+                        sh  'slc signature trust --extension-path=$PWD/extension/matter -data out/dmp_uc.data' 
+                        sh  'slc signature trust --extension matter:0.0.2 -data out/dmp_uc.data'    
+
+                        dir('extension/matter')
+                        {
+                            sh 'pwd'
+                            sh "slc generate  -d ${board} -p slc/sample-app/lock-app/lock-app.slcp --with ${board} -data ../../out/dmp_uc.data --generator-timeout=1800"
+                            sh "make -C ${board} -f lock-app.Makefile -j4"
+                            dir('out/'+board.toUpperCase())
+                            {
+                                sh 'pwd'
+                                sh "cp ../../${board}/build/debug/*.s37 ."
+                                sh 'ls -al'
+                                
+                            }
+                           
+                            stash name: 'OpenThreadExamples-lock-app-BRD4161A', includes: 'out/**/*.s37'
+                        }
+
+                    }
+                    catch (e) 
+                    {
+                        withEnv(['PATH+UC_CLI='+ workspaceTmpDir + createWorkspaceOverlay.overlayUcCliPath])
+                        {
+                            sh 'slc -exportLogs '
+                            archiveArtifacts "*.log"
+                        }
+                        deactivateWorkspaceOverlay(advanceStageMarker.getBuildStagesList(),
+                                                    workspaceTmpDir,
+                                                    saveDir,
+                                                    '-name no-files')
+                        throw e
+                    }
+                }
+        
+        }
+       
+        deactivateWorkspaceOverlay(advanceStageMarker.getBuildStagesList(),
+                                    workspaceTmpDir,
+                                     'matter/extension/matter/out/',
+                                    '-name "*.s37" -o -name "*.map"')
+        }
+ 
+}
+
+
 def buildOpenThreadExample(app, board, args)
 {
     actionWithRetry {
@@ -132,7 +308,7 @@ def buildOpenThreadExample(app, board, args)
             def releaseString = "\"chip_detail_logging=false chip_automation_logging=false chip_progress_logging=false is_debug=false disable_lcd=true chip_build_libshell=false enable_openthread_cli=false chip_openthread_ftd=true\""
 
             dir(dirPath) {
-                withDockerContainer(image: "connectedhomeip/chip-build-efr32:0.5.64", args: "-u root")
+                withDockerContainer(image: "nexus.silabs.net/connectedhomeip/chip-build-efr32:0.5.64", args: "-u root")
                 {
                     // CSA Examples build
                     withEnv(['PW_ENVIRONMENT_ROOT='+dirPath])
@@ -179,7 +355,7 @@ def buildSilabsCustomOpenThreadExamples(app, board)
             def dirPath = workspaceTmpDir + createWorkspaceOverlay.overlayMatterPath
             def saveDir = 'matter/'
             dir(dirPath) {
-                withDockerContainer(image: "connectedhomeip/chip-build-efr32:0.5.64", args: "-u root")
+                withDockerContainer(image: "nexus.silabs.net/connectedhomeip/chip-build-efr32:0.5.64", args: "-u root")
                 {
                     // Custom Silabs build
                     withEnv(['PW_ENVIRONMENT_ROOT='+dirPath])
@@ -227,7 +403,7 @@ def buildWiFiExample(name, board, wifi_radio, args, radioName, buildCustom)
                 exampleType = "examples"
             }
             dir(dirPath) {                            
-                withDockerContainer(image: "connectedhomeip/chip-build-efr32:0.5.64", args: "-u root")
+                withDockerContainer(image: "nexus.silabs.net/connectedhomeip/chip-build-efr32:0.5.64", args: "-u root")
                 {
                     // CSA Examples build
                     withEnv(['PW_ENVIRONMENT_ROOT='+dirPath])
@@ -262,7 +438,10 @@ def buildChipTool()
         {
             def workspaceTmpDir = createWorkspaceOverlay(advanceStageMarker.getBuildStagesList(),
                                                             buildOverlayDir)
-            def dirPath = workspaceTmpDir + createWorkspaceOverlay.overlayMatterPath
+           
+         
+            echo extensionPath
+            def dirPath = workspaceTmpDir + createWorkspaceOverlay.overlayMatterPath + extensionPath
             def saveDir = 'matter/'
             dir(dirPath) {
                 withDockerContainer(image: "nexus.silabs.net/connectedhomeip/chip-build-crosscompile:22",args: "-u root")
@@ -285,13 +464,13 @@ def buildChipTool()
                         }
                     }
                 }
-
+                sh 'pwd && ls -al out'
                 stash name: 'ChipTool', includes: 'out/**/chip-tool'
 
             }
             deactivateWorkspaceOverlay(advanceStageMarker.getBuildStagesList(),
                                        workspaceTmpDir,
-                                       'matter/out/',
+                                       'matter'+extensionPath+'/out',
                                        '-name "chip-tool"')
         }
     }
@@ -365,7 +544,7 @@ def exportIoTReports()
             def dirPath = workspaceTmpDir + createWorkspaceOverlay.overlayMatterPath
             def saveDir = 'matter/'
             dir(dirPath) {
-                withDockerContainer(image: "connectedhomeip/chip-build-efr32:0.5.64", args: "-u root")
+                withDockerContainer(image: "nexus.silabs.net/connectedhomeip/chip-build-efr32:0.5.64", args: "-u root")
                 {
                     try {
                         // sh 'apt-get install python3-venv'
@@ -556,7 +735,7 @@ def openThreadTestSuite(deviceGroup,name,board)
     }
 }
 
-def utfThreadTestSuite(nomadNode,deviceGroup,testBedName,appName,matterType,board,testSuite,manifestYaml,testSequenceYaml )
+def utfThreadTestSuite(nomadNode,deviceGroup,testBedName,appName,matterType,board,testSuite,manifestYaml,testSequenceYaml,buildTool)
 {
     globalLock(credentialsId: 'hwmux_token_matterci', deviceGroup: deviceGroup) {
        node(nomadNode)
@@ -591,8 +770,16 @@ def utfThreadTestSuite(nomadNode,deviceGroup,testBedName,appName,matterType,boar
                                    
                                     chiptoolPath = sh(script: "find " + pwd() + " -name 'chip-tool' -print",returnStdout: true).trim()
                                     echo chiptoolPath
-                                    sh "cp out/CSA/${appName}/OpenThread/standard/${board}/*.s37 ../manifest"
 
+                                    if (buildTool == 'NINJA')
+                                    {
+                                        sh "cp out/CSA/${appName}/OpenThread/standard/${board}/*.s37 ../manifest"
+                                    }
+                                    else
+                                    {
+                                        sh "cp out/${board}/*.s37 ../manifest"
+                                    }
+                             
                             }
 
                             withVault([vaultSecrets: secrets])
@@ -618,6 +805,8 @@ def utfThreadTestSuite(nomadNode,deviceGroup,testBedName,appName,matterType,boar
                                     "MATTER_APP_EXAMPLE=${appName}",
                                     'RUN_SUITE=true',
                                     "MATTER_TYPE=${matterType}",
+                                    "TEST_TYPE=ci",
+                                    "BUILD_TOOL=${buildTool}",
                                     'PUBLISH_RESULTS=true', // unneeded?
                                     'RUN_TCM_SETUP=false',  // unneeded?
                                     "MATTER_CHIP_TOOL_PATH=${chiptoolPath}" ,
@@ -647,7 +836,7 @@ def utfThreadTestSuite(nomadNode,deviceGroup,testBedName,appName,matterType,boar
 }
 
 
-def utfWiFiTestSuite(nomadNode,deviceGroup,testBedName,appName,matterType,board,wifi_module,testSuite,manifestYaml,testSequenceYaml)
+def utfWiFiTestSuite(nomadNode,deviceGroup,testBedName,appName,matterType,board,wifi_module,testSuite,manifestYaml,testSequenceYaml,buildTool)
 {
     globalLock(credentialsId: 'hwmux_token_matterci', deviceGroup: deviceGroup) {
        node(nomadNode)
@@ -712,6 +901,9 @@ def utfWiFiTestSuite(nomadNode,deviceGroup,testBedName,appName,matterType,board,
                                     "MATTER_APP_EXAMPLE=${appName}",
                                     'RUN_SUITE=true',
                                     "MATTER_TYPE=${matterType}",
+                                    "BUILD_TOOL=${buildTool}",
+                                    "WIFI_MODULE=${wifi_module}",
+                                    "TEST_TYPE=ci",
                                     'PUBLISH_RESULTS=true', // unneeded?
                                     'RUN_TCM_SETUP=false',  // unneeded?
                                     "MATTER_CHIP_TOOL_PATH=${chiptoolPath}" ,
@@ -750,7 +942,8 @@ def pushToNexusAndUbai()
             def dirPath = workspaceTmpDir + createWorkspaceOverlay.overlayMatterPath
             def saveDir = 'matter/'
 
-            dir(dirPath) {
+            dir(dirPath+extensionPath) {
+                sh 'pwd'
                 try{
                     def image = "nexus.silabs.net/gsdk_nomad_containers/gsdk_ubai:latest"
                     sh "docker pull ${image}"
@@ -807,7 +1000,7 @@ def pushToNexusAndUbai()
     }
 }
 
-def triggerSqaSmokeTest()
+def triggerSqaSmokeAndRegressionTest(buildTool)
 {
     node(buildFarmLabel)
         {
@@ -827,13 +1020,15 @@ def triggerSqaSmokeTest()
                             if(sqaFunctions.isProductionJenkinsServer())
                             {
                                 echo 'in product jenkin.... '
-                                sqaFunctions.commitToMatterSqaPipelines()
+                                sqaFunctions.commitToMatterSqaPipelines(buildTool, 'smoke')
+                                sqaFunctions.commitToMatterSqaPipelines(buildTool, 'regression')
                             }
                 }
             }
             deactivateWorkspaceOverlay(advanceStageMarker.getBuildStagesList(), workspaceTmpDir, 'matter/')
         }
 }
+
 // pipeline definition and execution
 def pipeline()
 {
@@ -843,7 +1038,19 @@ def pipeline()
         node('buildNFS')
         {
             // set up NFS overlay and git repos
-            initWorkspaceAndScm()
+            //change buildTool to NINJA if it's for SMG
+            buildTool = 'SLC'
+            if (buildTool == 'SLC')
+            {
+                extensionPath = '/extension/matter'
+                initExtensionWorkspaceAndScm()
+            }
+            else
+            {
+                extensionPath = ''
+                initWorkspaceAndScm()
+            }
+        
             // export the NFS overlay
             sh 'sudo exportfs -af'
         }
@@ -852,6 +1059,7 @@ def pipeline()
     stage("Build")
     {
         advanceStageMarker()
+        /*
 
         //---------------------------------------------------------------------
         // Build Unify Matter Bridge
@@ -987,12 +1195,12 @@ def pipeline()
                 }
             }
         }
-
+*/
         //---------------------------------------------------------------------
         // Build Tooling
         //---------------------------------------------------------------------
         parallelNodesBuild['Build Chip-tool ']           = { this.buildChipTool()   }
-
+        parallelNodesBuild['SLC generate ']           = { this.slcGeneration('brd4161a')   }
         parallelNodesBuild.failFast = false
         parallel parallelNodesBuild
 
@@ -1013,9 +1221,9 @@ def pipeline()
     }
      stage('SQA')
     {
-      // advanceStageMarker()
-        //even openthread test in parallel, they actually run in sequence as they are using same raspi
+    
         def parallelNodes = [:]
+        /*
         parallelNodes['lighting Thread BRD4187C']   = { this.utfThreadTestSuite('gsdkMontrealNode','utf_matter_thread','matter_thread','lighting-app','thread','BRD4187C','',"/manifest-4187-thread","--tmconfig tests/.sequence_manager/test_execution_definitions/matter_thread_ci_sequence.yaml") }
         // parallelNodes['lighting Thread BRD2703A']   = { this.utfThreadTestSuite('gsdkMontrealNode','utf_matter_thread_2',
         //                                                                         'matter_thread_2','lighting-app','thread','BRD2703A','',
@@ -1025,16 +1233,19 @@ def pipeline()
 
         parallelNodes['lighting rs9116 BRD4161A']   = { this.utfWiFiTestSuite('gsdkMontrealNode','utf_matter_ci','INT0014944','lighting-app','wifi','BRD4161A','rs9116','',"/manifest","--tmconfig tests/.sequence_manager/test_execution_definitions/matter_wifi_ci_sequence.yaml") }
         parallelNodes['lighting 917-exp BRD4187C']   = { this.utfWiFiTestSuite('gsdkMontrealNode','utf_matter_wifi','matter_wifi','lighting-app','wifi','BRD4187C','91x','',"/manifest-4187-917","--tmconfig tests/.sequence_manager/test_execution_definitions/matter_wifi_ci_sequence.yaml") }
+        */
+        parallelNodes['Lock-App BRD4161A']           = { this.utfThreadTestSuite('gsdkMontrealNode','utf_matter_thread_4','matter_thread_4','lock-app','thread','BRD4161A','',"/manifest-4161-thread-lock","--tmconfig tests/.sequence_manager/test_execution_definitions/matter_thread_ci_sequence.yaml",buildTool) }
+    
         parallelNodes.failFast = false
         parallel parallelNodes
 
     }
-    stage("Trigger SQA Smoke")
+    stage("Trigger SQA Smoke and Regression")
     {
         advanceStageMarker()
-        triggerSqaSmokeTest()
+        triggerSqaSmokeAndRegressionTest(buildTool)
+       
     }
-
     currentBuild.result = 'SUCCESS'
 }
 
