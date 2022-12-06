@@ -8,3 +8,4 @@ sdk:
 component_path:
   - path: slc/component/matter-core
   - path: slc/component/matter-silabs
+  - path: slc/component/matter-clusters

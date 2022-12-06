@@ -9,4 +9,4 @@ description=Matter extension for Gecko SDK Suite
 prop.file.templatesFile=matter_templates.xml
 #prop.file.docsFile=matter_docs.xml
 #prop.file.demosFile=matter_demos.xml
-prop.subLabel=Matter
+prop.subLabel=Silicon Labs Matter\\ 1.0.1-1.0
