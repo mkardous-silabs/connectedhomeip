@@ -31,7 +31,8 @@
 #include <credentials/examples/DeviceAttestationCredsExample.h>
 #endif
 
-#define BLE_DEV_NAME "SiLabs-Door-Lock"
+
+#define BLE_DEV_NAME "SiLabs-Thermostat"
 using namespace ::chip;
 using namespace ::chip::Inet;
 using namespace ::chip::DeviceLayer;
