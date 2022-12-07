@@ -71,6 +71,10 @@ define:
     value: "1"
   - name: IS_DEMO_LOCK
     value: "1"
+  - name: NVM3_DEFAULT_NVM_SIZE
+    value: "40960"
+  - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
+    value: "4092"
 configuration:
   - name: SL_BOARD_ENABLE_VCOM
     value: "1"
@@ -80,6 +84,19 @@ configuration:
 toolchain_settings:
   - option: gcc_c++_compiler_option
     value: -std=gnu++17
+template_contribution:
+  - name: memory_flash_start
+    value: 0x0
+    condition: [device_series_1]
+  - name: memory_flash_size
+    value: 0x000FF800
+    condition: [device_series_1] 
+  - name: memory_flash_start
+    value: 0x08006000
+    condition: [device_series_2]
+  - name: memory_flash_size
+    value: 0x00178000
+    condition: [device_series_2] 
 readme:
   - path: ./readme.html
 ui_hints:
