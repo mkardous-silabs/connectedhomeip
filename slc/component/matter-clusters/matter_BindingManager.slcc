@@ -1,0 +1,17 @@
+
+category: Matter|Clusters
+description: Implementation of TODO
+id: matter_BindingManager
+label: TODO Cluster
+quality: production
+provides:
+   - name: "matter_BindingManager"
+source:
+  - path: src/app/clusters/bindings/BindingManager.cpp
+include:
+  - path: src/app/clusters/bindings/
+    file_list:
+      - path: BindingManager.h
+template_contribution:
+  - name: component_catalog
+    value: matter_BindingManager

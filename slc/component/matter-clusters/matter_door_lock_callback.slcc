@@ -1,0 +1,13 @@
+
+category: Matter|Clusters
+description: Implementation of TODO
+id: matter_door_lock_callback
+label: TODO Cluster
+quality: production
+provides:
+   - name: "matter_door_lock_callback"
+source:
+  - path: src/app/clusters/door-lock-server/door-lock-server-callback.cpp
+template_contribution:
+  - name: component_catalog
+    value: matter_door_lock_callback

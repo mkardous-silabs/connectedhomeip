@@ -1,0 +1,17 @@
+
+category: Matter|Clusters
+description: Implementation of TODO
+id: matter_PendingNotificationMap
+label: TODO Cluster
+quality: production
+provides:
+   - name: "matter_PendingNotificationMap"
+source:
+  - path: src/app/clusters/bindings/PendingNotificationMap.cpp
+include:
+  - path: src/app/clusters/bindings/
+    file_list:
+      - path: PendingNotificationMap.h
+template_contribution:
+  - name: component_catalog
+    value: matter_PendingNotificationMap

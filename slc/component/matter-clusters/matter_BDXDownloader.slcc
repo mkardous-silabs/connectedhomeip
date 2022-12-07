@@ -1,0 +1,17 @@
+
+category: Matter|Clusters
+description: Implementation of TODO
+id: matter_BDXDownloader
+label: TODO Cluster
+quality: production
+provides:
+   - name: "matter_BDXDownloader"
+source:
+  - path: src/app/clusters/ota-requestor/BDXDownloader.cpp
+include:
+  - path: src/app/clusters/ota-requestor/
+    file_list:
+      - path: BDXDownloader.h
+template_contribution:
+  - name: component_catalog
+    value: matter_BDXDownloader
