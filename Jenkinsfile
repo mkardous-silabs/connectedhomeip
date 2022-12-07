@@ -224,7 +224,7 @@ def runInWorkspace(Map args, Closure cl)
     }
 }
 
-def slcGeneration(board)
+def slcBuild(app, board)
 {
     
     node(buildFarmLabel)
@@ -250,13 +250,13 @@ def slcGeneration(board)
                         sh  'slc configuration --sdk $PWD -data out/dmp_uc.data' 
                         sh  'slc signature trust --sdk $PWD -data out/dmp_uc.data'
                         sh  'slc signature trust --extension-path=$PWD/extension/matter -data out/dmp_uc.data' 
-                        sh  'slc signature trust --extension matter:0.0.2 -data out/dmp_uc.data'    
+                        sh  'slc signature trust --extension matter:'+pipelineMetadata.toolchain_info.matterExtensionVersion+' -data out/dmp_uc.data'    
 
                         dir('extension/matter')
                         {
                             sh 'pwd'
-                            sh "slc generate  -d ${board} -p slc/sample-app/lock-app/lock-app.slcp --with ${board} -data ../../out/dmp_uc.data --generator-timeout=1800"
-                            sh "make -C ${board} -f lock-app.Makefile -j4"
+                            sh "slc generate  -d ${board} -p slc/sample-app/${app}/${app}.slcp --with "+board.toLowerCase()+" -data ../../out/dmp_uc.data --generator-timeout=1800"
+                            sh "make -C ${board} -f ${app}.Makefile -j4"
                             dir('out/'+board.toUpperCase())
                             {
                                 sh 'pwd'
@@ -265,17 +265,18 @@ def slcGeneration(board)
                                 
                             }
                            
-                            stash name: 'OpenThreadExamples-lock-app-BRD4161A', includes: 'out/**/*.s37'
+                            stash name: "OpenThreadExamples-${app}-${board}", includes: 'out/**/*.s37'
                         }
 
                     }
                     catch (e) 
                     {
-                        withEnv(['PATH+UC_CLI='+ workspaceTmpDir + createWorkspaceOverlay.overlayUcCliPath])
-                        {
-                            sh 'slc -exportLogs '
-                            archiveArtifacts "*.log"
-                        }
+                        // TODO: No need to archive artifacts if the build fails. With this change, it was taking a long time (30+ mins).
+                        // withEnv(['PATH+UC_CLI='+ workspaceTmpDir + createWorkspaceOverlay.overlayUcCliPath])
+                        // {
+                        //     sh 'slc -exportLogs '
+                        //     archiveArtifacts "*.log"
+                        // }
                         deactivateWorkspaceOverlay(advanceStageMarker.getBuildStagesList(),
                                                     workspaceTmpDir,
                                                     saveDir,
@@ -1059,13 +1060,14 @@ def pipeline()
     stage("Build")
     {
         advanceStageMarker()
-        /*
 
+        /*
         //---------------------------------------------------------------------
         // Build Unify Matter Bridge
         //---------------------------------------------------------------------
         parallelNodesBuild["Unify Matter Bridge"] = {this.buildUnifyBridge()}
-        
+        */
+
         //---------------------------------------------------------------------
         // Build OpenThread Examples
         //---------------------------------------------------------------------
@@ -1076,24 +1078,40 @@ def pipeline()
         if (env.BRANCH_NAME.startsWith('RC_')) {
             openThreadBoards = ["BRD4161A", "BRD4162A", "BRD4163A", "BRD4164A", "BRD4166A", "BRD4186C", "BRD4187C", "BRD2703A", "BRD2601B", "BRD4316A", "BRD4317A", "BRD4319A"]
         } else {
-            openThreadBoards = ["BRD4161A", "BRD4166A", "BRD4187C", "BRD2703A","BRD4316A", "BRD4319A" ]
+            // openThreadBoards = ["BRD4161A", "BRD4166A", "BRD4187C", "BRD2703A","BRD4316A", "BRD4319A" ] // MATTER_GSDK_TODO: enable as builds are fixed
+            openThreadBoards = ["BRD4161A", "BRD4187C" ]
           
         }
-        def openThreadApps = ["lighting-app", "lock-app", "thermostat", "light-switch-app", "window-app"]
+        // def openThreadApps = ["lighting-app", "lock-app", "thermostat", "light-switch-app", "window-app"] // MATTER_GSDK_TODO: enable as SLC apps are added
+        def openThreadApps = ["lock-app"]
 
         def sleepyBoard = ["BRD4161A", "BRD4186C"]
 
-        openThreadApps.each { appName ->
-            openThreadBoards.each { board ->
-                def arguments = ""
-                if (sleepyBoard.contains(board)) {
-                    arguments = "--sed"
+        if (buildTool == 'NINJA')
+        {
+            openThreadApps.each { appName ->
+                openThreadBoards.each { board ->
+                    def arguments = ""
+                    if (sleepyBoard.contains(board)) {
+                        arguments = "--sed"
+                    }
+
+                    parallelNodesBuild["OpenThread " + appName + " " + board + " " + arguments]      = { this.buildOpenThreadExample(appName, board, arguments)   }
+
                 }
-
-                parallelNodesBuild["OpenThread " + appName + " " + board + " " + arguments]      = { this.buildOpenThreadExample(appName, board, arguments)   }
-
             }
         }
+        else // SLC
+        {
+            openThreadApps.each { appName ->
+                openThreadBoards.each { board ->
+                    parallelNodesBuild["SLC OT " + appName + " " + board]      = { this.slcBuild(appName, board)   }
+
+                }
+            }
+        }
+
+        /*
 
         //---------------------------------------------------------------------
         // Build WiFi Examples
@@ -1200,7 +1218,6 @@ def pipeline()
         // Build Tooling
         //---------------------------------------------------------------------
         parallelNodesBuild['Build Chip-tool ']           = { this.buildChipTool()   }
-        parallelNodesBuild['SLC generate ']           = { this.slcGeneration('brd4161a')   }
         parallelNodesBuild.failFast = false
         parallel parallelNodesBuild
 
