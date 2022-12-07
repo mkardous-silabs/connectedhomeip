@@ -1223,11 +1223,14 @@ def pipeline()
 
     }
 
-    if (env.BRANCH_NAME.startsWith('silabs') || env.BRANCH_NAME.startsWith('RC_')) {
-        stage("Code Size analysis")
-        {
-            advanceStageMarker()
-            exportIoTReports()
+    if (buildTool == 'NINJA') // MATTER_GSDK_TODO: Skip SLC code size analysis stage for now as the paths need to be updated
+    {
+        if (env.BRANCH_NAME.startsWith('silabs') || env.BRANCH_NAME.startsWith('RC_')) {
+            stage("Code Size analysis")
+            {
+                advanceStageMarker()
+                exportIoTReports()
+            }
         }
     }
 
