@@ -12,6 +12,7 @@ include:
   - path: src/app/clusters/keypad-input-server/
     file_list:
       - path: keypad-input-server.h
+      - path: keypad-input-delegate.h
 template_contribution:
   - name: component_catalog
     value: matter_keypad_input

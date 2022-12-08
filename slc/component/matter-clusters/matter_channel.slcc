@@ -12,6 +12,7 @@ include:
   - path: src/app/clusters/channel-server/
     file_list:
       - path: channel-server.h
+      - path: channel-delegate.h
 template_contribution:
   - name: component_catalog
     value: matter_channel

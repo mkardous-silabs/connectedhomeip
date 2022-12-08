@@ -13,6 +13,7 @@ include:
     file_list:
       - path: ota-provider-delegate.h
       - path: ota-provider.h
+      - path: OTAProviderUserConsentDelegate.h
 template_contribution:
   - name: component_catalog
     value: matter_ota_provider

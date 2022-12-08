@@ -12,6 +12,7 @@ include:
   - path: src/app/clusters/target-navigator-server/
     file_list:
       - path: target-navigator-server.h
+      - path: target-navigator-delegate.h
 template_contribution:
   - name: component_catalog
     value: matter_target_navigator

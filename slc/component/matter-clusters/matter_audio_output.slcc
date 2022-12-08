@@ -11,7 +11,8 @@ source:
 include:
   - path: src/app/clusters/audio-output-server/
     file_list:
-      - path: audio-output-server.h
+     - path: audio-output-server.h
+     - path: audio-output-delegate.h
 template_contribution:
   - name: component_catalog
     value: matter_audio_output

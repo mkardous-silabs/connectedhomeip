@@ -12,6 +12,7 @@ include:
   - path: src/app/clusters/content-launch-server/
     file_list:
       - path: content-launch-server.h
+      - path: content-launch-delegate.h
 template_contribution:
   - name: component_catalog
     value: matter_content_launch

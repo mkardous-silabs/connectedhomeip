@@ -12,6 +12,7 @@ include:
   - path: src/app/clusters/occupancy-sensor-server/
     file_list:
       - path: occupancy-sensor-server.h
+      - path: occupancy-hal.h
 template_contribution:
   - name: component_catalog
     value: matter_occupancy_sensor

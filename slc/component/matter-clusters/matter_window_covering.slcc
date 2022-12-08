@@ -12,6 +12,7 @@ include:
   - path: src/app/clusters/window-covering-server/
     file_list:
       - path: window-covering-server.h
+      - path: window-covering-delegate.h
 template_contribution:
   - name: component_catalog
     value: matter_window_covering

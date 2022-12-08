@@ -12,6 +12,7 @@ include:
   - path: src/app/clusters/wake-on-lan-server/
     file_list:
       - path: wake-on-lan-server.h
+      - path: wake-on-lan-delegate.h
 template_contribution:
   - name: component_catalog
     value: matter_wake_on_lan

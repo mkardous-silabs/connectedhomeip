@@ -12,6 +12,7 @@ include:
   - path: src/app/clusters/media-input-server/
     file_list:
       - path: media-input-server.h
+      - path: media-input-delegate.h
 template_contribution:
   - name: component_catalog
     value: matter_media_input
