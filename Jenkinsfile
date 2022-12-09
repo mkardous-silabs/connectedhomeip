@@ -1082,8 +1082,8 @@ def pipeline()
             openThreadBoards = ["BRD4161A", "BRD4187C" ]
           
         }
-        // def openThreadApps = ["lighting-app", "lock-app", "thermostat", "light-switch-app", "window-app"] // MATTER_GSDK_TODO: enable as SLC apps are added
-        def openThreadApps = ["lock-app"]
+        // def openThreadApps = ["window-app"] // MATTER_GSDK_TODO: enable as SLC apps are added
+        def openThreadApps = ["lighting-app", "lock-app", "thermostat", "light-switch-app"]
 
         def sleepyBoard = ["BRD4161A", "BRD4186C"]
 
