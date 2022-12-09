@@ -6,7 +6,7 @@ quality: production
 
 sdk_extension:
   - id: matter
-    version: "0.0.3"
+    version: "0.0.4"
 
 component:
   - id: device_init
