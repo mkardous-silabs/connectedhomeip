@@ -116,7 +116,7 @@ def   initExtensionWorkspaceAndScm()
         echo "after check out gsdk ....."
         sh 'pwd && ls -al'
      
-        dir('extension/matter')
+        dir('extension/matter_extension')
         {
             checkout scm: [$class                     : 'GitSCM',
                 branches                         : scm.branches,
@@ -249,10 +249,10 @@ def slcBuild(app, board)
                         echo "${env.STUDIO_ADAPTER_PACK_PATH}"
                         sh  'slc configuration --sdk $PWD -data out/dmp_uc.data' 
                         sh  'slc signature trust --sdk $PWD -data out/dmp_uc.data'
-                        sh  'slc signature trust --extension-path=$PWD/extension/matter -data out/dmp_uc.data' 
+                        sh  'slc signature trust --extension-path=$PWD/extension/matter_extension -data out/dmp_uc.data' 
                         sh  'slc signature trust --extension matter:'+pipelineMetadata.toolchain_info.matterExtensionVersion+' -data out/dmp_uc.data'    
 
-                        dir('extension/matter')
+                        dir('extension/matter_extension')
                         {
                             sh 'pwd'
                             sh "slc generate  -d ${board} -p slc/sample-app/${app}/${app}.slcp --with "+board.toLowerCase()+" -data ../../out/dmp_uc.data --generator-timeout=1800"
@@ -289,7 +289,7 @@ def slcBuild(app, board)
        
         deactivateWorkspaceOverlay(advanceStageMarker.getBuildStagesList(),
                                     workspaceTmpDir,
-                                     'matter/extension/matter/out/',
+                                     'matter/extension/matter_extension/out/',
                                     '-name "*.s37" -o -name "*.map"')
         }
  
@@ -1043,7 +1043,7 @@ def pipeline()
             buildTool = 'SLC'
             if (buildTool == 'SLC')
             {
-                extensionPath = '/extension/matter'
+                extensionPath = '/extension/matter_extension'
                 initExtensionWorkspaceAndScm()
             }
             else
