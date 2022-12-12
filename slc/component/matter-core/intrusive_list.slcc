@@ -26,6 +26,7 @@ include:
 -   path: third_party/pigweed/repo/pw_log/public
 -   path: third_party/pigweed/repo/pw_preprocessor/public
 -   path: zzz_generated/app-common
+label: intrusive_list
 package: Matter
 provides:
 -   name: matter_intrusive_list

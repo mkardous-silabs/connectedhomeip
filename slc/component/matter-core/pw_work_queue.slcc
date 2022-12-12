@@ -37,6 +37,7 @@ include:
 -   path: third_party/pigweed/repo/pw_tokenizer/public
 -   path: third_party/pigweed/repo/pw_work_queue/public
 -   path: zzz_generated/app-common
+label: pw_work_queue
 package: Matter
 provides:
 -   name: matter_pw_work_queue

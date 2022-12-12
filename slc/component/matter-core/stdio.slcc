@@ -15,6 +15,7 @@ include:
 -   path: src/lib
 -   path: src/platform/EFR32
 -   path: zzz_generated/app-common
+label: stdio
 package: Matter
 provides:
 -   name: matter_stdio

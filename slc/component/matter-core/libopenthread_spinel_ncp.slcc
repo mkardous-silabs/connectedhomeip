@@ -25,6 +25,7 @@ include:
 -   path: examples/platform/efr32/project_include
 -   path: src/lib
 -   path: src/platform/EFR32
+label: libopenthread_spinel_ncp
 package: Matter
 provides:
 -   name: matter_libopenthread_spinel_ncp

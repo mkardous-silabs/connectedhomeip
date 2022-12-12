@@ -15,9 +15,10 @@ PIGWEED_ALLOW_LIST = ['check_backend', 'intrusive_list']
 
 if __name__ == '__main__':
 
+    root  = str(pathlib.Path(os.path.realpath(__file__)).parent.parent.parent)
+
     MATTER_APP = sys.argv[1].split("/")[1]
 
-    root = pathlib.Path(sys.argv[1]).parent.absolute() # doesn't seem like "root" is being used anywhere else in the script
     with open(sys.argv[1]) as f:
         compile_commands = json.load(f) # returns a list of dictionaries, parses the json file, breaks it down into three fields, directory, file and command
 
@@ -110,6 +111,7 @@ if __name__ == '__main__':
             component['quality'] = 'production' 
             component['package'] = 'Matter'
             component['category'] = 'Matter|Core'
+            component['label'] = name
             component['provides'] = [{'name': f'matter_{name}'}] # creates a 'provides' entry in the component dict and assigns it to a list of dicts
             component['source'] = []
             for src in sorted(data['src']): # loops the 'src' set in data pertaining to the library 'name'
@@ -133,6 +135,9 @@ if __name__ == '__main__':
                 # Skip any references to third_party/silabs
                 if 'third_party/silabs' in inc:
                     continue
+
+                if 'out' == str(inc.split(os.sep)[0]):
+                    continue 
                 component['include'].append({'path': inc}) # appends a dict with a 'path: inc' entry to the list of includes 
             component['define'] = [] # creates a 'define' entry in the component dict and assigns it an empty list 
             for define in sorted(data['defines']): # sorts the 'define' set in the data dict and loops it 

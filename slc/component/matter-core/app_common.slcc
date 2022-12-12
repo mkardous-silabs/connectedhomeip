@@ -38,6 +38,7 @@ include:
 -   path: third_party/pigweed/repo/pw_stream/public
 -   path: zzz_generated
 -   path: zzz_generated/app-common
+label: app_common
 package: Matter
 provides:
 -   name: matter_app_common

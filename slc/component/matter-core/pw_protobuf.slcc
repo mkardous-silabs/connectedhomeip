@@ -36,6 +36,7 @@ include:
 -   path: third_party/pigweed/repo/pw_stream/public
 -   path: third_party/pigweed/repo/pw_varint/public
 -   path: zzz_generated/app-common
+label: pw_protobuf
 package: Matter
 provides:
 -   name: matter_pw_protobuf

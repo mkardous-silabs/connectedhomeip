@@ -32,6 +32,7 @@ include:
 -   path: third_party/pigweed/repo/pw_span/public
 -   path: third_party/pigweed/repo/pw_tokenizer/public
 -   path: zzz_generated/app-common
+label: pw_metric
 package: Matter
 provides:
 -   name: matter_pw_metric

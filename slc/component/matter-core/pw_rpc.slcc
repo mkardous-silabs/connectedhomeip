@@ -43,6 +43,7 @@ include:
 -   path: third_party/pigweed/repo/pw_sys_io/public
 -   path: third_party/pigweed/repo/pw_varint/public
 -   path: zzz_generated/app-common
+label: pw_rpc
 package: Matter
 provides:
 -   name: matter_pw_rpc

@@ -37,6 +37,7 @@ include:
 -   path: third_party/pigweed/repo/pw_status/public
 -   path: third_party/pigweed/repo/pw_stream/public
 -   path: zzz_generated/app-common
+label: address_resolve
 package: Matter
 provides:
 -   name: matter_address_resolve
