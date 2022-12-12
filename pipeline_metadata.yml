@@ -8,7 +8,7 @@
     studioBranch: 'master'
     ucCliBranch: 'master'
     gsdk:
-      gsdkBranch: 'staging/4.2/4.2.0-rc3'
+      gsdkBranch: 'staging/4.2/4.2.0-rc4'
       browserUrl: 'https://stash.silabs.com/projects/embsw/repos/gecko_sdk_release/'
       gitUrl: 'ssh://git@stash.silabs.com/embsw/gecko_sdk_release.git'
     zap:
