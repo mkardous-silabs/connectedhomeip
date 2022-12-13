@@ -23,3 +23,5 @@ provides:
 quality: production
 source:
 -   path: zzz_generated/app-common/app-common/zap-generated/cluster-objects.cpp
+ui_hints:
+ visibility: never

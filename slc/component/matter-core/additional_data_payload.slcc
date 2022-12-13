@@ -24,3 +24,5 @@ quality: production
 source:
 -   path: src/setup_payload/AdditionalDataPayloadGenerator.cpp
 -   path: src/setup_payload/AdditionalDataPayloadParser.cpp
+ui_hints:
+ visibility: never

@@ -25,3 +25,5 @@ quality: production
 source:
 -   path: src/lib/support/UnitTestRegistration.cpp
 -   path: src/lib/support/UnitTestUtils.cpp
+ui_hints:
+ visibility: never

@@ -64,3 +64,5 @@ source:
 -   path: third_party/openthread/ot-efr32/openthread/src/core/radio/radio_platform.cpp
 -   path: third_party/openthread/ot-efr32/openthread/src/core/thread/link_quality.cpp
 -   path: third_party/openthread/ot-efr32/openthread/src/core/utils/parse_cmdline.cpp
+ui_hints:
+ visibility: never

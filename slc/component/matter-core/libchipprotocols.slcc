@@ -48,3 +48,5 @@ source:
 -   path: src/protocols/secure_channel/MessageCounterManager.cpp
 -   path: src/protocols/user_directed_commissioning/UserDirectedCommissioningClient.cpp
 -   path: src/protocols/user_directed_commissioning/UserDirectedCommissioningServer.cpp
+ui_hints:
+ visibility: never

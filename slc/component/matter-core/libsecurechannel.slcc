@@ -52,3 +52,5 @@ source:
 -   path: src/protocols/secure_channel/SimpleSessionResumptionStorage.cpp
 -   path: src/protocols/secure_channel/StatusReport.cpp
 -   path: src/protocols/secure_channel/UnsolicitedStatusHandler.cpp
+ui_hints:
+ visibility: never

@@ -52,3 +52,5 @@ source:
 -   path: src/transport/SessionHolder.cpp
 -   path: src/transport/SessionManager.cpp
 -   path: src/transport/TransportMgrBase.cpp
+ui_hints:
+ visibility: never

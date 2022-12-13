@@ -49,3 +49,5 @@ source:
 -   path: src/app/server/EchoHandler.cpp
 -   path: src/app/server/OnboardingCodesUtil.cpp
 -   path: src/app/server/Server.cpp
+ui_hints:
+ visibility: never

@@ -31,3 +31,5 @@ source:
 -   path: src/lib/core/CHIPTLVUtilities.cpp
 -   path: src/lib/core/CHIPTLVWriter.cpp
 -   path: src/lib/core/OTAImageHeader.cpp
+ui_hints:
+ visibility: never

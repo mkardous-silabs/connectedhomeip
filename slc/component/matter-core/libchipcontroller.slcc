@@ -55,3 +55,5 @@ source:
 -   path: src/controller/EmptyDataModelHandler.cpp
 -   path: src/controller/ExampleOperationalCredentialsIssuer.cpp
 -   path: src/controller/SetUpCodePairer.cpp
+ui_hints:
+ visibility: never

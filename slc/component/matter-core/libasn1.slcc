@@ -27,3 +27,5 @@ source:
 -   path: src/lib/asn1/ASN1Reader.cpp
 -   path: src/lib/asn1/ASN1Time.cpp
 -   path: src/lib/asn1/ASN1Writer.cpp
+ui_hints:
+ visibility: never

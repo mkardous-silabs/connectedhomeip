@@ -54,3 +54,5 @@ source:
 -   path: src/platform/OpenThread/GenericNetworkCommissioningThreadDriver.cpp
 -   path: src/platform/PersistedStorage.cpp
 -   path: src/platform/PlatformEventSupport.cpp
+ui_hints:
+ visibility: never

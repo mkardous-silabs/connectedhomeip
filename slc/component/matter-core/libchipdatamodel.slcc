@@ -113,3 +113,5 @@ source:
 -   path: src/app/WriteClient.cpp
 -   path: src/app/WriteHandler.cpp
 -   path: src/app/reporting/Engine.cpp
+ui_hints:
+ visibility: never

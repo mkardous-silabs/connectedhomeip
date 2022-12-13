@@ -68,3 +68,5 @@ source:
 template_contribution:
 -   name: component_catalog
     value: gatt_configuration
+ui_hints:
+ visibility: never

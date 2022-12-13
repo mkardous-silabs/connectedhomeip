@@ -45,3 +45,5 @@ source:
 -   path: src/access/AccessControl.cpp
 -   path: src/access/examples/ExampleAccessControlDelegate.cpp
 -   path: src/access/examples/PermissiveAccessControlDelegate.cpp
+ui_hints:
+ visibility: never

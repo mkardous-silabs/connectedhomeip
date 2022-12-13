@@ -1,9 +1,8 @@
 id: matter_uart
 label: Uart
-description: >
-  Enable sources and define for uart as used by matter components
+description: Enable sources and define for uart as used by matter components
 package: "Matter"
-category: "Matter|Example"
+category: "Matter|Platform"
 quality: production
 requires:
   - name: uartdrv_usart

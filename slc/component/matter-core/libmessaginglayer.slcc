@@ -50,3 +50,5 @@ source:
 -   path: src/messaging/ReliableMessageContext.cpp
 -   path: src/messaging/ReliableMessageMgr.cpp
 -   path: src/messaging/ReliableMessageProtocolConfig.cpp
+ui_hints:
+ visibility: never

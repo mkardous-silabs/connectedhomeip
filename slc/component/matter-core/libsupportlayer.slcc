@@ -47,3 +47,5 @@ source:
 -   path: src/lib/support/verhoeff/Verhoeff16.cpp
 -   path: src/lib/support/verhoeff/Verhoeff32.cpp
 -   path: src/lib/support/verhoeff/Verhoeff36.cpp
+ui_hints:
+ visibility: never

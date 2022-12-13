@@ -46,3 +46,5 @@ source:
 -   path: src/protocols/bdx/BdxTransferSession.cpp
 -   path: src/protocols/bdx/BdxUri.cpp
 -   path: src/protocols/bdx/TransferFacilitator.cpp
+ui_hints:
+ visibility: never

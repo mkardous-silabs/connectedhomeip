@@ -45,3 +45,5 @@ source:
 -   path: src/lib/dnssd/Discovery_ImplPlatform.cpp
 -   path: src/lib/dnssd/ServiceNaming.cpp
 -   path: src/lib/dnssd/TxtFields.cpp
+ui_hints:
+ visibility: never

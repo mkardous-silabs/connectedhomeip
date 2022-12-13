@@ -25,3 +25,5 @@ source:
 -   path: src/crypto/CHIPCryptoPAL.cpp
 -   path: src/crypto/PersistentStorageOperationalKeystore.cpp
 -   path: src/crypto/RandUtils.cpp
+ui_hints:
+ visibility: never

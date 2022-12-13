@@ -47,3 +47,5 @@ source:
 -   path: third_party/pigweed/repo/pw_protobuf/map_utils.cc
 -   path: third_party/pigweed/repo/pw_protobuf/message.cc
 -   path: third_party/pigweed/repo/pw_protobuf/stream_decoder.cc
+ui_hints:
+ visibility: never

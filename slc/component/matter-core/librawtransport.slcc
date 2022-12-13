@@ -46,3 +46,5 @@ source:
 -   path: src/transport/raw/MessageHeader.cpp
 -   path: src/transport/raw/TCP.cpp
 -   path: src/transport/raw/UDP.cpp
+ui_hints:
+ visibility: never

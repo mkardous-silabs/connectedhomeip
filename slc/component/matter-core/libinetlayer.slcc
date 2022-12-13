@@ -31,3 +31,5 @@ source:
 -   path: src/inet/InetInterface.cpp
 -   path: src/inet/UDPEndPoint.cpp
 -   path: src/inet/UDPEndPointImplOpenThread.cpp
+ui_hints:
+ visibility: never

@@ -23,3 +23,5 @@ provides:
 quality: production
 source:
 -   path: src/protocols/interaction_model/StatusCode.cpp
+ui_hints:
+ visibility: never

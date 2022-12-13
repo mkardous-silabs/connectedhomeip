@@ -43,3 +43,5 @@ provides:
 quality: production
 source:
 -   path: examples/platform/efr32/EFR32DeviceDataProvider.cpp
+ui_hints:
+ visibility: never

@@ -239,3 +239,5 @@ source:
 -   path: third_party/openthread/ot-efr32/openthread/src/core/utils/ping_sender.cpp
 -   path: third_party/openthread/ot-efr32/openthread/src/core/utils/slaac_address.cpp
 -   path: third_party/openthread/ot-efr32/openthread/src/core/utils/srp_client_buffers.cpp
+ui_hints:
+ visibility: never

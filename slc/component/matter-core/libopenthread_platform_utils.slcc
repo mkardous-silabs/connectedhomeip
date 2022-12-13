@@ -31,3 +31,5 @@ source:
 -   path: third_party/openthread/ot-efr32/openthread/examples/platforms/utils/mac_frame.cpp
 -   path: third_party/openthread/ot-efr32/openthread/examples/platforms/utils/settings_ram.c
 -   path: third_party/openthread/ot-efr32/openthread/examples/platforms/utils/soft_source_match_table.c
+ui_hints:
+ visibility: never

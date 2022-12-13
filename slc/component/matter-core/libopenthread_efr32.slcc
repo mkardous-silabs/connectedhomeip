@@ -36,3 +36,5 @@ source:
 -   path: third_party/openthread/ot-efr32/src/src/security_manager.c
 -   path: third_party/openthread/ot-efr32/src/src/sleep.c
 -   path: third_party/openthread/ot-efr32/src/src/system.c
+ui_hints:
+ visibility: never

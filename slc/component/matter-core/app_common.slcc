@@ -56,3 +56,5 @@ source:
 -   path: src/app/util/privilege-storage.cpp
 -   path: src/app/util/util.cpp
 -   path: zzz_generated/app-common/app-common/zap-generated/attributes/Accessors.cpp
+ui_hints:
+ visibility: never
