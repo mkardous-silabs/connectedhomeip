@@ -15,7 +15,7 @@ buildFarmLargeLabel = 'Build-Farm-Large'
 pipelineMetadata = null 
 //change to NINJA if it's for SMG
 buildTool = ''
-extensionPath = ''
+extensionPath = 'extension/matter_extension'
 
 secrets = [[path: 'teams/gecko-sdk/app/svc_gsdk', engineVersion: 2,
             secretValues: [[envVar: 'SL_PASSWORD', vaultKey: 'password'],
@@ -116,7 +116,7 @@ def   initExtensionWorkspaceAndScm()
         echo "after check out gsdk ....."
         sh 'pwd && ls -al'
      
-        dir('extension/matter_extension')
+        dir(extensionPath)
         {
             checkout scm: [$class                     : 'GitSCM',
                 branches                         : scm.branches,
@@ -230,44 +230,52 @@ def slcBuild(app, board)
     node(buildFarmLabel)
     {
        
-            def workspaceTmpDir = createWorkspaceOverlay(advanceStageMarker.getBuildStagesList(),
-                                                            buildOverlayDir)
-            def dirPath = workspaceTmpDir + createWorkspaceOverlay.overlayMatterPath
-            def saveDir = 'matter/'
-        
-            dir(dirPath) 
-            {
-              
-                withEnv(['PATH+UC_CLI='+ workspaceTmpDir + createWorkspaceOverlay.overlayUcCliPath,
-                        'ARM_GCC_DIR='+pipelineMetadata.toolchain_info.gccToolLocation,
-                        'STUDIO_ADAPTER_PACK_PATH='+workspaceTmpDir + createWorkspaceOverlay.overlayPrebuiltZapPath])
-                { 
-            
+        def workspaceTmpDir = createWorkspaceOverlay(advanceStageMarker.getBuildStagesList(),
+                                                        buildOverlayDir)
+        def dirPath = workspaceTmpDir + createWorkspaceOverlay.overlayMatterPath
+        def saveDir = 'matter/'
+        def extensionVersion = pipelineMetadata.toolchain_info.matterExtensionVersion
+        def lowerCaseBoard= board.toLowerCase()
+        def gccImage = "nexus.silabs.net/gsdk_nomad_containers/gsdk_22q4:latest"
+
+        sh "docker pull ${gccImage}"
+
+        dir(workspaceTmpDir+"/overlay") 
+        {
+            withEnv(['PATH+UC_CLI='+ workspaceTmpDir + createWorkspaceOverlay.overlayUcCliPath,
+                'ARM_GCC_DIR='+pipelineMetadata.toolchain_info.gccToolLocation,
+                'STUDIO_ADAPTER_PACK_PATH='+workspaceTmpDir + createWorkspaceOverlay.overlayPrebuiltZapPath])
+            { 
+                withDockerContainer(image: gccImage)
+                {
                     try 
                     {
-                        echo board
-                        echo "${env.STUDIO_ADAPTER_PACK_PATH}"
-                        sh  'slc configuration --sdk $PWD -data out/dmp_uc.data' 
-                        sh  'slc signature trust --sdk $PWD -data out/dmp_uc.data'
-                        sh  'slc signature trust --extension-path=$PWD/extension/matter_extension -data out/dmp_uc.data' 
-                        sh  'slc signature trust --extension matter:'+pipelineMetadata.toolchain_info.matterExtensionVersion+' -data out/dmp_uc.data'    
-
-                        dir('extension/matter_extension')
+                        sh 'printenv | sort'
+                        def uccliPath = workspaceTmpDir +createWorkspaceOverlay.overlayUcCliPath
+                                    
+                        dir(dirPath) 
                         {
-                            sh 'pwd'
-                            sh "slc generate  -d ${board} -p slc/sample-app/${app}/${app}.slcp --with "+board.toLowerCase()+" -data ../../out/dmp_uc.data --generator-timeout=1800"
-                            sh "make -C ${board} -f ${app}.Makefile -j4"
-                            dir('out/'+board.toUpperCase())
+                            sh """
+                                echo ${dirPath}
+                                pwd
+                                ${uccliPath}/slc configuration --sdk ${dirPath} -data ${dirPath}/out/dmp_uc.data
+                                ${uccliPath}/slc signature trust --sdk ${dirPath} -data ${dirPath}/out/dmp_uc.data
+                                ${uccliPath}/slc signature trust --extension-path=${dirPath}/${extensionPath} -data ${dirPath}/out/dmp_uc.data
+                                ${uccliPath}/slc signature trust --extension matter:${extensionVersion} -data ${dirPath}/out/dmp_uc.data
+                                ${uccliPath}/slc generate  -d ${extensionPath}/${board} -p ${extensionPath}/slc/sample-app/${app}/${app}.slcp --with ${lowerCaseBoard} -data ${dirPath}/out/dmp_uc.data --generator-timeout=1800
+                                make -C ${extensionPath}/${board} -f ${app}.Makefile -j4
+                            
+                            """
+                            dir(extensionPath+'/out/'+board)
                             {
                                 sh 'pwd'
+                                sh "ls -R ../../${board}/build/debug"
                                 sh "cp ../../${board}/build/debug/*.s37 ."
                                 sh 'ls -al'
-                                
                             }
-                           
-                            stash name: "OpenThreadExamples-${app}-${board}", includes: 'out/**/*.s37'
+                        
+                            stash name: "OpenThreadExamples-${app}-${board}", includes: extensionPath+'/out/**/*.s37'
                         }
-
                     }
                     catch (e) 
                     {
@@ -284,14 +292,14 @@ def slcBuild(app, board)
                         throw e
                     }
                 }
-        
-        }
+            }
        
         deactivateWorkspaceOverlay(advanceStageMarker.getBuildStagesList(),
                                     workspaceTmpDir,
-                                     'matter/extension/matter_extension/out/',
+                                    'matter/'+extensionPath+'/out/',
                                     '-name "*.s37" -o -name "*.map"')
         }
+    }
  
 }
 
@@ -442,10 +450,13 @@ def buildChipTool()
            
          
             echo extensionPath
-            def dirPath = workspaceTmpDir + createWorkspaceOverlay.overlayMatterPath + extensionPath
+            def dirPath = workspaceTmpDir + createWorkspaceOverlay.overlayMatterPath + '/'+extensionPath
             def saveDir = 'matter/'
+            def chipToolImage = "nexus.silabs.net/connectedhomeip/chip-build-crosscompile:22"
+            sh "docker pull ${chipToolImage}"
+
             dir(dirPath) {
-                withDockerContainer(image: "nexus.silabs.net/connectedhomeip/chip-build-crosscompile:22",args: "-u root")
+                withDockerContainer(image: chipToolImage, args: "-u root")
                 {
                   	withEnv(['PW_ENVIRONMENT_ROOT='+dirPath])
                     {
@@ -767,7 +778,9 @@ def utfThreadTestSuite(nomadNode,deviceGroup,testBedName,appName,matterType,boar
                                     stashFolder = 'OpenThreadExamples-'+appName+'-'+board
                                     echo "unstash folder: "+stashFolder
                                     unstash stashFolder
+                                    sh "ls -R ${extensionPath}"
                                     unstash 'ChipTool'
+
                                    
                                     chiptoolPath = sh(script: "find " + pwd() + " -name 'chip-tool' -print",returnStdout: true).trim()
                                     echo chiptoolPath
@@ -778,7 +791,7 @@ def utfThreadTestSuite(nomadNode,deviceGroup,testBedName,appName,matterType,boar
                                     }
                                     else
                                     {
-                                        sh "cp out/${board}/*.s37 ../manifest"
+                                        sh "cp ${extensionPath}/out/${board}/*.s37 ../manifest"
                                     }
                              
                             }
@@ -874,7 +887,14 @@ def utfWiFiTestSuite(nomadNode,deviceGroup,testBedName,appName,matterType,board,
                                 chiptoolPath = sh(script: "find " + pwd() + " -name 'chip-tool' -print",returnStdout: true).trim()
                                 echo chiptoolPath
 
-                                sh "cp out/${appName}_wifi_${wifi_module}/${board}/*.s37 ../manifest"
+                                if (buildTool == 'NINJA')
+                                {
+                                   sh "cp out/${appName}_wifi_${wifi_module}/${board}/*.s37 ../manifest"
+                                }
+                                else
+                                {
+                                    sh "cp ${extensionPath}/out/${board}/*.s37 ../manifest"
+                                }
 
                             }
 
@@ -943,7 +963,7 @@ def pushToNexusAndUbai()
             def dirPath = workspaceTmpDir + createWorkspaceOverlay.overlayMatterPath
             def saveDir = 'matter/'
 
-            dir(dirPath+extensionPath) {
+            dir(dirPath+'/'+extensionPath) {
                 sh 'pwd'
                 try{
                     def image = "nexus.silabs.net/gsdk_nomad_containers/gsdk_ubai:latest"
@@ -1043,7 +1063,7 @@ def pipeline()
             buildTool = 'SLC'
             if (buildTool == 'SLC')
             {
-                extensionPath = '/extension/matter_extension'
+                extensionPath = 'extension/matter_extension'
                 initExtensionWorkspaceAndScm()
             }
             else
@@ -1083,7 +1103,8 @@ def pipeline()
           
         }
         // def openThreadApps = ["window-app"] // MATTER_GSDK_TODO: enable as SLC apps are added
-        def openThreadApps = ["lighting-app", "lock-app", "thermostat", "light-switch-app"]
+       // def openThreadApps = ["lighting-app", "lock-app", "thermostat", "light-switch-app"]
+        def openThreadApps = ["lighting-app", "lock-app", "light-switch-app"]
 
         def sleepyBoard = ["BRD4161A", "BRD4186C"]
 
