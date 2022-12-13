@@ -38,6 +38,7 @@ slc signature trust --sdk $GSDK_ROOT --extension-path "$GSDK_ROOT/extension/matt
 # Make ZAP available to SLC-CLI
 export STUDIO_ADAPTER_PACK_PATH="$MATTER_ROOT/third_party/zap/repo/"
 
+
 while [ $# -gt 0 ]; do
     case "$1" in
     --clean)
@@ -49,7 +50,6 @@ while [ $# -gt 0 ]; do
         ;;
     esac
 done
-
 # Generate project
 slc generate -d sample-app/$SILABS_APP_DIR/$SILABS_BOARD -p sample-app/$SILABS_APP_DIR/$SILABS_APP.slcp -s $GSDK_ROOT --with $SILABS_BOARD
 

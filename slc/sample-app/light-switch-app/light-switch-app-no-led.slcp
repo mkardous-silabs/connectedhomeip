@@ -28,6 +28,8 @@ component:
     from: matter
   - id: matter_thread_cli
     from: matter
+  - id: matter_gatt
+    from: matter
 
   - id: app_common
     from: matter

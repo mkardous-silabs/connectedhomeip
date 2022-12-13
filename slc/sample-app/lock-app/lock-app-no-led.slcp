@@ -28,7 +28,9 @@ component:
     from: matter
   - id: matter_thread_cli
     from: matter
-
+  - id: matter_gatt
+    from: matter
+    
   - id: efr32_factory_data_provider
     from: matter
 

@@ -1,7 +1,4 @@
 category: Matter|Core
-config_file:
--   directory: btconf
-    path: src/platform/EFR32/gatt.btconf
 define:
 -   name: CHIP_ADDRESS_RESOLVE_IMPL_INCLUDE_HEADER
     value: <lib/address_resolve/AddressResolve_DefaultImpl.h>
@@ -43,7 +40,6 @@ label: efr32
 package: Matter
 provides:
 -   name: matter_efr32
--   name: gatt_configuration
 quality: production
 source:
 -   path: src/platform/EFR32/BLEManagerImpl.cpp
@@ -65,8 +61,5 @@ source:
 -   path: src/platform/OpenThread/DnssdImpl.cpp
 -   path: src/platform/OpenThread/OpenThreadUtils.cpp
 -   path: src/platform/SingletonConfigurationManager.cpp
-template_contribution:
--   name: component_catalog
-    value: gatt_configuration
 ui_hints:
  visibility: never
