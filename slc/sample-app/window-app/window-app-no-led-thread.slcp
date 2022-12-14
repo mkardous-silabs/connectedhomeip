@@ -111,6 +111,8 @@ include:
 
 source:
   - path: src/LcdPainter.cpp
+    condition:
+    - matter_lcd
   - path: src/WindowAppImpl.cpp
   - path: src/WindowApp.cpp
   - path: src/ZclCallbacks.cpp
@@ -119,6 +121,8 @@ source:
   - path: include/AppConfig.h
   - path: include/CHIPProjectConfig.h
   - path: include/LcdPainter.h
+    condition:
+    - matter_lcd
   - path: include/WindowAppImpl.h
   - path: include/WindowApp.h
 
