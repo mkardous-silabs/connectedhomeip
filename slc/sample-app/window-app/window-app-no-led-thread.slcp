@@ -1,7 +1,7 @@
-project_name: thermostat-no-led
-label: Matter Thermostat
+project_name: window-app-no-led-thread
+label: Matter Window App
 description: >
-  Matter Thermostat
+  Matter window-app
 quality: production
 package: Matter
 
@@ -43,11 +43,7 @@ component:
     from: matter
   - id: matter_basic
     from: matter
-  - id: matter_bindings
-    from: matter
   - id: matter_descriptor
-    from: matter
-  - id: matter_diagnostic_logs
     from: matter
   - id: matter_ethernet_network_diagnostics
     from: matter
@@ -71,13 +67,11 @@ component:
     from: matter
   - id: matter_ota_requestor
     from: matter
+  - id: matter_power_source
+    from: matter
   - id: matter_scenes
     from: matter
   - id: matter_software_diagnostics
-    from: matter
-  - id: matter_thermostat
-    from: matter
-  - id: matter_thermostat_user_interface_configuration
     from: matter
   - id: matter_thread_network_diagnostics
     from: matter
@@ -87,6 +81,9 @@ component:
     from: matter
   - id: matter_wifi_network_diagnostics
     from: matter
+  - id: matter_window_covering
+    from: matter
+  - path: include/app.h
 
 # Require LCD and QR Code components only on the boards that support LCD
 requires:
@@ -104,30 +101,21 @@ requires:
     - brd4317a
 
 config_file:
-  - path: common/thermostat.zap
+  - path: common/window-app.zap
     directory: zap
 
 include:
   - path: include
 
 source:
-  - path: src/AppTask.cpp
-  - path: src/TemperatureManager.cpp
+  - path: src/LcdPainter.cpp
+  - path: src/WindowAppImpl.cpp
   - path: src/main.cpp
-  - path: src/ZclCallbacks.cpp
-  - path: src/SensorManager.cpp
-  - path: src/ThermostatUI.cpp
 
   - path: include/AppConfig.h
-  - path: include/AppEvent.h
-  - path: include/AppTask.h
-  - path: include/SensorManager.h
-  - path: include/TemperatureManager.h
-  - path: include/ThermostatIcons.h
-  - path: include/ThermostatUI.h
   - path: include/CHIPProjectConfig.h
-  - path: include/app.h
-
+  - path: include/LcdPainter.h
+  - path: include/WindowAppImpl.h
 
 define:
   - name: KVS_MAX_ENTRIES
@@ -137,8 +125,6 @@ define:
   - name: OPENTHREAD_CONFIG_LOG_OUTPUT
     value: OPENTHREAD_CONFIG_LOG_OUTPUT_APP
   - name: _WANT_REENT_SMALL
-    value: "1"
-  - name: IS_DEMO_THERMOSTAT
     value: "1"
   - name: NVM3_DEFAULT_NVM_SIZE
     value: "40960"

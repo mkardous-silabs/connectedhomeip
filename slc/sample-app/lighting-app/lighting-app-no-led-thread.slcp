@@ -1,7 +1,7 @@
-project_name: lock-app-no-led
-label: Matter Lock
+project_name: lighting-app-no-led-thread
+label: Matter Light
 description: >
-  Matter Lock App
+  Matter Lighting App
 quality: production
 package: Matter
 
@@ -30,11 +30,11 @@ component:
     from: matter
   - id: matter_gatt
     from: matter
-    
-  - id: efr32_factory_data_provider
-    from: matter
 
   - id: app_common
+    from: matter
+
+  - id: efr32_factory_data_provider
     from: matter
 
   - id: matter_access_control
@@ -43,11 +43,11 @@ component:
     from: matter
   - id: matter_basic
     from: matter
+  - id: matter_color_control
+    from: matter
   - id: matter_descriptor
     from: matter
   - id: matter_diagnostic_logs
-    from: matter
-  - id: matter_door_lock
     from: matter
   - id: matter_ethernet_network_diagnostics
     from: matter
@@ -63,9 +63,13 @@ component:
     from: matter
   - id: matter_identify
     from: matter
+  - id: matter_level_control
+    from: matter
   - id: matter_localization_configuration
     from: matter
   - id: matter_network_commissioning
+    from: matter
+  - id: matter_occupancy_sensor
     from: matter
   - id: matter_on_off
     from: matter
@@ -73,11 +77,9 @@ component:
     from: matter
   - id: matter_ota_requestor
     from: matter
-  - id: matter_power_source_configuration
-    from: matter
-  - id: matter_power_source
-    from: matter
   - id: matter_software_diagnostics
+    from: matter
+  - id: matter_switch
     from: matter
   - id: matter_thread_network_diagnostics
     from: matter
@@ -104,7 +106,7 @@ requires:
     - brd4317a
 
 config_file:
-  - path: common/lock-app.zap
+  - path: common/lighting-app.zap
     directory: zap
 
 include:
@@ -112,15 +114,13 @@ include:
 
 source:
   - path: src/AppTask.cpp
-  - path: src/LockManager.cpp
+  - path: src/LightingManager.cpp
   - path: src/main.cpp
   - path: src/ZclCallbacks.cpp
-  - path: src/EventHandlerLibShell.cpp
-    condition: [matter_shell]
   - path: include/AppConfig.h
   - path: include/AppEvent.h
   - path: include/AppTask.h
-  - path: include/LockManager.h
+  - path: include/LightingManager.h
   - path: include/CHIPProjectConfig.h
   - path: include/app.h
 
@@ -133,7 +133,7 @@ define:
     value: OPENTHREAD_CONFIG_LOG_OUTPUT_APP
   - name: _WANT_REENT_SMALL
     value: "1"
-  - name: IS_DEMO_LOCK
+  - name: IS_DEMO_LIGHT
     value: "1"
   - name: NVM3_DEFAULT_NVM_SIZE
     value: "40960"
@@ -161,11 +161,6 @@ template_contribution:
   - name: memory_flash_size
     value: 0x00178000
     condition: [device_series_2]
-readme:
-  - path: ./readme.html
-ui_hints:
-  highlight:
-    - path: readme.html
-      focus: false
+
 tag:
   - hardware:component:!led

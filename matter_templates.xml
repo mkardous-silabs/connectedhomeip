@@ -4,8 +4,8 @@
                description="This project builds a Matter Lock that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.sample-app.lock-app.lock-app.slcp"/>
-    <properties key="projectFilePaths" value="slc/sample-app/lock-app/lock-app.slcp"/>
+    <properties key="solutionReferenceId" value="slc.sample-app.lock-app.lock-app-thread.slcp"/>
+    <properties key="projectFilePaths" value="slc/sample-app/lock-app/lock-app-thread.slcp"/>
     <properties key="readmeFiles" value="slc/sample-app/lock-app/readme.html"/>
     <properties key="boardCompatibility" value="brd4161a brd4162a brd4163a brd4164a brd4166a brd4170a brd4186c brd4187c brd2601b brd2703a"/>
     <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
@@ -20,8 +20,8 @@
                description="This project builds a Matter Lock that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.sample-app.lock-app.lock-app-no-led.slcp"/>
-    <properties key="projectFilePaths" value="slc/sample-app/lock-app/lock-app-no-led.slcp"/>
+    <properties key="solutionReferenceId" value="slc.sample-app.lock-app.lock-app-no-led-thread.slcp"/>
+    <properties key="projectFilePaths" value="slc/sample-app/lock-app/lock-app-no-led-thread.slcp"/>
     <properties key="readmeFiles" value="slc/sample-app/lock-app/readme.html"/>
     <properties key="boardCompatibility" value="brd4316a brd4317a brd4319a"/>
     <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
@@ -36,8 +36,8 @@
                description="This project builds a Matter Light that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.sample-app.lighting-app.lighting-app.slcp"/>
-    <properties key="projectFilePaths" value="slc/sample-app/lighting-app/lighting-app.slcp"/>
+    <properties key="solutionReferenceId" value="slc.sample-app.lighting-app.lighting-app-thread.slcp"/>
+    <properties key="projectFilePaths" value="slc/sample-app/lighting-app/lighting-app-thread.slcp"/>
     <properties key="boardCompatibility" value="brd4161a brd4162a brd4163a brd4164a brd4166a brd4170a brd4186c brd4187c brd2601b brd2703a"/>
     <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide"/>
@@ -51,8 +51,8 @@
                description="This project builds a Matter Light that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.sample-app.lighting-app.lighting-app-no-led.slcp"/>
-    <properties key="projectFilePaths" value="slc/sample-app/lighting-app/lighting-app-no-led.slcp"/>
+    <properties key="solutionReferenceId" value="slc.sample-app.lighting-app.lighting-app-no-led-thread.slcp"/>
+    <properties key="projectFilePaths" value="slc/sample-app/lighting-app/lighting-app-no-led-thread.slcp"/>
     <properties key="boardCompatibility" value="brd4316a brd4317a brd4319a"/>
     <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide"/>
@@ -66,8 +66,8 @@
                description="This project builds a Matter Thermostat that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.sample-app.thermostat.thermostat.slcp"/>
-    <properties key="projectFilePaths" value="slc/sample-app/thermostat/thermostat.slcp"/>
+    <properties key="solutionReferenceId" value="slc.sample-app.thermostat.thermostat-thread.slcp"/>
+    <properties key="projectFilePaths" value="slc/sample-app/thermostat/thermostat-thread.slcp"/>
     <properties key="boardCompatibility" value="brd4161a brd4162a brd4163a brd4164a brd4166a brd4170a brd4186c brd4187c"/>
     <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide"/>
@@ -81,8 +81,8 @@
                description="This project builds a Matter Thermostat that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.sample-app.thermostat.thermostat-no-led.slcp"/>
-    <properties key="projectFilePaths" value="slc/sample-app/thermostat/thermostat-no-led.slcp"/>
+    <properties key="solutionReferenceId" value="slc.sample-app.thermostat.thermostat-no-led-thread.slcp"/>
+    <properties key="projectFilePaths" value="slc/sample-app/thermostat/thermostat-no-led-thread.slcp"/>
     <properties key="boardCompatibility" value="brd4316a brd4317a"/>
     <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide"/>
@@ -96,8 +96,8 @@
                description="This project builds a Matter Light Switch that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.sample-app.light-switch-app.light-switch-app.slcp"/>
-    <properties key="projectFilePaths" value="slc/sample-app/light-switch-app/light-switch-app.slcp"/>
+    <properties key="solutionReferenceId" value="slc.sample-app.light-switch-app.light-switch-app-thread.slcp"/>
+    <properties key="projectFilePaths" value="slc/sample-app/light-switch-app/light-switch-app-thread.slcp"/>
     <properties key="boardCompatibility" value="brd4161a brd4162a brd4163a brd4164a brd4166a brd4170a brd4186c brd4187c brd2601b brd2703a"/>
     <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide"/>
@@ -111,8 +111,8 @@
                description="This project builds a Matter Light Switch that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.sample-app.light-switch-app.light-switch-app-no-led.slcp"/>
-    <properties key="projectFilePaths" value="slc/sample-app/light-switch-app/light-switch-app-no-led.slcp"/>
+    <properties key="solutionReferenceId" value="slc.sample-app.light-switch-app.light-switch-app-no-led-thread.slcp"/>
+    <properties key="projectFilePaths" value="slc/sample-app/light-switch-app/light-switch-app-no-led-thread.slcp"/>
     <properties key="boardCompatibility" value="brd4316a brd4317a brd4319a"/>
     <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide"/>

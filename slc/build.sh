@@ -6,19 +6,20 @@
 # is assumed to reside in ./sample-apps/lighting-app/
 #
 # Usage:
-#./build.sh <app name> <board>
+# ./slc/build.sh <slcp path> <board>
 #
 # Example usage:
-# ./build.sh lighting-app brd4161a
-# ./build.sh lighting-app-no-led brd4161a
+# ./slc/build.sh slc/sample-app/lighting-app/lighting-app-no-led-thread.slcp brd4161a
+#       output in out/lighting-app-no-led-thread/brd4161a
 
-SILABS_APP=$1
+SILABS_APP_PATH=$1
 SILABS_BOARD=$2
-SILABS_APP_DIR=${SILABS_APP%%"-no-led"}
+SILABS_APP=$(basename "$SILABS_APP_PATH" .slcp)
+OUTPUT_DIR="out/$SILABS_APP/$SILABS_BOARD"
 
-echo "Building $SILABS_APP for $SILABS_BOARD in ./sample-app/$SILABS_APP_DIR"
+echo "Building $SILABS_APP for $SILABS_BOARD in $OUTPUT_DIR"
 
-MATTER_ROOT=$( cd "../" ; pwd -P )
+MATTER_ROOT=$( pwd -P )
 GSDK_ROOT=$MATTER_ROOT/third_party/silabs/gecko_sdk
 
 # Ensure Matter repo is registered as SDK extension
@@ -51,6 +52,6 @@ while [ $# -gt 0 ]; do
     esac
 done
 # Generate project
-slc generate -d sample-app/$SILABS_APP_DIR/$SILABS_BOARD -p sample-app/$SILABS_APP_DIR/$SILABS_APP.slcp -s $GSDK_ROOT --with $SILABS_BOARD
+slc generate -d $OUTPUT_DIR -p $SILABS_APP_PATH -s $GSDK_ROOT --with $SILABS_BOARD
 
-make -C sample-app/$SILABS_APP_DIR/$SILABS_BOARD -f $SILABS_APP.Makefile -j4
+make -C $OUTPUT_DIR -f $SILABS_APP.Makefile -j4

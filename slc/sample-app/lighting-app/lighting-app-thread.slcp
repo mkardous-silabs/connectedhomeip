@@ -1,7 +1,7 @@
-project_name: light-switch-app
-label: Matter Light Switch
+project_name: lighting-app-thread
+label: Matter Light
 description: >
-  Matter Light Switch App
+  Matter Lighting App
 quality: production
 package: Matter
 
@@ -48,7 +48,7 @@ component:
     from: matter
   - id: matter_basic
     from: matter
-  - id: matter_bindings
+  - id: matter_color_control
     from: matter
   - id: matter_descriptor
     from: matter
@@ -68,9 +68,15 @@ component:
     from: matter
   - id: matter_identify
     from: matter
+  - id: matter_level_control
+    from: matter
   - id: matter_localization_configuration
     from: matter
   - id: matter_network_commissioning
+    from: matter
+  - id: matter_occupancy_sensor
+    from: matter
+  - id: matter_on_off
     from: matter
   - id: matter_operational_credentials
     from: matter
@@ -135,7 +141,7 @@ requires:
     - brd4187c
 
 config_file:
-  - path: common/light-switch-app.zap
+  - path: common/lighting-app.zap
     directory: zap
 
 include:
@@ -143,13 +149,13 @@ include:
 
 source:
   - path: src/AppTask.cpp
-  - path: src/binding-handler.cpp
+  - path: src/LightingManager.cpp
   - path: src/main.cpp
   - path: src/ZclCallbacks.cpp
   - path: include/AppConfig.h
   - path: include/AppEvent.h
   - path: include/AppTask.h
-  - path: include/binding-handler.h
+  - path: include/LightingManager.h
   - path: include/CHIPProjectConfig.h
   - path: include/app.h
 
@@ -161,6 +167,8 @@ define:
   - name: OPENTHREAD_CONFIG_LOG_OUTPUT
     value: OPENTHREAD_CONFIG_LOG_OUTPUT_APP
   - name: _WANT_REENT_SMALL
+    value: "1"
+  - name: IS_DEMO_LIGHT
     value: "1"
   - name: NVM3_DEFAULT_NVM_SIZE
     value: "40960"
@@ -181,13 +189,13 @@ template_contribution:
     condition: [device_series_1]
   - name: memory_flash_size
     value: 0x000FF800
-    condition: [device_series_1]
+    condition: [device_series_1] 
   - name: memory_flash_start
     value: 0x08006000
     condition: [device_series_2]
   - name: memory_flash_size
     value: 0x00178000
-    condition: [device_series_2]
+    condition: [device_series_2] 
 
 tag:
   - hardware:component:led:2+

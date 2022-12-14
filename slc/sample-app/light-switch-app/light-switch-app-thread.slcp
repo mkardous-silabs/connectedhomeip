@@ -1,7 +1,7 @@
-project_name: thermostat
-label: Matter Thermostat
+project_name: light-switch-app-thread
+label: Matter Light Switch
 description: >
-  Matter Thermostat
+  Matter Light Switch App
 quality: production
 package: Matter
 
@@ -76,13 +76,9 @@ component:
     from: matter
   - id: matter_ota_requestor
     from: matter
-  - id: matter_scenes
-    from: matter
   - id: matter_software_diagnostics
     from: matter
-  - id: matter_thermostat
-    from: matter
-  - id: matter_thermostat_user_interface_configuration
+  - id: matter_switch
     from: matter
   - id: matter_thread_network_diagnostics
     from: matter
@@ -137,9 +133,9 @@ requires:
   - name: matter_qr_code
     condition:
     - brd4187c
-    
+
 config_file:
-  - path: common/thermostat.zap
+  - path: common/light-switch-app.zap
     directory: zap
 
 include:
@@ -147,22 +143,15 @@ include:
 
 source:
   - path: src/AppTask.cpp
-  - path: src/TemperatureManager.cpp
+  - path: src/binding-handler.cpp
   - path: src/main.cpp
   - path: src/ZclCallbacks.cpp
-  - path: src/SensorManager.cpp
-  - path: src/ThermostatUI.cpp
-
   - path: include/AppConfig.h
   - path: include/AppEvent.h
   - path: include/AppTask.h
-  - path: include/SensorManager.h
-  - path: include/TemperatureManager.h
-  - path: include/ThermostatIcons.h
-  - path: include/ThermostatUI.h
+  - path: include/binding-handler.h
   - path: include/CHIPProjectConfig.h
   - path: include/app.h
-
 
 define:
   - name: KVS_MAX_ENTRIES
@@ -172,8 +161,6 @@ define:
   - name: OPENTHREAD_CONFIG_LOG_OUTPUT
     value: OPENTHREAD_CONFIG_LOG_OUTPUT_APP
   - name: _WANT_REENT_SMALL
-    value: "1"
-  - name: IS_DEMO_THERMOSTAT
     value: "1"
   - name: NVM3_DEFAULT_NVM_SIZE
     value: "40960"

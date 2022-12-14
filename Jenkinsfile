@@ -224,7 +224,7 @@ def runInWorkspace(Map args, Closure cl)
     }
 }
 
-def slcBuild(app, board)
+def slcBuild(appDir, slcpFilename, board)
 {
     
     node(buildFarmLabel)
@@ -262,8 +262,8 @@ def slcBuild(app, board)
                                 ${uccliPath}/slc signature trust --sdk ${dirPath} -data ${dirPath}/out/dmp_uc.data
                                 ${uccliPath}/slc signature trust --extension-path=${dirPath}/${extensionPath} -data ${dirPath}/out/dmp_uc.data
                                 ${uccliPath}/slc signature trust --extension matter:${extensionVersion} -data ${dirPath}/out/dmp_uc.data
-                                ${uccliPath}/slc generate  -d ${extensionPath}/${board} -p ${extensionPath}/slc/sample-app/${app}/${app}.slcp --with ${lowerCaseBoard} -data ${dirPath}/out/dmp_uc.data --generator-timeout=1800
-                                make -C ${extensionPath}/${board} -f ${app}.Makefile -j4
+                                ${uccliPath}/slc generate  -d ${extensionPath}/${board} -p ${extensionPath}/slc/sample-app/${appDir}/${slcpFilename}.slcp --with ${lowerCaseBoard} -data ${dirPath}/out/dmp_uc.data --generator-timeout=1800
+                                make -C ${extensionPath}/${board} -f ${slcpFilename}.Makefile -j4
                             
                             """
                             dir(extensionPath+'/out/'+board)
@@ -273,8 +273,12 @@ def slcBuild(app, board)
                                 sh "cp ../../${board}/build/debug/*.s37 ."
                                 sh 'ls -al'
                             }
-                        
-                            stash name: "OpenThreadExamples-${app}-${board}", includes: extensionPath+'/out/**/*.s37'
+                           
+                            if (slcpFilename.contains("thread")) {
+                                stash name: "OpenThreadExamples-${slcpFilename}-${board}", includes: extensionPath+'/out/**/*.s37'
+                            } else {
+                                stash name: "WiFiExamples-${slcpFilename}-${board}", includes: 'out/**/*.s37'
+                            }
                         }
                     }
                     catch (e) 
@@ -1098,13 +1102,11 @@ def pipeline()
         if (env.BRANCH_NAME.startsWith('RC_')) {
             openThreadBoards = ["BRD4161A", "BRD4162A", "BRD4163A", "BRD4164A", "BRD4166A", "BRD4186C", "BRD4187C", "BRD2703A", "BRD2601B", "BRD4316A", "BRD4317A", "BRD4319A"]
         } else {
-            // openThreadBoards = ["BRD4161A", "BRD4166A", "BRD4187C", "BRD2703A","BRD4316A", "BRD4319A" ] // MATTER_GSDK_TODO: enable as builds are fixed
-            openThreadBoards = ["BRD4161A", "BRD4187C" ]
+            openThreadBoards = ["BRD4161A", "BRD4187C", "BRD4316A"]
           
         }
         // def openThreadApps = ["window-app"] // MATTER_GSDK_TODO: enable as SLC apps are added
-       // def openThreadApps = ["lighting-app", "lock-app", "thermostat", "light-switch-app"]
-        def openThreadApps = ["lighting-app", "lock-app", "light-switch-app"]
+        def openThreadApps = ["lighting-app", "lock-app", "thermostat", "light-switch-app"]
 
         def sleepyBoard = ["BRD4161A", "BRD4186C"]
 
@@ -1124,10 +1126,20 @@ def pipeline()
         }
         else // SLC
         {
+            def openThreadNoLEDBoards = ["BRD4316A", "BRD4317A", "BRD4319A"]
+
             openThreadApps.each { appName ->
                 openThreadBoards.each { board ->
-                    parallelNodesBuild["SLC OT " + appName + " " + board]      = { this.slcBuild(appName, board)   }
+                    def slcpFilename = ""
+                    if (board in openThreadNoLEDBoards) {
+                        slcpFilename = appName+"-no-led-thread"
+                    } else {
+                        slcpFilename = appName+"-thread"
+                    }
 
+                    if (!(appName == "thermostat" && board == "BRD4319A")) { // combination not supported
+                        parallelNodesBuild["SLC $slcpFilename $board"]      = { this.slcBuild(appName, slcpFilename, board)   }
+                    }
                 }
             }
         }
@@ -1275,7 +1287,7 @@ def pipeline()
         parallelNodes['lighting rs9116 BRD4161A']   = { this.utfWiFiTestSuite('gsdkMontrealNode','utf_matter_ci','INT0014944','lighting-app','wifi','BRD4161A','rs9116','',"/manifest","--tmconfig tests/.sequence_manager/test_execution_definitions/matter_wifi_ci_sequence.yaml") }
         parallelNodes['lighting 917-exp BRD4187C']   = { this.utfWiFiTestSuite('gsdkMontrealNode','utf_matter_wifi','matter_wifi','lighting-app','wifi','BRD4187C','91x','',"/manifest-4187-917","--tmconfig tests/.sequence_manager/test_execution_definitions/matter_wifi_ci_sequence.yaml") }
         */
-        parallelNodes['Lock-App BRD4161A']           = { this.utfThreadTestSuite('gsdkMontrealNode','utf_matter_thread_4','matter_thread_4','lock-app','thread','BRD4161A','',"/manifest-4161-thread-lock","--tmconfig tests/.sequence_manager/test_execution_definitions/matter_thread_ci_sequence.yaml",buildTool) }
+        parallelNodes['Lock-App BRD4161A']           = { this.utfThreadTestSuite('gsdkMontrealNode','utf_matter_thread_4','matter_thread_4','lock-app-thread','thread','BRD4161A','',"/manifest-4161-thread-lock","--tmconfig tests/.sequence_manager/test_execution_definitions/matter_thread_ci_sequence.yaml",buildTool) }
     
         parallelNodes.failFast = false
         parallel parallelNodes
