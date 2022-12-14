@@ -9,6 +9,9 @@ sdk_extension:
   - id: matter
     version: "0.0.5"
 
+provides:
+  - name: window_app
+
 component:
   - id: device_init
   - id: simple_button
@@ -18,7 +21,7 @@ component:
   - id: uartdrv_usart
     instance: [vcom]
 
- - id: matter_wstk_leds
+  - id: matter_wstk_leds
     from: matter
 
   - id: matter
@@ -88,7 +91,6 @@ component:
     from: matter
   - id: matter_window_covering
     from: matter
-  - path: include/app.h
 
 # Require LCD and QR Code components only on the boards that support LCD
 requires:
@@ -145,12 +147,15 @@ include:
 source:
   - path: src/LcdPainter.cpp
   - path: src/WindowAppImpl.cpp
+  - path: src/WindowApp.cpp
+  - path: src/ZclCallbacks.cpp
   - path: src/main.cpp
 
   - path: include/AppConfig.h
   - path: include/CHIPProjectConfig.h
   - path: include/LcdPainter.h
   - path: include/WindowAppImpl.h
+  - path: include/WindowApp.h
 
 define:
   - name: KVS_MAX_ENTRIES

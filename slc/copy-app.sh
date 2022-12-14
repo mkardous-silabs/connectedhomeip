@@ -25,14 +25,20 @@ fi
 rsync -aP --exclude=main.cpp $MATTER_ROOT/examples/$MATTER_APP/efr32/src/* sample-app/$MATTER_APP/src/
 rsync -aP $MATTER_ROOT/examples/$MATTER_APP/efr32/include/* sample-app/$MATTER_APP/include/
 
+# Window app needs its own main, and doesn't need app.h
 # Window app has "common" folder instead of "window-common" like the other apps.. 
 if [ "$MATTER_APP" != "window-app" ]; then
     cp $MATTER_ROOT/examples/$MATTER_APP/${MATTER_APP%-*}-common/$MATTER_APP.zap sample-app/$MATTER_APP/common/$MATTER_APP.zap
     cp $MATTER_ROOT/examples/$MATTER_APP/${MATTER_APP%-*}-common/$MATTER_APP.matter sample-app/$MATTER_APP/common/$MATTER_APP.matter
+
+    cp sample-app/common/app.h sample-app/$MATTER_APP/include/app.h
+    cp sample-app/common/main.cpp sample-app/$MATTER_APP/src/main.cpp
 else
     cp $MATTER_ROOT/examples/$MATTER_APP/common/$MATTER_APP.zap sample-app/$MATTER_APP/common/$MATTER_APP.zap
     cp $MATTER_ROOT/examples/$MATTER_APP/common/$MATTER_APP.matter sample-app/$MATTER_APP/common/$MATTER_APP.matter
-fi
 
-cp sample-app/common/app.h sample-app/$MATTER_APP/include/app.h
-cp sample-app/common/main.cpp sample-app/$MATTER_APP/src/main.cpp
+    rsync -aP $MATTER_ROOT/examples/$MATTER_APP/common/include/ sample-app/$MATTER_APP/include/
+    rsync -aP $MATTER_ROOT/examples/$MATTER_APP/common/src/ sample-app/$MATTER_APP/src/
+
+    cp $MATTER_ROOT/examples/$MATTER_APP/efr32/src/main.cpp sample-app/$MATTER_APP/src/main.cpp
+fi

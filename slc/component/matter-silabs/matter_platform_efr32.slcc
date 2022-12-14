@@ -14,6 +14,7 @@ include:
   - path: examples/platform/efr32
 source:
   - path: examples/platform/efr32/BaseApplication.cpp
+    unless: ["window_app"]  
   - path: examples/platform/efr32/efr32_utils.cpp
   - path: examples/platform/efr32/heap_4_silabs.c
   - path: examples/platform/efr32/init_efrPlatform.cpp

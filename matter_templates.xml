@@ -122,4 +122,34 @@
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Beginner Wireless\ Technology|Matter"/>
   </descriptors>
+  <descriptors name="MatterWindowCoverOverThread" label="Matter - Window Cover over Thread"
+               description="This project builds a Matter Window Cover that can be developed inside Simplicity Studio">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="Matter"/>
+    <properties key="solutionReferenceId" value="slc.sample-app.window-app.window-app-thread.slcp"/>
+    <properties key="projectFilePaths" value="slc/sample-app/window-app/window-app-thread.slcp"/>
+    <properties key="boardCompatibility" value="brd4161a brd4162a brd4163a brd4164a brd4166a brd4170a brd4186c brd4187c brd2601b brd2703a"/>
+    <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
+    <properties key="ideCompatibility" value="makefile-ide simplicity-ide"/>
+    <properties key="toolchainCompatibility" value="gcc"/>
+    <properties key="category" value="Matter Application"/>
+    <properties key="quality" value="EXPERIMENTAL"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+    <properties key="filters" value="Type|SoC Project\ Difficulty|Beginner Wireless\ Technology|Matter"/>
+  </descriptors>
+  <descriptors name="MatterWindowCoverOverThread" label="Matter - Window Cover over Thread"
+               description="This project builds a Matter Window Cover that can be developed inside Simplicity Studio">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="Matter"/>
+    <properties key="solutionReferenceId" value="slc.sample-app.window-app.window-app-no-led-thread.slcp"/>
+    <properties key="projectFilePaths" value="slc/sample-app/window-app/window-app-no-led-thread.slcp"/>
+    <properties key="boardCompatibility" value="brd4316a brd4317a brd4319a"/>
+    <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
+    <properties key="ideCompatibility" value="makefile-ide simplicity-ide"/>
+    <properties key="toolchainCompatibility" value="gcc"/>
+    <properties key="category" value="Matter Application"/>
+    <properties key="quality" value="EXPERIMENTAL"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+    <properties key="filters" value="Type|SoC Project\ Difficulty|Beginner Wireless\ Technology|Matter"/>
+  </descriptors>
 </model:MDescriptors>
