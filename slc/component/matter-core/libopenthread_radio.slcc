@@ -11,8 +11,6 @@ define:
     value: \"OpenThreadConfig.h\"
 -   name: OPENTHREAD_RADIO
     value: '1'
--   name: OTA_PERIODIC_TIMEOUT
-    value: '86400'
 -   name: PACKAGE_NAME
     value: \"OPENTHREAD\"
 -   name: PACKAGE_VERSION

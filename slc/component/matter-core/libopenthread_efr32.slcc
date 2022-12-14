@@ -5,8 +5,6 @@ define:
     value: \"openthread-core-efr32-config-check.h\"
 -   name: OPENTHREAD_PROJECT_CORE_CONFIG_FILE
     value: \"OpenThreadConfig.h\"
--   name: OTA_PERIODIC_TIMEOUT
-    value: '86400'
 -   name: PACKAGE_NAME
     value: \"OPENTHREAD\"
 -   name: PACKAGE_VERSION
