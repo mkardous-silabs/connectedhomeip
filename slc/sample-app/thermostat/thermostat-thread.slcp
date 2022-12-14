@@ -152,6 +152,8 @@ source:
   - path: src/ZclCallbacks.cpp
   - path: src/SensorManager.cpp
   - path: src/ThermostatUI.cpp
+    unless:
+      - brd4166a
 
   - path: include/AppConfig.h
   - path: include/AppEvent.h
@@ -159,7 +161,11 @@ source:
   - path: include/SensorManager.h
   - path: include/TemperatureManager.h
   - path: include/ThermostatIcons.h
+    unless:
+      - brd4166a
   - path: include/ThermostatUI.h
+    unless:
+      - brd4166a
   - path: include/CHIPProjectConfig.h
   - path: include/app.h
 
