@@ -43,7 +43,7 @@ export STUDIO_ADAPTER_PACK_PATH="$MATTER_ROOT/third_party/zap/repo/"
 while [ $# -gt 0 ]; do
     case "$1" in
     --clean)
-        rm -rf $SILABS_BOARD
+        rm -rf $OUTPUT_DIR
         shift
         ;;
     *)
