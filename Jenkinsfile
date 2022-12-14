@@ -446,7 +446,7 @@ def buildWiFiExample(name, board, wifi_radio, args, radioName, buildCustom)
 
 def buildChipTool()
 {
-        actionWithRetry {
+      //  actionWithRetry {
         node(buildFarmLabel)
         {
             def workspaceTmpDir = createWorkspaceOverlay(advanceStageMarker.getBuildStagesList(),
@@ -480,16 +480,20 @@ def buildChipTool()
                         }
                     }
                 }
-                sh 'pwd && ls -al out'
-                stash name: 'ChipTool', includes: 'out/**/chip-tool'
-
             }
+            dir(workspaceTmpDir + createWorkspaceOverlay.overlayMatterPath)
+            {
+                sh 'pwd '
+                sh "ls -R ${extensionPath}/out "
+                stash name: 'ChipTool', includes: extensionPath+'/out/**/chip-tool'
+            }
+
             deactivateWorkspaceOverlay(advanceStageMarker.getBuildStagesList(),
                                        workspaceTmpDir,
-                                       'matter'+extensionPath+'/out',
+                                       'matter/'+extensionPath+'/out',
                                        '-name "chip-tool"')
         }
-    }
+    //}
 }
 
 def buildUnifyBridge()
