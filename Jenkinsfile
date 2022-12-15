@@ -1140,7 +1140,7 @@ def pipeline()
                         slcpFilename = appName+"-thread"
                     }
 
-                    if (!(appName == "thermostat" && board == "BRD4319A")) { // combination not supported
+                    if (!(appName == "thermostat" && (board == "BRD4319A" || board == "BRD2703A" || board == "BRD2601B"))) { // combination not supported
                         parallelNodesBuild["SLC $slcpFilename $board"]      = { this.slcBuild(appName, slcpFilename, board)   }
                     }
                 }
