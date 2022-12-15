@@ -1,0 +1,12 @@
+id: matter_drivers_series_2
+label: Matter UART selection for Series 2 boards
+description: >
+  Matter UART selection for Series 2 boards
+package: "Matter"
+category: "Matter|Platform"
+quality: production
+provides:
+  - name: matter_drivers_series_2
+recommends:
+  - id: uartdrv_eusart
+    instance: [vcom]

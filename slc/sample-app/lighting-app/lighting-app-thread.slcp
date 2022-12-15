@@ -15,8 +15,6 @@ component:
     instance: [btn0, btn1]
   - id: simple_led
     instance: [led0, led1]
-  - id: uartdrv_usart
-    instance: [vcom]
 
   - id: matter_wstk_leds
     from: matter
@@ -140,6 +138,23 @@ requires:
     condition:
     - brd4187c
 
+# On Series 2 LCD and external flash run over USART, VCOM runs over EUSART
+# Enable memlcd_usart for boards that have LCD and LED
+  - name: memlcd_usart
+    condition:
+    - brd4186c
+  - name: memlcd_usart
+    condition:
+    - brd4187c
+
+# Select UART/EUART drivers based on device series
+  - name: matter_drivers_series_1
+    condition:
+     - device_series_1
+  - name: matter_drivers_series_2
+    condition:
+     - device_series_2
+     
 config_file:
   - path: common/lighting-app.zap
     directory: zap
