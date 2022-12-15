@@ -224,7 +224,7 @@ def runInWorkspace(Map args, Closure cl)
     }
 }
 
-def slcBuild(appDir, slcpFilename, board)
+def slcBuild(appName, slcpFilename, board)
 {
     
     node(buildFarmLabel)
@@ -262,7 +262,7 @@ def slcBuild(appDir, slcpFilename, board)
                                 ${uccliPath}/slc signature trust --sdk ${dirPath} -data ${dirPath}/out/dmp_uc.data
                                 ${uccliPath}/slc signature trust --extension-path=${dirPath}/${extensionPath} -data ${dirPath}/out/dmp_uc.data
                                 ${uccliPath}/slc signature trust --extension matter:${extensionVersion} -data ${dirPath}/out/dmp_uc.data
-                                ${uccliPath}/slc generate  -d ${extensionPath}/${board} -p ${extensionPath}/slc/sample-app/${appDir}/${slcpFilename}.slcp --with ${lowerCaseBoard} -data ${dirPath}/out/dmp_uc.data --generator-timeout=1800
+                                ${uccliPath}/slc generate  -d ${extensionPath}/${board} -p ${extensionPath}/slc/sample-app/${appName}/${slcpFilename}.slcp --with ${lowerCaseBoard} -data ${dirPath}/out/dmp_uc.data --generator-timeout=1800
                                 make -C ${extensionPath}/${board} -f ${slcpFilename}.Makefile -j4
                             
                             """
@@ -275,9 +275,9 @@ def slcBuild(appDir, slcpFilename, board)
                             }
                            
                             if (slcpFilename.contains("thread")) {
-                                stash name: "OpenThreadExamples-${slcpFilename}-${board}", includes: extensionPath+'/out/**/*.s37'
+                                stash name: "OpenThreadExamples-${appName}-${board}", includes: extensionPath+'/out/**/*.s37'
                             } else {
-                                stash name: "WiFiExamples-${slcpFilename}-${board}", includes: 'out/**/*.s37'
+                                stash name: "WiFiExamples-${appName}-${board}", includes: 'out/**/*.s37'
                             }
                         }
                     }
