@@ -15,6 +15,8 @@ component:
     instance: [btn0, btn1]
   - id: uartdrv_usart
     instance: [vcom]
+  - id: i2cspm
+    instance: [sensor]
 
   - id: matter
     from: matter
@@ -88,6 +90,10 @@ component:
   - id: matter_wifi_network_diagnostics
     from: matter
 
+  - id: matter_temperature_sensor
+    from: matter
+  - id: sensor_rht
+
 # Require LCD and QR Code components only on the boards that support LCD
 requires:
   - name: matter_lcd
@@ -150,6 +156,8 @@ define:
     value: "40960"
   - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
     value: "4092"
+  - name: USE_TEMP_SENSOR
+    value: "1"
 configuration:
   - name: SL_BOARD_ENABLE_VCOM
     value: "1"
