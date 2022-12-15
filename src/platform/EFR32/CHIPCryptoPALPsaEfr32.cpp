@@ -312,8 +312,6 @@ static_assert(kMAX_Hash_SHA256_Context_Size >= sizeof(psa_hash_operation_t),
 
 static inline psa_hash_operation_t * to_inner_hash_sha256_context(HashSHA256OpaqueContext * context)
 {
-    // MATTER_GSDK_TODO temporary to allow compilation, use  reinterpret_cast<>
-    // return SafePointerCast<psa_hash_operation_t *>(context);
     return reinterpret_cast<psa_hash_operation_t *>(context);
 }
 
