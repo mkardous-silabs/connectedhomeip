@@ -277,7 +277,8 @@ def slcBuild(appName, slcpFilename, board)
                             if (slcpFilename.contains("thread")) {
                                 stash name: "OpenThreadExamples-${appName}-${board}", includes: extensionPath+'/out/**/*.s37'
                             } else {
-                                stash name: "WiFiExamples-${appName}-${board}", includes: 'out/**/*.s37'
+                                def radioName = slcpFilename.substring(slcpFilename.lastIndexOf("-")+1)
+                                stash name: "WiFiExamples-${appName}-${board}-${radioName}", includes: extensionPath+'/out/**/*.s37'
                             }
                         }
                     }
@@ -1147,8 +1148,6 @@ def pipeline()
             }
         }
 
-        /*
-
         //---------------------------------------------------------------------
         // Build WiFi Examples
         //---------------------------------------------------------------------
@@ -1156,46 +1155,71 @@ def pipeline()
 
         // Build only for release candidate branch
         if (env.BRANCH_NAME.startsWith('RC_')) {
-            wifiBoards = ["BRD4161A", "BRD4186C", "BRD4187C"]
+            // wifiBoards = ["BRD4161A", "BRD4186C", "BRD4187C"] MATTER_GSDK_TODO: enable BRD4187C once supported
+            wifiBoards = ["BRD4161A", "BRD4186C"]
         } else {
-            wifiBoards = ["BRD4161A", "BRD4187C"]
+            wifiBoards = ["BRD4161A", "BRD4186C"]
         }
 
-        def wifiApps = [ "lighting-app", "lock-app", "thermostat", "light-switch-app", "window-app"]
+        // def wifiApps = [ "lighting-app", "lock-app", "thermostat", "light-switch-app", "window-app"] // MATTER_GSDK_TODO: enable as SLC apps are added
+        def wifiApps = [ "lock-app", "lighting-app", "light-switch-app", "thermostat", "window-app"]
 
-        def wifiRCP = ["rs911x", "wf200"]
+        def wifiRCP = ["rs911x"]
 
-        wifiApps.each { appName ->
-            wifiBoards.each { board ->
-                wifiRCP.each { rcp ->
-                    // MG24 + 9116: name the example as "xxx_wifi_91x" so that it's common to RS9116 and SiWx917
-                    // MG12 + 9116: name the example as "xxx_wifi_rs9116" so that it only applies to RS9116 (we don't support MG12 + SiWx917)
-                    // MGxx + WF00: name the example as "xxx_wifi_wf200"
-                    def radioName = "${rcp}"  // MGxx + WF200
-                    if ((board == "BRD4186C" || board == "BRD4187C") && rcp == "rs911x") { // MG24 + 9116
-                        radioName = "91x"
-                    } else if (board == "BRD4161A" && rcp == "rs911x") { // MG12 + 9116
-                        radioName = "rs9116"
+        if (buildTool == 'NINJA')
+        {
+            wifiApps.each { appName ->
+                wifiBoards.each { board ->
+                    wifiRCP.each { rcp ->
+                        // MG24 + 9116: name the example as "xxx_wifi_91x" so that it's common to RS9116 and SiWx917
+                        // MG12 + 9116: name the example as "xxx_wifi_rs9116" so that it only applies to RS9116 (we don't support MG12 + SiWx917)
+                        // MGxx + WF00: name the example as "xxx_wifi_wf200"
+                        def radioName = "${rcp}"  // MGxx + WF200
+                        if ((board == "BRD4186C" || board == "BRD4187C") && rcp == "rs911x") { // MG24 + 9116
+                            radioName = "91x"
+                        } else if (board == "BRD4161A" && rcp == "rs911x") { // MG12 + 9116
+                            radioName = "rs9116"
+                        }
+
+                        // MG12 + WF200: set is_debug=false and chip_logging=false, otherwise it does not fit (not a problem for MG24 + WF200, also MG24 + WF200 init fails with is_debug=false)
+                        // All MG24 combos: disable LCD and ext flash due to common SPI pin multiplexing issue
+                        def args = ""
+                        if (board == "BRD4161A" && rcp == "wf200") {  // MG12 + WF200
+                            args = "is_debug=false chip_logging=false"
+                        } else if (board == "BRD4186C" || board == "BRD4187C") {  // All MG24 combos
+                            args = "disable_lcd=true use_external_flash=false"
+                        }
+
+                        // MG24 + WF200: also disable libshell due to VCOM pin multiplexing issue
+                        if ((board == "BRD4186C" || board == "BRD4187C") && rcp == "wf200") {
+                            args = "${args} chip_build_libshell=false"
+                        }
+
+                        parallelNodesBuild["WiFi " + appName + " " + board + " " + rcp]      = { this.buildWiFiExample(appName, board, rcp, args, radioName, false)   }
                     }
-
-                    // MG12 + WF200: set is_debug=false and chip_logging=false, otherwise it does not fit (not a problem for MG24 + WF200, also MG24 + WF200 init fails with is_debug=false)
-                    // All MG24 combos: disable LCD and ext flash due to common SPI pin multiplexing issue
-                    def args = ""
-                    if (board == "BRD4161A" && rcp == "wf200") {  // MG12 + WF200
-                        args = "is_debug=false chip_logging=false"
-                    } else if (board == "BRD4186C" || board == "BRD4187C") {  // All MG24 combos
-                        args = "disable_lcd=true use_external_flash=false"
-                    }
-
-                    // MG24 + WF200: also disable libshell due to VCOM pin multiplexing issue
-                    if ((board == "BRD4186C" || board == "BRD4187C") && rcp == "wf200") {
-                        args = "${args} chip_build_libshell=false"
-                    }
-
-                     parallelNodesBuild["WiFi " + appName + " " + board + " " + rcp]      = { this.buildWiFiExample(appName, board, rcp, args, radioName, false)   }
                 }
             }
         }
+        else // SLC
+        {
+            wifiApps.each { appName ->
+                wifiBoards.each { board ->
+                    wifiRCP.each { rcp ->
+                        // MATTER_GSDK_TODO: remove this once it is consolidated in one file
+                        if(board == "BRD4161A"){
+                            def slcpFilename = appName+"-mg12-"+rcp
+                            parallelNodesBuild["SLC $slcpFilename $board"]      = { this.slcBuild(appName, slcpFilename, board)   }
+                        } else {
+                            // for MG24
+                            def slcpFilename = appName+"-mg24-"+rcp
+                            parallelNodesBuild["SLC $slcpFilename $board"]      = { this.slcBuild(appName, slcpFilename, board)   }
+                        }
+                    }
+                }
+            }
+        }
+
+        /*
 
         //---------------------------------------------------------------------
         // Build Custom examples

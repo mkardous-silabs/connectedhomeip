@@ -24,6 +24,8 @@ mkdir $DEST_DIR/matter_extension/examples/common/
 mkdir $DEST_DIR/matter_extension/examples/common/QRCode/
 mkdir $DEST_DIR/matter_extension/examples/common/QRCode/repo/
 mkdir $DEST_DIR/matter_extension/third_party/
+mkdir $DEST_DIR/matter_extension/third_party/silabs/
+mkdir $DEST_DIR/matter_extension/third_party/silabs/wiseconnect-wifi-bt-sdk/
 mkdir $DEST_DIR/matter_extension/examples/providers/
 mkdir $DEST_DIR/matter_extension/zzz_generated
 
@@ -32,11 +34,13 @@ cp -R $MATTER_ROOT/slc $DEST_DIR/matter_extension
 cp -R $MATTER_ROOT/examples/platform/efr32 $DEST_DIR/matter_extension/examples/platform
 cp -R $MATTER_ROOT/examples/providers $DEST_DIR/matter_extension/examples
 cp -R $MATTER_ROOT/examples/common/QRCode/repo/c $DEST_DIR/matter_extension/examples/common/QRCode/repo
+cp -R $MATTER_ROOT/third_party/lwip $DEST_DIR/matter_extension/third_party/lwip
 cp -R $MATTER_ROOT/third_party/nlassert $DEST_DIR/matter_extension/third_party/nlassert
 cp -R $MATTER_ROOT/third_party/pigweed $DEST_DIR/matter_extension/third_party/pigweed
 cp -R $MATTER_ROOT/third_party/nlio $DEST_DIR/matter_extension/third_party/nlio
 cp -R $MATTER_ROOT/zzz_generated/app-common $DEST_DIR/matter_extension/zzz_generated
 cp -R $MATTER_ROOT/zzz_generated/controller-clusters $DEST_DIR/matter_extension/zzz_generated
+cp -R $MATTER_ROOT/third_party/silabs/wiseconnect-wifi-bt-sdk/sapi $DEST_DIR/matter_extension/third_party/silabs/wiseconnect-wifi-bt-sdk/
 
 cp $MATTER_ROOT/matter.slce $DEST_DIR/matter_extension
 cp $MATTER_ROOT/matter.slsdk $DEST_DIR/matter_extension

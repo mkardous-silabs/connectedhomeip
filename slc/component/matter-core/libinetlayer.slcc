@@ -29,5 +29,12 @@ source:
 -   path: src/inet/InetInterface.cpp
 -   path: src/inet/UDPEndPoint.cpp
 -   path: src/inet/UDPEndPointImplOpenThread.cpp
+    condition: [matter_thread]
+-   path: src/inet/UDPEndPointImplLwIP.cpp
+    condition: [matter_lwip]
+-   path: src/inet/TCPEndPoint.cpp
+    condition: [matter_lwip]
+-   path: src/inet/TCPEndPointImplLwIP.cpp
+    condition: [matter_lwip]
 ui_hints:
  visibility: never

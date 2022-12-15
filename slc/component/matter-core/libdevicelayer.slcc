@@ -50,6 +50,7 @@ source:
 -   path: src/platform/Globals.cpp
 -   path: src/platform/LockTracker.cpp
 -   path: src/platform/OpenThread/GenericNetworkCommissioningThreadDriver.cpp
+    condition: [matter_thread]
 -   path: src/platform/PersistedStorage.cpp
 -   path: src/platform/PlatformEventSupport.cpp
 ui_hints:
