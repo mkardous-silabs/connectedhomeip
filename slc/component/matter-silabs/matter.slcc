@@ -48,7 +48,6 @@ requires:
   - name: cpp_support
   - name: sl_system
   - name: freertos
-  - name: power_manager
   - name: sleeptimer
   - name: dmadrv
   - name: gpiointerrupt
