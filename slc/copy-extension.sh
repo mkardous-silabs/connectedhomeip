@@ -41,6 +41,7 @@ cp -R $MATTER_ROOT/zzz_generated/controller-clusters $DEST_DIR/matter_extension/
 cp $MATTER_ROOT/matter.slce $DEST_DIR/matter_extension
 cp $MATTER_ROOT/matter.slsdk $DEST_DIR/matter_extension
 cp $MATTER_ROOT/matter_templates.xml $DEST_DIR/matter_extension
+cp $MATTER_ROOT/matter_demos.xml $DEST_DIR/matter_extension
 
 # Remove unnecessary directories
 rm -fr $DEST_DIR/matter_extension/src/test_driver/
