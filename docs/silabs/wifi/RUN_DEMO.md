@@ -1,6 +1,8 @@
 # Running the Matter Demo over Wi-fi
 
-## Flashing images/binaries on MG12, MG24 platform using Ozone, Simplicity Studio or Simplicity Commander.
+## Flashing Images/Binaries
+
+The following applies to either the EFR32MG12 or EFR32MG24 platforms using Ozone, Simplicity Studio, or Simplicity Commander.
 
 > Note: If you are coming from Simplicity Studio, you may have already installed
 > the demo image in Simplicity Studio, in which case you can skip to the
@@ -8,7 +10,7 @@
 
 1.  Plug the WSTK and EFR into the laptop.
 
-2.  Based on the Application being built, make sure to flash proper [bootloader](../general/ARTIFACTS.md#matter-bootloader-binaries) internal or external binaries. 
+2.  Based on the Application being built, make sure to flash proper [bootloader](../prerequisites/ARTIFACTS.md#matter-bootloader-binaries) internal or external binaries. 
 
 3.  Launch Ozone, Simplicity Studio or Simplicity Commander Standalone - this
     will display a GUI. If you are not using Ozone, you can follow the
@@ -55,12 +57,11 @@
 
     > The Silabs chip, EFR32MG12 or EFR32MG24 will be erased and programmed
 
-10.  Run the image by clicking the 'Play' button on the top left (or press the F5
-    key)
+10.  Run the image by clicking the 'Play' button on the top left (or press the F5 key)
 
-    > The output of the EFR32 can be viewed on the console of the Ozone GUI
+> The output of the EFR32 can be viewed in the console of the Ozone GUI
 
-11. **[Optional]** This step is for when the device has already been flashed and
+1.  **[Optional]** This step is for when the device has already been flashed and
     is being used for testing/debug purposes:
 
     > If you are restarting the device and do not need to re-flash the EFR
@@ -81,9 +82,11 @@
     $ konsole -e JLinkRTTClient &
     ```
 
-    > You may need to press <ENTER> in the JLinkExe console first
+    > You may need to press [ENTER] in the JLinkExe console first
 
-## Demo Execution - Commissioning a Wi-Fi Device using chip-tool for Linux
+## Demo Execution
+
+This section describes commissioning a Wi-Fi Device using chip-tool for Linux.
 
 > Commissioning can be done using chip-tool running either on Linux or Raspberry
 > Pi
@@ -151,5 +154,5 @@ certificates
 
 ---
 
-[Table of Contents](../README.md) | [Thread Demo](../thread/DEMO_OVERVIEW.md) |
-[Wi-Fi Demo](./DEMO_OVERVIEW.md)
+{*[Table of Contents](../README.md) | [Thread Demo](../thread/DEMO_OVERVIEW.md) |
+[Wi-Fi Demo](./DEMO_OVERVIEW.md)*}

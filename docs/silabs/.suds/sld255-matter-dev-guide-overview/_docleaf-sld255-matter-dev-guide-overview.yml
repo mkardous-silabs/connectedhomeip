@@ -1,0 +1,12 @@
+objectType: docLeaf
+id: matter-developers-guide-overview
+access: public
+status: active
+version: "0.1"
+docSpaceParent: ../_docspace-sld56-matter.yml
+authors:
+  - anyone@silabs.com
+contentType: markdown
+title: "Introduction"
+description: "Matter Developer's Guide Introduction"
+sourceDir: .

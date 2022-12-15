@@ -1,4 +1,8 @@
-# Using Simplicity Studio's GATT Configurator with Matter
+# Using Simplicity Studio's GATT Configurator with Matter GitHub Repo
+
+**[GITHUB]**
+
+> **Note:** This guide is intended for developers who are primarily developing outside of Simplicity Studio. If you are developing using Simplicity Studio please consider the section on [Matter in Simplicity Studio](../dev/studio/index.md) for more information.
 
 The Simplicity Studio Bluetooth GATT Configurator is an Advanced Configurator
 within the Simplicity Studio Project Configuration suite. For more information on
@@ -42,8 +46,3 @@ follows:
     Copy the BLE GATT db header files out of your project and into the Matter
     project. BLE GATT db header and `.c` files are located in
     `./src/platform/EFR32` in the Silicon Labs Matter GitHub repo.
-
----
-
-[Table of Contents](../README.md) | [Thread Demo](../thread/DEMO_OVERVIEW.md) |
-[Wi-Fi Demo](../wifi/DEMO_OVERVIEW.md)

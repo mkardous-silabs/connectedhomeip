@@ -1,0 +1,17 @@
+# Matter packing list
+releaseTicket: ''
+docSpaceConfigs:
+  - docs/silabs/.suds/_docspace-sld56-matter.yml
+docLeafConfigs:
+  - docs/silabs/.suds/sld57-matter-landing-page/_docleaf-sld57-matter-landing-page.yml
+  - docs/silabs/.suds/_docleaf-sld245-matter-bridge.yml
+  - docs/silabs/.suds/_docleaf-sld246-matter-faq.yml
+  - docs/silabs/.suds/_docleaf-sld247-matter-overview.yml
+  - docs/silabs/.suds/_docleaf-sld248-matter-overview-guides.yml
+  - docs/silabs/.suds/_docleaf-sld249-matter-prerequisites.yml
+  - docs/silabs/.suds/_docleaf-sld250-matter-references.yml
+  - docs/silabs/.suds/_docleaf-sld251-matter-thread.yml
+  - docs/silabs/.suds/_docleaf-sld252-matter-vscode.yml
+  - docs/silabs/.suds/_docleaf-sld253-matter-wifi.yml
+  - docs/silabs/.suds/_docleaf-sld254-matter-studio.yml
+  - docs/silabs/.suds/sld255-matter-dev-guide-overview/_docleaf-sld255-matter-dev-guide-overview.yml

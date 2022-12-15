@@ -1,8 +1,12 @@
-# Using Simplicity Studio's Pintool and Project Configuration with Matter
+# Using Simplicity Studio's Pintool and Project Configuration with the Matter GitHub Repo
+
+**[GITHUB]**
 
 At some point during product development you may need to move your project over to your custom hardware. In this case,
 you will likely need to change the pinout and hardware configuration in the example project to reflect your own custom project. You can do this
 with Simplicity Studio's Pintool starting from a blank C++ project.
+
+> **Note:** This guide is intended for developers who are primarily developing outside of Simplicity Studio. If you are developing using Simplicity Studio please consider the section on [Matter in Simplicity Studio](../dev/studio/index.md) for more information.
 
 ## 1. Locating the board support files in the Matter repo
 
@@ -49,8 +53,3 @@ All of the header files in your `config` project directory constitute the
 hardware configuration for your device. Copy these files 
 into your Matter project so that they can be used in place of the ones provided
 in the example.
-
----
-
-[Table of Contents](../README.md) | [Thread Demo](../thread/DEMO_OVERVIEW.md) |
-[Wi-Fi Demo](../wifi/DEMO_OVERVIEW.md)

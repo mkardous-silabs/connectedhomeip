@@ -26,8 +26,7 @@ options
 9. Remove the SD card from the reader and insert it into the Raspberry Pi as
    shown below:
 
-<!-- ![Inserting SD into Pi](images/sd_into_pi.png) -->
-<img src="images/sd_into_pi.png" alt="Inserting SD into Pi" width="550"/>
+![Inserting SD into Pi](images/sd_into_pi.png)
 
 On powering up the board, the red and green lights should start blinking. 
 
@@ -110,5 +109,5 @@ $ sudo systemctl status bluetooth.service
 
 ---
 
-[Table of Contents](../README.md) | [Thread Demo](../thread/DEMO_OVERVIEW.md) |
-[Wi-Fi Demo](./DEMO_OVERVIEW.md)
+{*[Table of Contents](../README.md) | [Thread Demo](../thread/DEMO_OVERVIEW.md) |
+[Wi-Fi Demo](./DEMO_OVERVIEW.md)*}

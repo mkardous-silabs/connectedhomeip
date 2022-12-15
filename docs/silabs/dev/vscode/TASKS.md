@@ -7,8 +7,8 @@ provided to facilitate the development experience.
 1. [Create](CREATE.md)
 2. [Build](BUILD.md)
 3. [Flash](FLASH.md)
-4. [Debug](DEBUG.md) <br><br>
+4. [Debug](DEBUG.md) 
 
 -----
 
-[Table of Contents](../../README.md)
+{*[Table of Contents](../../README.md)*}

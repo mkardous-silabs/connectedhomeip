@@ -1,11 +1,15 @@
 # Custom Matter Device Development
 
+**[GITHUB]**
+
 Build a customizable lighting app using the Matter protocol.
 
 ## Overview
 
 This guide covers the basics of building a customizable lighting application
 using Matter.
+
+> **Note:** This guide is intended for developers who are primarily developing outside of Simplicity Studio. If you are developing using Simplicity Studio please consider the section on [Matter in Simplicity Studio](../dev/studio/index.md) for more information.
 
 ## Using Matter with Clusters
 
@@ -131,11 +135,5 @@ $ mattertool levelcontrol move-to-level {desired_level} 0 1 1 {node_ID} 1
 ```shell
 $ mattertool levelcontrol read current-level 1 1 // Returns 10
 ```
-
-For more information on running a Silicon Labs lighting example on a Thunderboard Sense 2 see 
-[sl-newlight/efr32](../../../silabs_examples/sl-newLight/efr32/README.md).
-
----
-
-[Table of Contents](../README.md) | [Thread Demo](../thread/DEMO_OVERVIEW.md) |
-[Wi-Fi Demo](../wifi/DEMO_OVERVIEW.md)
+{*For more information on running a Silicon Labs lighting example on a Thunderboard Sense 2 see 
+[sl-newlight/efr32](../../../silabs_examples/sl-newLight/efr32/README.md).*}

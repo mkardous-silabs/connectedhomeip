@@ -15,7 +15,6 @@ This section covers flashing efr32 examples to target devices.
 
 ## Flashing
 
-<ol>
 
 ### Step 1:
 
@@ -40,10 +39,9 @@ binary file with the ".out" extension.
 
 In response to the final prompt, select the target device.
 
-## ![](../../images/flash_efr32_example.gif)
+## {*![Flash EFR32 Example](../../images/flash_efr32_example.gif)*}
 
-</ol>
 
 -----
 
-[Table of Contents](../../README.md)
+{*[Table of Contents](../../README.md)*}

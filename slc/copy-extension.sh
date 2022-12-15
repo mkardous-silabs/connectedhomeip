@@ -45,6 +45,7 @@ cp -R $MATTER_ROOT/third_party/silabs/wiseconnect-wifi-bt-sdk/sapi $DEST_DIR/mat
 cp $MATTER_ROOT/matter.slce $DEST_DIR/matter_extension
 cp $MATTER_ROOT/matter.slsdk $DEST_DIR/matter_extension
 cp $MATTER_ROOT/matter_templates.xml $DEST_DIR/matter_extension
+cp $MATTER_ROOT/matter_docs.xml $DEST_DIR/matter_extension
 cp $MATTER_ROOT/matter_demos.xml $DEST_DIR/matter_extension
 
 # Remove unnecessary directories

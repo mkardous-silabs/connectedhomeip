@@ -1,6 +1,6 @@
 # Silicon Labs Matter User's Guide Overview
 
-Welcome to the Silicon Labs Matter user documentation set. This provides all of the information required to use the Matter demos or start development with Matter on the Thread and Wi-Fi transport protocols. 
+Welcome to the Silicon Labs Matter user documentation set. This provides all of the information required to use the Matter demos or start development with Matter on the Thread and Wi-Fi transport protocols in GitHub. An alternate development path is available through Silicon Labs Simplicity Studio. See the Matter content on https://docs.silabs.com/ for more information.
 
 > **Note:** The Thread development use cases differs from Wi-Fi because the Thread protocol requires the use of an Open Thread Border Router (OTBR).
 
@@ -18,4 +18,4 @@ This content covers
 
 ----
 
-[Table of Contents](./README.md)
+{*[Table of Contents](./README.md)*}

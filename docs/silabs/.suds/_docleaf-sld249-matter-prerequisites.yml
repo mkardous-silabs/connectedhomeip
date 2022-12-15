@@ -1,0 +1,17 @@
+objectType: docLeaf
+id: matter-prerequisites
+access: public
+status: active
+version: "0.1"
+docSpaceParent: ./_docspace-sld56-matter.yml
+authors:
+  - anyone@silabs.com
+contentType: markdown
+title: "Matter Prerequisites"
+description: "Matter Prerequisites"
+sourceDir: ../prerequisites
+menu:
+  items: 
+    - Hardware Requirements: HARDWARE_REQUIREMENTS.md
+    - Software Requirements: SOFTWARE_REQUIREMENTS.md
+    - Artifacts: ARTIFACTS.md

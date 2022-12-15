@@ -341,7 +341,7 @@ see
 
 With this lighting lite example you can also use group communication to send Lighting
 commands to multiples devices at once. Please refer to the
-[chip-tool documentation](../../chip-tool/README.md) _Configuring the server
+[chip-tool documentation](../../../examples/chip-tool/README.md) _Configuring the server
 side for Group Commands_ and _Using the Client to Send Group (Multicast) Matter
 Commands_
 

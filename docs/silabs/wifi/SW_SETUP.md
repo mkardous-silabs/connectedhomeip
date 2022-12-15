@@ -5,7 +5,7 @@
 If you are just running the Matter demo, and are not interested in building the
 Matter Accessory Device images from scratch, you can download the MAD images for
 Wi-Fi from this software release on the
-[Matter Artifacts Page](../general/ARTIFACTS.md)
+[Matter Artifacts Page](../prerequisites/ARTIFACTS.md)
 
 Once you have downloaded the image you require for your device, you can skip
 forward to the [Running the Matter Demo over Wi-Fi page](./RUN_DEMO.md)
@@ -60,8 +60,7 @@ you are using, select the appropriate command to build.
 
 > **Note:** 
 > The following build commands are for the `lighting-app` application. In order to build different applications, for example `lock-app`, `window-app` or `thermostat`, substitute the appropriate application name.
-> Additional examples are provided in the [/examples](../../../examples/) directory,
-or [/silabs_examples](../../../silabs_examples/) (such as `onoff-plug-app`).
+> Additional examples are provided in the [/examples](../../../examples/) directory.
 
 Run the following:
 
@@ -76,33 +75,13 @@ Build command for EFR32MG12 + RS9116:
 $ ./scripts/examples/gn_efr32_example.sh examples/lighting-app/efr32/ out/rs911x_lighting BRD41xxx --wifi rs911x |& tee out/rs911x_lighting.log
 ```
 
-Build command for EFR32MG12 + WF200:
-
-```shell
-$ ./scripts/examples/gn_efr32_example.sh examples/lighting-app/efr32 out/wf200_lighting_app BRD41xxx is_debug=false chip_logging=false --wifi wf200 |& tee out/wf200_lighting.log
-```
-
-> **Note:** The image size currently exceeds the available flash with CHIP logging enabled.
-
 Build command for EFR32MG24 + RS9116:
 
 ```shell
 $ ./scripts/examples/gn_efr32_example.sh examples/lighting-app/efr32/ out/rs911x_lighting BRD41xxx disable_lcd=true use_external_flash=false --wifi rs911x |& tee out/rs911x_lighting.log
 ```
 
-Build command for EFR32MG24 + SiWx917:
-
-```shell
-$ ./scripts/examples/gn_efr32_example.sh examples/lighting-app/efr32/ out/siwx917_lighting BRD41xxx disable_lcd=true use_external_flash=false --wifi rs911x |& tee out/siwx917_lighting.log
-```
-
-Build command for EFR32MG24 + WF200:
-
-```shell
-$ ./scripts/examples/gn_efr32_example.sh examples/lighting-app/efr32/ out/wf200_lighting BRD41xxx disable_lcd=true use_external_flash=false chip_build_libshell=false --wifi wf200 |& tee out/wf200_lighting.log
-```
-
-A complete list of hardware supported is included on the [Hardware Requirements page](../general/HARDWARE_REQUIREMENTS.md).
+A complete list of hardware supported is included on the [Hardware Requirements page](../prerequisites/HARDWARE_REQUIREMENTS.md).
 
 Enable or disable the lighting application's features using the following flags.
 
@@ -130,15 +109,8 @@ Enable or disable the lighting application's features using the following flags.
 >    1. QR code is enabled by default for all except MG24
 >    2. QR code is disabled for MG24 because of lcd disable. It cannot be enabled using the flag.
 
-4. `chip_enable_wifi_ipv4` : Use this flag while building to enable IPV4 (disabled by default).
-
-    ```shell
-    ./scripts/examples/gn_efr32_example.sh examples/lighting-app/efr32/ out/rs911x_lighting BRD41xxx chip_enable_wifi_ipv4=true --wifi rs911x |& tee out/rs911x_lighting.log
-    ```
-
 The generated software can be found in
-`out/rs911x_xxx/BRD41xxx/*.out` for the RS9116, in `out/siwx917_xxx/BRD41xxx/*.out`  for the
-SiWx917 and in `out/wf200_xxx/BRD41xxx/*.out` for the WF200.
+`out/rs911x_xxx/BRD41xxx/*.out`.
 
 This is what you will flash onto the EFR32. For more information on how to flash
 the EFR32 see
@@ -152,7 +124,7 @@ Navigate to
 \``configMINIMAL_STACK_SIZE`\`, and change the macro value from `140` to
  **`320`**.
 
-<br>
+ 
 
-[Table of Contents](../README.md) | [Thread Demo](../thread/DEMO_OVERVIEW.md) |
-[Wi-Fi Demo](./DEMO_OVERVIEW.md)
+{*[Table of Contents](../README.md) | [Thread Demo](../thread/DEMO_OVERVIEW.md) |
+[Wi-Fi Demo](./DEMO_OVERVIEW.md)*}

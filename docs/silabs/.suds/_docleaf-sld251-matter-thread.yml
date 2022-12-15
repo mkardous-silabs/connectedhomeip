@@ -1,0 +1,20 @@
+objectType: docLeaf
+id: matter-thread
+access: public
+status: active
+version: "0.1"
+docSpaceParent: ./_docspace-sld56-matter.yml
+authors:
+  - anyone@silabs.com
+contentType: markdown
+title: "Matter Over Thread"
+description: "Matter Over Thread [15.4]"
+sourceDir: ../thread
+menu:
+  items: 
+    - Thread Overview: THREAD.md
+    - Demo Overview: DEMO_OVERVIEW.md
+    - Using the Matter Hub: RASPI_IMG.md
+    - Setting up the RCP: RCP.md
+    - Creating an End Device: BUILD_FLASH_MAD.md
+    - Using the Chip-Tool: CHIP_TOOL.md

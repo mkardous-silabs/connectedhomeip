@@ -1,0 +1,23 @@
+objectType: docSpace
+id: matter
+version: "1.0.1"
+curators:
+  - anyone@silabs.com
+title: "Silicon Labs Matter"
+menu:
+  items:
+    - docleaf://matter-start/0.3
+    - Getting Started:
+        - docleaf://matter-overview/0.1
+        - docleaf://matter-prerequisites/0.1
+    - Matter Developer's Guide:
+        - docleaf://matter-developers-guide-overview/0.1
+        - docleaf://matter-overview-guides/0.1
+        - docleaf://matter-thread/0.1
+        - docleaf://matter-wifi/0.1
+        - docleaf://matter-bridge/0.1
+        - docleaf://matter-vscode/0.1
+        - docleaf://matter-studio/0.1
+    - Resources: 
+        - docleaf://matter-references/0.1
+        - docleaf://matter-faq/0.1

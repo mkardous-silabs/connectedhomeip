@@ -3,7 +3,6 @@
 This section covers creating a new sample application from an existing application, which is optional for [ Building ](BUILD.md), [ Flashing ](FLASH.md) and
 [ Debugging ](DEBUG.md) the target Matter Accessory Devices.
 
-<a name="linMac"></a>
 
 ## Linux/Mac
 
@@ -27,7 +26,7 @@ On the next menu select an EFR32 example to copy.
 
 Select the appropriate target board.
 
-![](../../images/build_efr32_example.gif)
+![Create EFR32 Example](../../images/create_efr32_example.jpg)
 
 ### Step 6:
 
@@ -40,4 +39,4 @@ Copying a sample application is not supported for Windows at this time.
 
 -----
 
-[Table of Contents](../../README.md)
+{*[Table of Contents](../../README.md)*}

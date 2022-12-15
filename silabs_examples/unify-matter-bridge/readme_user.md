@@ -131,7 +131,9 @@ To send an OnOff cluster Toggle command to a bridged endpoint with id 2, via Mat
 chip-tool onoff toggle 1 2
 ```
 
-For more information on how to use the `chip-tool` see the [chip-tool manual](../../docs/guides/chip_tool_guide.md) on the Matter website.
+For more information on how to use the `chip-tool` see the Chip Tool Manual located in the Matter repo at `/docs/guides/chip_tool_guide.md`
+
+{*[chip-tool manual](../../docs/guides/chip_tool_guide.md) on the Matter website.*}
 
 ## Toggle a Group of OnOff Devices
 

@@ -6,32 +6,41 @@ communicates with the higher layers of the Thread stack running on the Raspberry
 Pi over a USB connection.
 
 A complete list of supported hardware for the RCP is provided on the
-[Matter Hardware Requirements](../general/HARDWARE_REQUIREMENTS.md) page.
+[Matter Hardware Requirements](../prerequisites/HARDWARE_REQUIREMENTS.md) page.
 
 First, in order to flash the RCP, connect it to your laptop directly by USB.
 
-<br>
+ 
 
 ## Step 1: Get or Build the Image File to Flash the RCP
 
 We have provided two ways to get the required image to flash the RCP. You can
 use one of the following options:
 
-1. Use the pre-built 'ot-rcp' image file
+1. Use the pre-built 'ot-rcp' image file available in both **[SIMPLICITY STUDIO]** and the **[GITHUB]** repository.
 2. Build the image file from the 'ot-efr32' repository, which is listed on the
    [Matter Repositories and Commit Hashes page](../general/COMMIT_HASHES.md)
 
-<br>
+ 
 
 ### **Using a Pre-built Image File**
 
+**[GITHUB]**
+
 RCP image files for all demo boards are accessible through the
-[Matter Artifacts Page](../general/ARTIFACTS.md). If you are using a pre-built
+[Matter Artifacts Page](../prerequisites/ARTIFACTS.md). If you are using a pre-built
 image file, you can skip to [Step #2: Flash the RCP](#step-2-flash-the-rcp).
 
-<br>
 
-### **Building the Image File from the Repository**
+**[SIMPLICITY STUDIO]**
+
+Pre-built RCP images are available within Simplicity Studio as "Demos". You can also download and use
+the GitHub artifacts listed above, or you can easily build an RCP image of your choosing for your target part from
+within Simplicity Studio's OpenThread SDK. 
+### **Building the Image File from the GitHub Repository**
+
+**[GITHUB]**
+
 
 **1. Clone the ot-efr32 repository**
 
@@ -64,7 +73,7 @@ hash for the system. Check the current branch and commit hash used here:
 $ git checkout <commit hash>
 ```
 
-<br>
+ 
 
 **2. Build the RCP**
 
@@ -76,11 +85,12 @@ This process will build several images for your board. The filename of the image
 to be flashed onto the board to create an RCP is 'ot-rcp.s37'.
 
 The output of the build process puts all the image files in the following
-location: '<git>/ot-efr32/build/<efr32xgxx>'
+location: '[git]/ot-efr32/build/[efr32xgxx]'
 
-<br>
 
 ## Step 2: Flash the RCP
+
+**[SIMPLICITY STUDIO] & [GITHUB]**
 
 Once you get the RCP image, either by downloading a prebuilt image or building
 the image file from the repo, you can flash it onto your device. This is done
@@ -96,5 +106,5 @@ with the Thread network.
 
 ---
 
-[Table of Contents](../README.md) | [Thread Demo](./DEMO_OVERVIEW.md) |
-[Wi-Fi Demo](../wifi/DEMO_OVERVIEW.md)
+{*[Table of Contents](../README.md) | [Thread Demo](./DEMO_OVERVIEW.md) |
+[Wi-Fi Demo](../wifi/DEMO_OVERVIEW.md)*}

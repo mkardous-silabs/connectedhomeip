@@ -1,0 +1,19 @@
+objectType: docLeaf
+id: matter-overview-guides
+access: public
+status: active
+version: "0.1"
+docSpaceParent: ./_docspace-sld56-matter.yml
+authors:
+  - anyone@silabs.com
+contentType: markdown
+title: "Matter Overview Guides"
+description: "Matter Overview Guides"
+sourceDir: ../overview
+menu:
+  items: 
+    - Matter Commissioning: ../overview/COMMISSIONING.md
+    - Matter Security: ../overview/SECURITY.md
+    - Matter OT Sleepy End Device: ../overview/OT_SLEEPY_END_DEVICE.md
+    - Matter OTA Software Update: ../overview/OTA_SOFTWARE_UPDATE.md
+    - Matter OTA Bootloader: ../overview/OTA_BOOTLOADER.md

@@ -1,15 +1,15 @@
 # Matter over Wi-Fi Demo Overview
 
-This document walks through the steps to build the Matter application i.e lighting, thermostat, door-lock for<br>
-EFR32MG boards. A complete list of hardware supported for Wi-Fi is included on the [Hardware Requirements page](../general/HARDWARE_REQUIREMENTS.md).
+This document walks through the steps to build the Matter application i.e lighting, thermostat, door-lock for 
+EFR32MG boards. A complete list of hardware supported for Wi-Fi is included on the [Hardware Requirements page](../prerequisites/HARDWARE_REQUIREMENTS.md).
 
 ## Step 1: Matter Wi-Fi Prerequisites
 
 Before running the Matter Wi-Fi demo or developing for Wi-Fi make sure that you have all the required hardware and software for each
 use case.
 
-1. [Matter Hardware Requirements](../general/HARDWARE_REQUIREMENTS.md)
-1. [Matter Software Requirements](../general/SOFTWARE_REQUIREMENTS.md)
+1. [Matter Hardware Requirements](../prerequisites/HARDWARE_REQUIREMENTS.md)
+1. [Matter Software Requirements](../prerequisites/SOFTWARE_REQUIREMENTS.md)
 
 ## Step 2: Building the chip-tool for Wi-Fi
 
@@ -24,7 +24,7 @@ of two platforms, either Linux/Mac or Raspberry Pi.
 
 Follow the steps in [Software Setup](SW_SETUP.md)
 
-Build commands are provided for the RS911x, SiWx917 and WF200 adapters.
+Build commands are provided for the RS9116 adapter.
 
 ## Step 4: Running the Demo
 
@@ -36,5 +36,5 @@ after successfully executing the above steps.
 
 ---
 
-[Table of Contents](../README.md) | [Thread Demo](../thread/DEMO_OVERVIEW.md) |
-[Wi-Fi Demo](./DEMO_OVERVIEW.md)
+{*[Table of Contents](../README.md) | [Thread Demo](../thread/DEMO_OVERVIEW.md) |
+[Wi-Fi Demo](./DEMO_OVERVIEW.md)*}

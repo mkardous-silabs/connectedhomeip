@@ -1,0 +1,18 @@
+objectType: docLeaf
+id: matter-studio
+access: public
+status: active
+version: "0.1"
+docSpaceParent: ./_docspace-sld56-matter.yml
+authors:
+  - anyone@silabs.com
+contentType: markdown
+title: "Matter in Simplicity Studio"
+description: "Matter Simplicity Studio documentation"
+sourceDir: ../dev/studio
+menu:
+  items: 
+    - Creating in Studio: CREATE_STUDIO.md
+    - Modifying in Studio: MODIFY_STUDIO.md
+    - Building in Studio: BUILD_STUDIO.md
+    - Debugging in Studio: DEBUG_STUDIO.md

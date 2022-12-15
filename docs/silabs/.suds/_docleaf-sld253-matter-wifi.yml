@@ -1,0 +1,19 @@
+objectType: docLeaf
+id: matter-wifi
+access: public
+status: active
+version: "0.1"
+docSpaceParent: ./_docspace-sld56-matter.yml
+authors:
+  - anyone@silabs.com
+contentType: markdown
+title: "Matter Over Wi-Fi"
+description: "Matter Over Wi-Fi"
+sourceDir: ../wifi
+menu:
+  items: 
+    - Demo Overview: DEMO_OVERVIEW.md
+    - Building in a Linux Environment: BUILD_CHIP_ENV.md
+    - Building using the Pre-Built RaspPi Image: BUILD_PI_ENV.md
+    - Building a Wi-Fi End Device: SW_SETUP.md
+    - Running Matter Demo over Wi-Fi: RUN_DEMO.md

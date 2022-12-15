@@ -27,7 +27,7 @@ The flow of the setup described above is as follows:
    Device performs the corresponding action, such as turning the End Device's
    LED on or off
 
-<br>
+ 
 
 A Matter network can be built in a number of ways using a combination of Silicon
 Labs hardware, a Raspberry Pi, and any external controller (Macbook, Ubuntu,
@@ -42,5 +42,5 @@ routing between the controller and OTBR.
 
 ---
 
-[Table of Contents](../README.md) | [Thread Demo](./DEMO_OVERVIEW.md) |
-[Wi-Fi Demo](../wifi/DEMO_OVERVIEW.md)
+{*[Table of Contents](../README.md) | [Thread Demo](./DEMO_OVERVIEW.md) |
+[Wi-Fi Demo](../wifi/DEMO_OVERVIEW.md)*}

@@ -15,16 +15,10 @@ This section covers remote debugging (GDB jlink) of Matter examples in VS Code.
 ## Settings
 
 Before starting a debug session ensure the following:
-
-<ol>
-<div style="text-align: justify"> 
-  <li> A path to "arm-none-eabi-gdb.exe" is provided in the "Settings.Json" file under the "cortex-debug.gdbPath.windows" property.</li>  
-  <li> A path to the GDB jlink server executable is provided in the launch.Json file for the property "serverpath". Find this property under the configuration name "Debug efr32 example app"</li>
-</ol>
+ - A path to "arm-none-eabi-gdb.exe" is provided in the "Settings.Json" file under the "cortex-debug.gdbPath.windows" property. 
+ - A path to the GDB jlink server executable is provided in the launch.Json file for the property "serverpath". Find this property under the configuration name "Debug efr32 example app"
 
 ## Debugging
-
-<ol>
 
 ### Step 1:
 
@@ -43,10 +37,8 @@ Select the example you want to debug.
 
 From the drop-down menu, select the desired target device.
 
-![](../../images/debug_session.gif)
-
-## </ol>
+{*![Debug Session](../../images/debug_session.gif)*}
 
 -----
 
-[Table of Contents](../../README.md)
+{*[Table of Contents](../../README.md)*}

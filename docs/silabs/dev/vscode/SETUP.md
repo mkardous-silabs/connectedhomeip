@@ -57,7 +57,7 @@ $ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:"/opt/homebrew/opt/openssl@3/lib/pkgco
 ### Mac OS (Apple Silicon) Users
 
 These requirements are are needed for Mac OS (Apple Silicon) in addition to
-those mentioned above. <br>
+those mentioned above.  
 
 1. Add ARM GCC toolchain to the search path within `bootstrap.sh` by adding this
    line of code:
@@ -94,4 +94,4 @@ $ sudo apt-get install git gcc g++ pkg-config libssl-dev libdbus-1-dev libglib2.
 
 ---
 
-[Table of Contents](../../README.md)
+{*[Table of Contents](../../README.md)*}

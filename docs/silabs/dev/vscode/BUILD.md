@@ -3,8 +3,6 @@
 This section covers building the binaries required for [ Flashing ](FLASH.md) and
 [ Debugging ](DEBUG.md) the target Matter Accessory Devices.
 
-<a name="linMac"></a>
-
 ## Linux/Mac
 
 ### Step 1:
@@ -65,4 +63,4 @@ During bootstrap, an error might occur. Check if pip.exe is installed in ./envir
 
 -----
 
-[Table of Contents](../../README.md)
+{*[Table of Contents](../../README.md)*}

@@ -2,18 +2,17 @@
 
 A lighting app with color control and level control.
 
-<hr>
 
--   [Matter EFR32 Color Lighting Application](#matter-EFR32-color-lighting-application)
-    -   [Introduction](#introduction)
-    -   [Running the application](#running-the-application)
-        -   [Material](#material)
-        -   [Compiling](#compiling)
-            -   [Building and flashing the example](#building-and-flashing-the-example)
-        -   [Monitoring the app](#monitoring-the-app)
-        -   [Interacting with the app](#interacting-with-the-app)
+- [Matter EFR32 Color Lighting Application](#matter-efr32-color-lighting-application)
+  - [Introduction](#introduction)
+  - [Running the application](#running-the-application)
+    - [Material](#material)
+    - [Compiling](#compiling)
+      - [Building and flashing the example](#building-and-flashing-the-example)
+    - [Monitoring the app](#monitoring-the-app)
+    - [Interacting with the app](#interacting-with-the-app)
+          - [Last modified August 4th, 2022.](#last-modified-august-4th-2022)
 
-<hr>
 
 ## Introduction
 

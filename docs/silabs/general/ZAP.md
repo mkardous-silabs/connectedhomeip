@@ -1,5 +1,9 @@
 # ZCL Advanced Platform (ZAP) Tool for Matter
 
+**[GITHUB]**
+
+> **Note:** This guide is intended for developers who are primarily developing outside of Simplicity Studio. If you are developing using Simplicity Studio please consider the section on [Matter in Simplicity Studio](../dev/studio/index.md) for more information.
+
 ## Overview
 
 EFR32 example applications provide a baseline demonstration of a lock device,
@@ -37,7 +41,7 @@ Each Matter application consists of the following layers:
             is represented by an LED), with options to set passwords and lock
             schedules
 
-<br>
+ 
 
 ## Clusters
 
@@ -58,7 +62,7 @@ Some applications have callbacks that are left to be implemented by the device
 manufacturer. For example, the storage and mangement of users and credentials in
 the lock-app is left up to the application developer.
 
-<br>
+ 
 
 ## ZAP Tool
 
@@ -120,7 +124,7 @@ cluster should already be enabled as "Server".
 
 ![ZAP Endpoint 1](./images/zap_endpoint_1.png)
 
-<br>
+ 
 
 ## Attributes
 
@@ -139,7 +143,7 @@ a default value for attributes, commands and events for Endpoint 1.
 
 ![ZAP Attributes](./images/zap_attributes.png)
 
-<br>
+ 
 
 ## Commands
 
@@ -152,7 +156,7 @@ store these differently.
 
 ![ZAP Commands](./images/zap_commands.png)
 
-<br>
+ 
 
 ## Generation of Code
 
@@ -165,5 +169,5 @@ matter/zzz_generated/lock-app/zap-generated .
 
 ---
 
-[Table of Contents](../README.md) | [Thread Demo](../thread/DEMO_OVERVIEW.md) |
-[Wi-Fi Demo](../wifi/DEMO_OVERVIEW.md)
+{*[Table of Contents](../README.md) | [Thread Demo](../thread/DEMO_OVERVIEW.md) |
+[Wi-Fi Demo](../wifi/DEMO_OVERVIEW.md)*}

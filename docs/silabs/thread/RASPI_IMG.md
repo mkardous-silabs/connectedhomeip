@@ -1,4 +1,4 @@
-# Setting up the Matter Hub (Raspberry Pi)
+# Setting up the Matter Hub (Raspberry Pi) ([SIMPLICITY STUDIO] & [GITHUB])
 
 The Matter Hub consists of the Open Thread Border Router (OTBR) and the chip-tool
 running on a Raspberry Pi. Silicon Labs has developed a Raspberry Pi image that
@@ -8,7 +8,7 @@ In short, the Matter Controller sends IPv6 packets to the OTBR, which converts
 the IPv6 packets into Thread packets. The Thread packets are then routed to the
 Silicon Labs end device.
 
-<br>
+ 
 
 ## How to use the Silicon Labs Matter Raspberry Pi Image (Matter Hub)
 
@@ -18,21 +18,21 @@ Silicon Labs end device.
 > follow the instructions on the [Matter Tool Page](CHIP_TOOL.md) to update your
 > existing installation.
 
-<br>
+ 
 
 ### Step 1. Raspberry Pi Image Download
 
 The provided Raspberry Pi image is used as a Matter Controller with the OTBR.
 
 The image can be downloaded from the
-[Matter Artifacts page](../general/ARTIFACTS.md)
+[Matter Artifacts page](../prerequisites/ARTIFACTS.md)
 
 > Please note that this image, even when zipped up, is quite large ~5GB so this
 > download will take a while if you are on a slow connection. This image
 > includes both the Ubuntu operating system as well as the OTBR and chip-tool,
 > hence the size.
 
-<br>
+ 
 
 ### Step 2. Flashing your Raspberry Pi
 
@@ -47,7 +47,7 @@ used to flash the image to a micro SD card.
 > Raspberry Pi by unplugging it from the power source and plugging it back in.
 > Then, wait at least 10 seconds for it to come up and start the SSH server.
 
-<br>
+ 
 
 ### Step 3. Finding your Raspberry Pi on the Network
 
@@ -83,7 +83,7 @@ on finding the IP address and connecting to the Raspberry Pi by SSH. .
 > may receive a warning regarding a 'key fingerprint' - this is normal and
 > expected. You can get past this by typing '_yes_' at the prompt.
 
-<br>
+ 
 
 ### Step 4: Using the Matter Hub
 
@@ -95,5 +95,5 @@ Hub with `mattertool` commands.
 
 ---
 
-[Table of Contents](../README.md) | [Thread Demo](./DEMO_OVERVIEW.md) |
-[Wi-Fi Demo](../wifi/DEMO_OVERVIEW.md)
+{*[Table of Contents](../README.md) | [Thread Demo](./DEMO_OVERVIEW.md) |
+[Wi-Fi Demo](../wifi/DEMO_OVERVIEW.md)*}

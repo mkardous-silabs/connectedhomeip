@@ -1,10 +1,10 @@
-# Using the Mattertool (chip-tool)
+# Using the Mattertool (chip-tool) ([SIMPLICITY STUDIO] & [GITHUB])
 
 The following commands show how to start a new Thread network from the local
 OTBR, commission an EFR32 Matter End Device (Matter Accessory Device), and then
 send the on/off commands with the `mattertool` automated script. The `mattertool` 
-script provides an interface into various chip-tool and otbr commands used to create 
-and interact with a Matter network
+script provides an interface into various chip-tool and OTBR commands used to create 
+and interact with a Matter network.
 
 ## Basic Mattertool Commands
 
@@ -20,8 +20,6 @@ You can also use the full chip-tool command set (still using mattertool)
 ```shell
 $ mattertool levelcontrol read current-level 106 1
 ```
-
-<br><br>
 
 ## Advanced Information on the Matter Hub
 
@@ -40,7 +38,7 @@ $ mattertool levelcontrol read current-level 106 1
             -   matterTool.sh
             -   setupOTBR.sh
 
-<br>
+ 
 
 ## Open Thread Border Router (OTBR)
 
@@ -67,13 +65,13 @@ Available commands:
 | -s, --setup                    | Runs the OTBR setup only, use this to change the configured infrastructure interface (use in combination with -if wlan0 for Wi-Fi) |
 | -u, --update                   | Update the OTBR installation after the repo is updated                                                                             |
 
-<br>
+ 
 
 #### Usage:
 
-<br>
+ 
 
-Change infrastructure to wlan0: `$ otbrsetup -if wlan0 -s` <br> Rerun full
+Change infrastructure to wlan0: `$ otbrsetup -if wlan0 -s`   Rerun full
 install for eth0 interface: `$ otbrsetup -i`
 
 ## Upgrading the OpenThread Border Router (OTBR)
@@ -123,7 +121,7 @@ $ mattertool buildCT
 The mattertool script centralizes and simplifies the use of chip-tool and
 starting a clean thread network.
 
-<br>
+ 
 
 Available commands:
 
@@ -142,12 +140,12 @@ Available commands:
 | rebuildCT    | Rebuild the chip-tool                                                                                          |
 | vars         | Print the Variables in use by the script                                                                      |
 
-<br>
+ 
 
 Some options/arguments can be added to the command to update the values of the
 variables used by the script.
 
-<br>
+ 
 
 Available commands:
 
@@ -163,7 +161,7 @@ Available commands:
 > These configurations are held until overwritten, cleared with cleanVars or
 > when Raspberry Pi reboots.
 
-<br>
+ 
 
 Active variables used by mattertool:
 
@@ -190,7 +188,7 @@ it is the same as the last pairing
 When the startThread command is used, THREAD_DATA_SET will be assigned with
 the right operation dataset for the created Thread Network.
 
-<br>
+ 
 
 ### Scripts Alias
 
@@ -207,5 +205,5 @@ $ alias otbrsetup=‘source $HOME/scripts/setupOTBR.sh'
 
 ---
 
-[Table of Contents](../README.md) | [Thread Demo](./DEMO_OVERVIEW.md) |
-[Wi-Fi Demo](../wifi/DEMO_OVERVIEW.md)
+{*[Table of Contents](../README.md) | [Thread Demo](./DEMO_OVERVIEW.md) |
+[Wi-Fi Demo](../wifi/DEMO_OVERVIEW.md)*}

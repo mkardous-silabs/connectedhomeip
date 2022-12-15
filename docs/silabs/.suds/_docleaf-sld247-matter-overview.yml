@@ -1,0 +1,12 @@
+objectType: docLeaf
+id: matter-overview
+access: public
+status: active
+version: "0.1"
+docSpaceParent: ./_docspace-sld56-matter.yml
+authors:
+  - anyone@silabs.com
+contentType: markdown
+title: "Overview"
+description: "An Overview of Matter and the Silicon Labs Matter GitHub Repo"
+sourceDir: ../

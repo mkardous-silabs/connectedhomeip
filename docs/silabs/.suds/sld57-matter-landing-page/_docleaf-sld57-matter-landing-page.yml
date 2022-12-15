@@ -1,0 +1,12 @@
+objectType: docLeaf
+id: matter-start
+access: public
+status: active
+version: "0.3"
+docSpaceParent: ../_docspace-sld56-matter.yml
+authors:
+  - anyone@silabs.com
+contentType: markdown 
+title: "Developing with Silicon Labs Matter"
+description: ""
+sourceDir: .

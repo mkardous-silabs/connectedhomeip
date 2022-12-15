@@ -6,7 +6,7 @@
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.sample-app.lock-app.lock-app-thread.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/lock-app/lock-app-thread.slcp"/>
-    <properties key="readmeFiles" value="slc/sample-app/lock-app/readme.html"/>
+    <properties key="readmeFiles" value="slc/sample-app/lock-app/README.md"/>
     <properties key="boardCompatibility" value="brd4161a brd4162a brd4163a brd4164a brd4166a brd4170a brd4186c brd4187c brd2601b brd2703a"/>
     <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide"/>
@@ -22,7 +22,7 @@
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.sample-app.lock-app.lock-app-no-led-thread.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/lock-app/lock-app-no-led-thread.slcp"/>
-    <properties key="readmeFiles" value="slc/sample-app/lock-app/readme.html"/>
+    <properties key="readmeFiles" value="slc/sample-app/lock-app/README.md"/>
     <properties key="boardCompatibility" value="brd4316a brd4317a brd4319a"/>
     <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide"/>
@@ -38,6 +38,7 @@
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.sample-app.lighting-app.lighting-app-thread.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/lighting-app/lighting-app-thread.slcp"/>
+    <properties key="readmeFiles" value="slc/sample-app/lighting-app/README.md"/>
     <properties key="boardCompatibility" value="brd4161a brd4162a brd4163a brd4164a brd4166a brd4170a brd4186c brd4187c brd2601b brd2703a"/>
     <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide"/>
@@ -53,6 +54,7 @@
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.sample-app.lighting-app.lighting-app-no-led-thread.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/lighting-app/lighting-app-no-led-thread.slcp"/>
+    <properties key="readmeFiles" value="slc/sample-app/lighting-app/README.md"/>
     <properties key="boardCompatibility" value="brd4316a brd4317a brd4319a"/>
     <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide"/>
@@ -68,6 +70,7 @@
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.sample-app.thermostat.thermostat-thread.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/thermostat/thermostat-thread.slcp"/>
+    <properties key="readmeFiles" value="slc/sample-app/thermostat/README.md"/>
     <properties key="boardCompatibility" value="brd4161a brd4162a brd4163a brd4164a brd4166a brd4170a brd4186c brd4187c"/>
     <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide"/>
@@ -83,6 +86,7 @@
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.sample-app.thermostat.thermostat-no-led-thread.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/thermostat/thermostat-no-led-thread.slcp"/>
+    <properties key="readmeFiles" value="slc/sample-app/thermostat/README.md"/>
     <properties key="boardCompatibility" value="brd4316a brd4317a"/>
     <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide"/>
@@ -98,6 +102,7 @@
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.sample-app.light-switch-app.light-switch-app-thread.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/light-switch-app/light-switch-app-thread.slcp"/>
+    <properties key="readmeFiles" value="slc/sample-app/light-switch-app/README.md"/>
     <properties key="boardCompatibility" value="brd4161a brd4162a brd4163a brd4164a brd4166a brd4170a brd4186c brd4187c brd2601b brd2703a"/>
     <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide"/>
@@ -113,6 +118,7 @@
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.sample-app.light-switch-app.light-switch-app-no-led-thread.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/light-switch-app/light-switch-app-no-led-thread.slcp"/>
+    <properties key="readmeFiles" value="slc/sample-app/light-switch-app/README.md"/>
     <properties key="boardCompatibility" value="brd4316a brd4317a brd4319a"/>
     <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide"/>
@@ -128,6 +134,7 @@
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.sample-app.window-app.window-app-thread.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/window-app/window-app-thread.slcp"/>
+    <properties key="readmeFiles" value="slc/sample-app/window-app/README.md"/>
     <properties key="boardCompatibility" value="brd4161a brd4162a brd4163a brd4164a brd4166a brd4170a brd4186c brd4187c brd2601b brd2703a"/>
     <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide"/>
@@ -143,6 +150,7 @@
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.sample-app.window-app.window-app-no-led-thread.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/window-app/window-app-no-led-thread.slcp"/>
+    <properties key="readmeFiles" value="slc/sample-app/window-app/README.md"/>
     <properties key="boardCompatibility" value="brd4316a brd4317a brd4319a"/>
     <properties key="partCompatibility" value=".*efr32mg12p.* .*efr32mg24.* .*mgm24.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide"/>

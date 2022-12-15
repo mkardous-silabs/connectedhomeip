@@ -11,7 +11,7 @@
     -   Make sure the images being used to flash the Raspberry Pi, RCP and MAD
         are correct.
 
-<br>
+ 
 
 -   How can I find the IP address of my Raspberry Pi?
 
@@ -23,9 +23,9 @@
     -   For more detailed information, refer to this page:
         [Raspberry Pi Remote Access](https://www.raspberrypi.com/documentation/computers/remote-access.html)
 
-<br>
+ 
 
 ---
 
-[Table of Contents](../README.md) | [Thread Demo](./DEMO_OVERVIEW.md) |
-[Wi-Fi Demo](../wifi/DEMO_OVERVIEW.md)
+{*[Table of Contents](../README.md) | [Thread Demo](./DEMO_OVERVIEW.md) |
+[Wi-Fi Demo](../wifi/DEMO_OVERVIEW.md)*}
