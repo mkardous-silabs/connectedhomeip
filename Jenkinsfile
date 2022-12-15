@@ -1290,8 +1290,8 @@ def pipeline()
         parallelNodes['lighting rs9116 BRD4161A']   = { this.utfWiFiTestSuite('gsdkMontrealNode','utf_matter_ci','INT0014944','lighting-app','wifi','BRD4161A','rs9116','',"/manifest","--tmconfig tests/.sequence_manager/test_execution_definitions/matter_wifi_ci_sequence.yaml") }
         parallelNodes['lighting 917-exp BRD4187C']   = { this.utfWiFiTestSuite('gsdkMontrealNode','utf_matter_wifi','matter_wifi','lighting-app','wifi','BRD4187C','91x','',"/manifest-4187-917","--tmconfig tests/.sequence_manager/test_execution_definitions/matter_wifi_ci_sequence.yaml") }
         */
-        parallelNodes['Lighting-App BRD4161A']           = { this.utfThreadTestSuite('gsdkMontrealNode','utf_matter_thread_4','matter_thread_4','lighting-app','thread','BRD4161A','',"/manifest-4161-thread-lighting_slc.yaml","--tmconfig tests/.sequence_manager/test_execution_definitions/matter_thread_ci_sequence.yaml",buildTool) }
-        parallelNodes['Lighting-App BRD4187C']           = { this.utfThreadTestSuite('gsdkMontrealNode','utf_matter_thread','matter_thread','lighting-app','thread','BRD4187C','',"/manifest-4187-thread-lighting_slc.yaml","--tmconfig tests/.sequence_manager/test_execution_definitions/matter_thread_ci_sequence.yaml",buildTool) }
+        parallelNodes['Lighting-App BRD4161A']           = { this.utfThreadTestSuite('gsdkMontrealNode','utf_matter_thread_4','matter_thread_4','lighting-app','thread','BRD4161A','',"/manifest-4161-thread-lighting_slc","--tmconfig tests/.sequence_manager/test_execution_definitions/matter_thread_ci_sequence.yaml",buildTool) }
+        parallelNodes['Lighting-App BRD4187C']           = { this.utfThreadTestSuite('gsdkMontrealNode','utf_matter_thread','matter_thread','lighting-app','thread','BRD4187C','',"/manifest-4187-thread-lighting_slc","--tmconfig tests/.sequence_manager/test_execution_definitions/matter_thread_ci_sequence.yaml",buildTool) }
     
         parallelNodes.failFast = false
         parallel parallelNodes
