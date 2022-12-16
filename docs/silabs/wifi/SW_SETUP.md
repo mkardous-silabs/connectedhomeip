@@ -2,6 +2,8 @@
 
 ## Using the Matter Accessory Device (MAD) Pre-Built Binaries
 
+**[GITHUB]**
+
 If you are just running the Matter demo, and are not interested in building the
 Matter Accessory Device images from scratch, you can download the MAD images for
 Wi-Fi from this software release on the
@@ -14,6 +16,8 @@ If you are planning to build the Wi-Fi images from scratch,
 continue with this documentation.
 
 ## Software Setup
+
+**[GITHUB]**
 
 If you have not downloaded or cloned this repository, you can run the following
 commands on a Linux terminal running on either Linux machine, WSL or Virtual
@@ -40,6 +44,8 @@ application images.
 
 ## Compiling the chip-tool
 
+**[SIMPLICITY STUDIO] & [GITHUB]**
+
 In order to control the Wi-Fi Matter Accessory Device you will have to compile
 and run the chip-tool on either a Linux, Mac or Raspberry Pi. The chip-tool builds
 faster on the Mac and Linux machines so that is recommended, but if you have
@@ -53,7 +59,15 @@ access to a Raspberry Pi that will work as well.
 
     This will build chip-tool in `out/standalone`.
 
-## Building the Matter Application
+## Building the Matter Application in Simplicity Studio
+
+**[SIMPLICITY STUDIO]**
+
+Silicon Labs offers a complete IDE and Matter Development tool set inside Simplicity Studio. For more information on using Simplicity Studio to build your Matter Accessory Device please consider the [Matter in Simplicity Studio](../dev/studio/index.md) section in this documentation.
+
+## Building the Matter Application from GitHub
+
+**[GITHUB]**
 
 The following commands are for building the Matter application. Depending on which device
 you are using, select the appropriate command to build.

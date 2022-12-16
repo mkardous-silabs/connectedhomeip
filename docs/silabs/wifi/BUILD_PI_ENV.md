@@ -1,5 +1,7 @@
 # Using the Pre-Built Rasberry Pi "Matter Hub" Image
 
+**[SIMPLICITY STUDIO] & [GITHUB]**
+
 When using a Raspberry Pi as a controller in your Matter network you have two
 options
 

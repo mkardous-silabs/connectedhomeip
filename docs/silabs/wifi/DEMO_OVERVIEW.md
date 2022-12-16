@@ -5,6 +5,8 @@ EFR32MG boards. A complete list of hardware supported for Wi-Fi is included on t
 
 ## Step 1: Matter Wi-Fi Prerequisites
 
+**[SIMPLICITY STUDIO] & [GITHUB]**
+
 Before running the Matter Wi-Fi demo or developing for Wi-Fi make sure that you have all the required hardware and software for each
 use case.
 
@@ -12,6 +14,8 @@ use case.
 1. [Matter Software Requirements](../prerequisites/SOFTWARE_REQUIREMENTS.md)
 
 ## Step 2: Building the chip-tool for Wi-Fi
+
+**[SIMPLICITY STUDIO] & [GITHUB]**
 
 In order to run the Matter Wi-Fi demo you will need to run the chip-tool on one
 of two platforms, either Linux/Mac or Raspberry Pi.
@@ -22,11 +26,15 @@ of two platforms, either Linux/Mac or Raspberry Pi.
 
 ## Step 3: Building the Matter Accessory Device (MAD) for Wi-Fi
 
+**[SIMPLICITY STUDIO] & [GITHUB]**
+
 Follow the steps in [Software Setup](SW_SETUP.md)
 
 Build commands are provided for the RS9116 adapter.
 
 ## Step 4: Running the Demo
+
+**[SIMPLICITY STUDIO] & [GITHUB]**
 
 [Running Matter Demo over Wi-Fi using Linux](RUN_DEMO.md)
 

@@ -1,5 +1,7 @@
 # Building the Wi-Fi Matter End Device and the chip-tool
 
+**[SIMPLICITY STUDIO] & [GITHUB]**
+
 ## Build Environment for Linux
 
 This section will go through the steps required to build the chip-tool for Linux.
@@ -26,14 +28,14 @@ $ sudo apt install
 -   Open the Linux terminal from Start menu
 -   Install required packages on Ubuntu Laptop/PC using the following commands:
 
-    ```shell
-    $ sudo apt install git gcc g++ pkg-config libssl-dev libdbus-1-dev
-    libglib2.0-dev libavahi-client-dev ninja-build python3-venv python3-dev python3-pip unzip libgirepository1.0-dev libcairo2-dev libreadline-dev
-    ```
+```shell
+$ sudo apt install git gcc g++ pkg-config libssl-dev libdbus-1-dev
+libglib2.0-dev libavahi-client-dev ninja-build python3-venv python3-dev python3-pip unzip libgirepository1.0-dev libcairo2-dev libreadline-dev
+```
      
-#### 2. Building Enviorment
+#### 2. Building Environment
 
--    To build enviorment follow the `Software setup` and `Compiling chip-tool` steps given in [SW_SETUP](./SW_SETUP.md),
+-    To build environment follow the `Software setup` and `Compiling chip-tool` steps given in [SW_SETUP](./SW_SETUP.md),
 
  
 

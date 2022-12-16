@@ -2,6 +2,8 @@
 
 ## Flashing Images/Binaries
 
+**[GITHUB]**
+
 The following applies to either the EFR32MG12 or EFR32MG24 platforms using Ozone, Simplicity Studio, or Simplicity Commander.
 
 > Note: If you are coming from Simplicity Studio, you may have already installed
@@ -85,6 +87,8 @@ The following applies to either the EFR32MG12 or EFR32MG24 platforms using Ozone
     > You may need to press [ENTER] in the JLinkExe console first
 
 ## Demo Execution
+
+**[SIMPLICITY STUDIO] & [GITHUB]**
 
 This section describes commissioning a Wi-Fi Device using chip-tool for Linux.
 
