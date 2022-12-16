@@ -47,10 +47,17 @@ cp $MATTER_ROOT/matter.slsdk $DEST_DIR/matter_extension
 cp $MATTER_ROOT/matter_templates.xml $DEST_DIR/matter_extension
 cp $MATTER_ROOT/matter_docs.xml $DEST_DIR/matter_extension
 cp $MATTER_ROOT/matter_demos.xml $DEST_DIR/matter_extension
+cp $MATTER_ROOT/slc/EXTENSION_README.md $DEST_DIR/matter_extension/README.md
 
 # Remove unnecessary directories
 rm -fr $DEST_DIR/matter_extension/src/test_driver/
 rm -fr $DEST_DIR/matter_extension/slc/sample-app/*/brd*/
+rm -fr $DEST_DIR/matter_extension/slc/copy-app.sh
+rm -fr $DEST_DIR/matter_extension/slc/copy-extension.sh
+rm -fr $DEST_DIR/matter_extension/slc/build.sh
+rm -fr $DEST_DIR/matter_extension/slc/README.md
+rm -fr $DEST_DIR/matter_extension/slc/script/
+rm -fr $DEST_DIR/matter_extension/slc/EXTENSION_README.md
 
 echo "Matter extension code copied to $DEST_DIR"
 
