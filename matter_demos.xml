@@ -610,4 +610,104 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Light switch Application over Thread for BRD4316A</description>
 	</demo>
+	<demo name="brd4161a.demo.window_app_wifi_rs9116" label="Matter - Window over Wi-Fi">
+		<property key="demos.blurb" value="Matter - Window app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4161a"/>
+		<property key="demos.imageFile" value="demos/window-app-wifi/rs9116/BRD4161A/chip-efr32-window-example.s37"/>
+		<property key="core.readmeFiles" value="https://docs.silabs.com/matter/1.0.1/matter-wifi/demo-overview"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Beginner Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="EXPERIMENTAL"/>
+		<description>This is a Matter Window Application for BRD4161A to be used with RS9116 Wi-Fi Evaluation kit</description>
+	</demo>
+	<demo name="brd4186c.demo.window_app_wifi_rs9116" label="Matter - Window over Wi-Fi">
+		<property key="demos.blurb" value="Matter - Window app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4186c"/>
+		<property key="demos.imageFile" value="demos/window-app-wifi/rs9116/BRD4186C/chip-efr32-window-example.s37"/>
+		<property key="core.readmeFiles" value="https://docs.silabs.com/matter/1.0.1/matter-wifi/demo-overview"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Beginner Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="EXPERIMENTAL"/>
+		<description>This is a Matter Window Application for BRD4186C to be used with RS9116 Wi-Fi Evaluation kit</description>
+	</demo>
+	<demo name="brd4186c.demo.light_switch_app_wifi_rs9116" label="Matter - Light switch over Wi-Fi">
+		<property key="demos.blurb" value="Matter - Light switch app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4186c"/>
+		<property key="demos.imageFile" value="demos/light-switch-app-wifi/rs9116/BRD4186C/chip-efr32-light-switch-example.s37"/>
+		<property key="core.readmeFiles" value="https://docs.silabs.com/matter/1.0.1/matter-wifi/demo-overview"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Beginner Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="EXPERIMENTAL"/>
+		<description>This is a Matter Light switch Application for BRD4186C to be used with RS9116 Wi-Fi Evaluation kit</description>
+	</demo>
+	<demo name="brd4161a.demo.light_switch_app_wifi_rs9116" label="Matter - Light switch over Wi-Fi">
+		<property key="demos.blurb" value="Matter - Light switch app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4161a"/>
+		<property key="demos.imageFile" value="demos/light-switch-app-wifi/rs9116/BRD4161A/chip-efr32-light-switch-example.s37"/>
+		<property key="core.readmeFiles" value="https://docs.silabs.com/matter/1.0.1/matter-wifi/demo-overview"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Beginner Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="EXPERIMENTAL"/>
+		<description>This is a Matter Light switch Application for BRD4161A to be used with RS9116 Wi-Fi Evaluation kit</description>
+	</demo>
+	<demo name="brd4186c.demo.thermostat_app_wifi_rs9116" label="Matter - Thermostat over Wi-Fi">
+		<property key="demos.blurb" value="Matter - Thermostat app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4186c"/>
+		<property key="demos.imageFile" value="demos/thermostat-app-wifi/rs9116/BRD4186C/chip-efr32-thermostat-example.s37"/>
+		<property key="core.readmeFiles" value="https://docs.silabs.com/matter/1.0.1/matter-wifi/demo-overview"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Beginner Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="EXPERIMENTAL"/>
+		<description>This is a Matter Thermostat Application for BRD4186C to be used with RS9116 Wi-Fi Evaluation kit</description>
+	</demo>
+	<demo name="brd4161a.demo.thermostat_app_wifi_rs9116" label="Matter - Thermostat over Wi-Fi">
+		<property key="demos.blurb" value="Matter - Thermostat app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4161a"/>
+		<property key="demos.imageFile" value="demos/thermostat-app-wifi/rs9116/BRD4161A/chip-efr32-thermostat-example.s37"/>
+		<property key="core.readmeFiles" value="https://docs.silabs.com/matter/1.0.1/matter-wifi/demo-overview"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Beginner Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="EXPERIMENTAL"/>
+		<description>This is a Matter Thermostat Application for BRD4161A to be used with RS9116 Wi-Fi Evaluation kit</description>
+	</demo>
+	<demo name="brd4186c.demo.lock_app_wifi_rs9116" label="Matter - Lock over Wi-Fi">
+		<property key="demos.blurb" value="Matter - Lock app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4186c"/>
+		<property key="demos.imageFile" value="demos/lock-app-wifi/rs9116/BRD4186C/chip-efr32-lock-example.s37"/>
+		<property key="core.readmeFiles" value="https://docs.silabs.com/matter/1.0.1/matter-wifi/demo-overview"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Beginner Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="EXPERIMENTAL"/>
+		<description>This is a Matter Lock Application for BRD4186C to be used with RS9116 Wi-Fi Evaluation kit</description>
+	</demo>
+	<demo name="brd4161a.demo.lock_app_wifi_rs9116" label="Matter - Lock over Wi-Fi">
+		<property key="demos.blurb" value="Matter - Lock app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4161a"/>
+		<property key="demos.imageFile" value="demos/lock-app-wifi/rs9116/BRD4161A/chip-efr32-lock-example.s37"/>
+		<property key="core.readmeFiles" value="https://docs.silabs.com/matter/1.0.1/matter-wifi/demo-overview"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Beginner Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="EXPERIMENTAL"/>
+		<description>This is a Matter Lock Application for BRD4161A to be used with RS9116 Wi-Fi Evaluation kit</description>
+	</demo>
+	<demo name="brd4186c.demo.lighting_app_wifi_rs9116" label="Matter - Lighting over Wi-Fi">
+		<property key="demos.blurb" value="Matter - Lighting app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4186c"/>
+		<property key="demos.imageFile" value="demos/lighting-app-wifi/rs9116/BRD4186C/chip-efr32-lighting-example.s37"/>
+		<property key="core.readmeFiles" value="https://docs.silabs.com/matter/1.0.1/matter-wifi/demo-overview"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Beginner Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="EXPERIMENTAL"/>
+		<description>This is a Matter Lighting Application for BRD4186C to be used with RS9116 Wi-Fi Evaluation kit</description>
+	</demo>
+	<demo name="brd4161a.demo.lighting_app_wifi_rs9116" label="Matter - Lighting over Wi-Fi">
+		<property key="demos.blurb" value="Matter - Lighting app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4161a"/>
+		<property key="demos.imageFile" value="demos/lighting-app-wifi/rs9116/BRD4161A/chip-efr32-lighting-example.s37"/>
+		<property key="core.readmeFiles" value="https://docs.silabs.com/matter/1.0.1/matter-wifi/demo-overview"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Beginner Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="EXPERIMENTAL"/>
+		<description>This is a Matter Lighting Application for BRD4161A to be used with RS9116 Wi-Fi Evaluation kit</description>
+	</demo>
 </demos>
