@@ -480,16 +480,6 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Lock Application over Thread for BRD4316A</description>
 	</demo>
-	<demo name="brd4170a.demo.light_switch_app_thread" label="Matter - Light switch over Thread">
-		<property key="demos.blurb" value="Matter - Light switch app"/>
-		<property key="core.partCompatibility" value=".*"/>
-		<property key="core.boardCompatibility" value="brd4170a"/>
-		<property key="demos.imageFile" value="demos/light-switch-app-thread/light-switch-app-thread-led/BRD4170A/chip-efr32-light-switch-example.s37"/>
-		<property key="core.readmeFiles" value="https://docs.silabs.com/matter/1.0.1/matter-thread/demo-overview"/>
-		<property key="filters" value="Type|SoC Project\ Difficulty|Beginner Wireless\ Technology|Matter"/>
-		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Light switch Application over Thread for BRD4170A</description>
-	</demo>
 	<demo name="brd4162a.demo.light_switch_app_thread" label="Matter - Light switch over Thread">
 		<property key="demos.blurb" value="Matter - Light switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
