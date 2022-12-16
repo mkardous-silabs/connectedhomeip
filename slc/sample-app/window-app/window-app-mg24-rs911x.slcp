@@ -164,5 +164,12 @@ template_contribution:
     value: 0x00178000
     condition: [device_series_2]
 
+readme:
+  - path: ./README.md
+ui_hints:
+  highlight:
+    - path: README.md
+      focus: false
+
 tag:
   - hardware:component:led:2+

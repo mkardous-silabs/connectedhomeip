@@ -1,8 +1,8 @@
 # CHIP EFR32 Lock Example
 
 The EFR32 lock example provides a baseline demonstration of a door lock control
-device, built using Matter and the Silicon Labs gecko SDK. It can be controlled by
-a Chip controller over Openthread network..
+device, built using Matter and the Silicon Labs Gecko SDK. It can be controlled by
+a Chip controller over Openthread network.
     
 The EFR32 device can be commissioned over Bluetooth Low Energy where the device
 and the Chip controller will exchange security information with the Rendez-vous
@@ -17,8 +17,9 @@ workings of Matter as well as a template for creating real products based on the
 Silicon Labs platform.
 
 For more general information on running matter applications and pre-requisites please look at online 
-documentation available on docs.silabs.com 
-[Silicon Labs Matter Documentation](https://docs.silabs.com/matter/1.0.1/matter-thread/demo-overview)
+documentation for Matter available on docs.silabs.com. Follow Wi-Fi or Thread demo instructions depending on the example you are running.
+* [Demo instructions for Thread](https://docs.silabs.com/matter/1.0.1/matter-thread/demo-overview)
+* [Demo instructions for Wi-Fi](https://docs.silabs.com/matter/1.0.1/matter-wifi/demo-overview)
 
 ## Lock Application User Interface
 
