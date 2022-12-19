@@ -2,12 +2,11 @@
 
 The EFR32 light switch example provides a baseline demonstration of a on-off
 light switch device, built using Matter and the Silicon Labs Gecko SDK. It can
-be controlled by a Chip controller over an Openthread network.
+be controlled by a Chip controller over Wifi network.
 
 The EFR32 device can be commissioned over Bluetooth Low Energy where the device
 and the Chip controller will exchange security information with the Rendez-vous
-procedure. If using Thread, Thread Network credentials are then provided to the
-EFR32 device which will then join the network.
+procedure.
 
 If the LCD is enabled, the LCD on the Silabs WSTK shows a QR Code containing the
 needed commissioning information for the BLE connection and starting the
@@ -18,8 +17,8 @@ workings of Matter as well as a template for creating real products based on the
 Silicon Labs platform.
 
 For more general information on running matter applications and pre-requisites please look at online 
-documentation for Matter available on docs.silabs.com. Follow Thread demo instructions depending on the example you are running.
-[Demo instructions for Thread](https://docs.silabs.com/matter/1.0.1/matter-thread/demo-overview)
+documentation for Matter available on docs.silabs.com. Follow Wi-Fi instructions depending on the example you are running.
+[Demo instructions for Wi-Fi](https://docs.silabs.com/matter/1.0.1/matter-wifi/demo-overview)
 
 ## Light Switch Specific Interface
 
@@ -46,9 +45,9 @@ application to connect.
 -   Rapid Even Flashing (100 ms on/100 ms off): The device is in the
     unprovisioned state and a commissioning application is connected through Bluetooth LE.
 
--   Short Flash Off (950ms on/50ms off): The device is fully provisioned, but does not yet have full Thread network or service connectivity.
+-   Short Flash Off (950ms on/50ms off): The device is fully provisioned, but does not yet have full service connectivity.
 
--   Solid On: The device is fully provisioned and has full Thread network and service connectivity.
+-   Solid On: The device is fully provisioned and has full service connectivity.
 
 **Push Button 0**
 

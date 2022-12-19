@@ -165,10 +165,10 @@ template_contribution:
     condition: [device_series_2]
 
 readme:
-  - path: ./README.md
+  - path: ./README_WiFi.md
 ui_hints:
   highlight:
-    - path: README.md
+    - path: README_WiFi.md
       focus: false
 
 tag:

@@ -2,12 +2,11 @@
 
 The EFR32 window-covering example provides a baseline demonstration of a Window
 Covering device, built using Matter and the Silicon Labs Gecko SDK. It can be
-controlled by a Chip controller over an Openthread network.
+controlled by a Chip controller over Wifi network.
 
 The EFR32 device can be commissioned over Bluetooth Low Energy where the device
 and the Chip controller will exchange security information with the Rendez-vous
-procedure. In the case of Thread, the Thread Network credentials are provided to
-the EFR32 device which will then join the Thread network.
+procedure.
 
 If the LCD is enabled, the LCD on the Silabs WSTK shows a QR Code containing the
 needed commissioning information for the BLE connection and starting the
@@ -19,8 +18,8 @@ workings of Matter as well as a template for creating real products based on the
 Silicon Labs platform.
 
 For more general information on running matter applications and pre-requisites please look at online 
-documentation for Matter available on docs.silabs.com. Follow Thread demo instructions depending on the example you are running.
-[Demo instructions for Thread](https://docs.silabs.com/matter/1.0.1/matter-thread/demo-overview)
+documentation for Matter available on docs.silabs.com. Follow Wi-Fi demo instructions depending on the example you are running.
+[Demo instructions for Wi-Fi](https://docs.silabs.com/matter/1.0.1/matter-wifi/demo-overview)
 
 ## Window Covering Application User Interface
 
@@ -48,11 +47,10 @@ LED 0 shows the overall state of the device and its connectivity. The following 
             Bluetooth LE.
 
 -   _Short Flash Off_ ; (950ms on/50ms off)_ &mdash; The device is fully
-            provisioned, but does not yet have full Thread network or service
+            provisioned, but does not yet have full service
             connectivity.
 
--   _Solid On_ ; The device is fully provisioned and has full Thread
-            network and service connectivity.
+-   _Solid On_ ; The device is fully provisioned and has full service connectivity.
 
 **LED 1** 
 
@@ -90,26 +88,26 @@ Switch between lift and tilt
 
 - Pressing and hold both buttons at the same time: Cycles between window covering 1, and window covering 2.
 
-*   Once the device is provisioned, it will join the Thread network is
+*   Once the device is provisioned, it will join the wifi network is
     established, look for the RTT log
 
 ```shell
 [DL] Device Role: CHILD
 [DL] Partition Id:0x6A7491B7
 [DL] \_OnPlatformEvent default: event->Type = 32778
-[DL] OpenThread State Changed (Flags: 0x00000001)
-[DL] Thread Unicast Addresses:
+[DL] Wifi State Changed (Flags: 0x00000001)
+[DL] Wifi Unicast Addresses:
 [DL]    2001:DB8::E1A2:87F1:7D5D:FECA/64 valid preferred
 [DL]    FDDE:AD00:BEEF::FF:FE00:2402/64 valid preferred rloc
 [DL]    FDDE:AD00:BEEF:0:383F:5E81:A05A:B168/64 valid preferred
 [DL]    FE80::D8F2:592E:C109:CF00/64 valid preferred
-[DL] LwIP Thread interface addresses updated
+[DL] LwIP Wifi face addresses updated
 [DL] FE80::D8F2:592E:C109:CF00 IPv6 link-local address, preferred)
-[DL] FDDE:AD00:BEEF:0:383F:5E81:A05A:B168 Thread mesh-local address, preferred)
+[DL] FDDE:AD00:BEEF:0:383F:5E81:A05A:B168 Wifi mesh-local address, preferred)
 [DL] 2001:DB8::E1A2:87F1:7D5D:FECA IPv6 global unicast address, preferred)
 ```
 
-(you can verify that the device is on the thread network with the command
+(you can verify that the device is on the wifi network with the command
     `router table` using a serial terminal (screen / minicom etc.) on the board
     running the window-app example. You can also get the address list with the
     command ipaddr again in the serial terminal )
@@ -122,14 +120,14 @@ The pre-built chip-tool instance ships with the Matter Hub image which is availa
     
 More information on using the chip-tool directly can be found here: [CHIPTool](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md) 
 
-For instance, to set the window covering lift by percentage:
+For instance, to set the window covering:
 
 ```shell
-chip-tool pairing ble-thread 1 hex:<operationalDataset> 20202021 3840
+chip-tool pairing ble-wifi 1122 $SSID $PSK 20202021 3840
 
-chip-tool onoff on 1 1
+./chip-tool windowcovering up-or-open 1 1
 
-chip-tool windowcovering go-to-tilt-percentage 50 0 1 1
+./chip-tool windowcovering down-or-close 1 1
 ```
 
 To see the supported window covering cluster commands, use:

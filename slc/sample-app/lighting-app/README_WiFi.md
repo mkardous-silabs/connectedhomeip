@@ -2,12 +2,11 @@
 
 The EFR32 lighting example provides a baseline demonstration of a Light control
 device, built using Matter and the Silicon Labs Gecko SDK. It can be controlled
-by a Chip controller over an Openthread network.
+by a Chip controller over Wifi network.
 
 The EFR32 device can be commissioned over Bluetooth Low Energy where the device
 and the Chip controller will exchange security information with the Rendez-vous
-procedure. If using Thread, Thread Network credentials are then provided to the
-EFR32 device which will then join the Thread network.
+procedure.
 
 If the LCD is enabled, the LCD on the Silabs WSTK shows a QR Code containing the
 needed commissioning information for the BLE connection and starting the
@@ -18,8 +17,8 @@ workings of Matter as well as a template for creating real products based on the
 Silicon Labs platform.
 
 For more general information on running matter applications and pre-requisites please look at online 
-documentation for Matter available on docs.silabs.com. Follow Thread demo instructions depending on the example you are running.
-[Demo instructions for Thread](https://docs.silabs.com/matter/1.0.1/matter-thread/demo-overview)
+documentation for Matter available on docs.silabs.com. Follow Wi-Fi instructions depending on the example you are running.
+[Demo instructions for Wi-Fi](https://docs.silabs.com/matter/1.0.1/matter-wifi/demo-overview)
 
 ## Lighting Example User Interface
 
@@ -43,11 +42,10 @@ Shows the overall state of the device and its connectivity. The following states
 -   _Rapid Even Flashing_ ; (100 ms on/100 ms off)_ &mdash; The device is in the unprovisioned state and a commissioning application is connected through Bluetooth LE.
 
 -   _Short Flash Off_ ; (950ms on/50ms off)_ &mdash; The device is fully
-provisioned, but does not yet have full Thread network or service
+provisioned, but does not yet have full service
 connectivity.
 
--   _Solid On_ ; The device is fully provisioned and has full Thread
- network and service connectivity.
+-   _Solid On_ ; The device is fully provisioned and has full service connectivity.
 
 **LED 1** 
 
@@ -84,7 +82,7 @@ More information on using the chip-tool directly can be found here: [CHIPTool](h
 Here is an example with the CHIPTool:
 
 ```shell
-chip-tool pairing ble-thread 1 hex:<operationalDataset> 20202021 3840
+chip-tool pairing ble-wifi 1122 $SSID $PSK 20202021 3840
 
 chip-tool onoff on 1 1
 ```
