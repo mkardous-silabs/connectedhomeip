@@ -1316,6 +1316,7 @@ def pipeline()
         */
         parallelNodes['Lighting-App BRD4161A']           = { this.utfThreadTestSuite('gsdkMontrealNode','utf_matter_thread_4','matter_thread_4','lighting-app','thread','BRD4161A','',"/manifest-4161-thread-lighting_slc","--tmconfig tests/.sequence_manager/test_execution_definitions/matter_thread_ci_sequence.yaml",buildTool) }
         parallelNodes['Lighting-App BRD4187C']           = { this.utfThreadTestSuite('gsdkMontrealNode','utf_matter_thread','matter_thread','lighting-app','thread','BRD4187C','',"/manifest-4187-thread-lighting_slc","--tmconfig tests/.sequence_manager/test_execution_definitions/matter_thread_ci_sequence.yaml",buildTool) }
+        parallelNodes['lighting rs9116 BRD4161A']   = { this.utfWiFiTestSuite('gsdkMontrealNode','utf_matter_ci','INT0014944','lighting-app','wifi','BRD4161A','rs911x','',"/manifest-4161-rs9116-lighting-slc","--tmconfig tests/.sequence_manager/test_execution_definitions/matter_wifi_ci_sequence.yaml",buildTool) }
     
         parallelNodes.failFast = false
         parallel parallelNodes
