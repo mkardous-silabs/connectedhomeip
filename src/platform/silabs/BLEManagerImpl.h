@@ -58,7 +58,8 @@ using namespace chip::Ble;
 /**
  * Concrete implementation of the BLEManager singleton object for the EFR32 platforms.
  */
-class BLEManagerImpl final : public BLEManager, private BleLayer, private BlePlatformDelegate, private BleApplicationDelegate
+// template <typename T>
+class BleManagerHelper : public BLEManager, private BleLayer, private BlePlatformDelegate, private BleApplicationDelegate
 {
 
 public:
@@ -94,6 +95,9 @@ public:
 #endif
 #endif
 #endif
+
+protected:
+    virtual void ProofOfConcept() = 0;
 
 private:
     // Allow the BLEManager interface class to delegate method calls to
@@ -134,13 +138,6 @@ private:
     // ===== Members that implement virtual methods on BleApplicationDelegate.
 
     void NotifyChipConnectionClosed(BLE_CONNECTION_OBJECT conId) override;
-
-    // ===== Members for internal use by the following friends.
-
-    friend BLEManager & BLEMgr(void);
-    friend BLEManagerImpl & BLEMgrImpl(void);
-
-    static BLEManagerImpl sInstance;
 
     // ===== Private members reserved for use by this class only.
 
@@ -207,6 +204,27 @@ private:
     uint8_t GetTimerHandle(uint8_t connectionHandle, bool allocate);
 };
 
+class BLEManagerImpl final : public BleManagerHelper//<sl_bt_msg_t> 
+{
+
+protected:
+    virtual void ProofOfConcept();
+
+private:
+
+    // Allow the BLEManager interface class to delegate method calls to
+    // the implementation methods provided by this class.
+    friend BLEManager;
+
+    // ===== Members for internal use by the following friends.
+
+    friend BLEManager & BLEMgr(void);
+    friend BLEManagerImpl & BLEMgrImpl(void);
+
+    static BLEManagerImpl sInstance;
+};
+
+
 /**
  * Returns a reference to the public interface of the BLEManager singleton object.
  *
@@ -229,12 +247,12 @@ inline BLEManagerImpl & BLEMgrImpl(void)
     return BLEManagerImpl::sInstance;
 }
 
-inline BleLayer * BLEManagerImpl::_GetBleLayer()
+inline BleLayer * BleManagerHelper::_GetBleLayer()
 {
     return this;
 }
 
-inline bool BLEManagerImpl::_IsAdvertisingEnabled(void)
+inline bool BleManagerHelper::_IsAdvertisingEnabled(void)
 {
     return mFlags.Has(Flags::kAdvertisingEnabled);
 }
