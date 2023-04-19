@@ -39,8 +39,8 @@ config("efr32-platform-wifi-config") {
 static_library("efr32") {
   sources = [
     "${silabs_platform_dir}/BLEManagerImpl.h",
-    "${silabs_platform_dir}/BleManagerHelper.cpp",
-    "${silabs_platform_dir}/BleManagerHelper.h",
+    "${silabs_platform_dir}/BleManagerAbstraction.cpp",
+    "${silabs_platform_dir}/BleManagerAbstraction.h",
     "${silabs_platform_dir}/BlePlatformConfig.h",
     "${silabs_platform_dir}/CHIPDevicePlatformConfig.h",
     "${silabs_platform_dir}/CHIPDevicePlatformEvent.h",

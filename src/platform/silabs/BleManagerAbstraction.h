@@ -25,29 +25,9 @@
 #pragma once
 #if CHIP_DEVICE_CONFIG_ENABLE_CHIPOBLE
 
-#ifdef RSI_BLE_ENABLE
-#define BLE_MIN_CONNECTION_INTERVAL_MS 45 // 45 msec
-#define BLE_MAX_CONNECTION_INTERVAL_MS 45 // 45 msec
-#define BLE_SLAVE_LATENCY_MS 0
-#define BLE_TIMEOUT_MS 400
-#endif // RSI_BLE_ENABLE
+#include "sl_bt_api.h"
 #include "FreeRTOS.h"
 #include "timers.h"
-#ifdef RSI_BLE_ENABLE
-#ifdef __cplusplus
-extern "C" {
-#endif
-#include <rsi_ble.h>
-#include <rsi_ble_apis.h>
-#include <rsi_bt_common.h>
-#ifdef __cplusplus
-}
-#endif
-#else
-#include "gatt_db.h"
-#include "sl_bgapi.h"
-#include "sl_bt_api.h"
-#endif // RSI_BLE_ENABLE
 
 namespace chip {
 namespace DeviceLayer {
@@ -58,41 +38,23 @@ using namespace chip::Ble;
 /**
  * Concrete implementation of the BLEManager singleton object for the EFR32 platforms.
  */
-class BleManagerHelper : public BLEManager, private BleLayer, private BlePlatformDelegate, private BleApplicationDelegate
+class BleManagerAbstraction : public BLEManager, private BleLayer, private BlePlatformDelegate, private BleApplicationDelegate
 {
 
 public:
     void HandleBootEvent(void);
-
-#ifdef RSI_BLE_ENABLE
-    void HandleConnectEvent(void);
-    void HandleConnectionCloseEvent(uint16_t reason);
-    void HandleWriteEvent(rsi_ble_event_write_t evt);
-    void UpdateMtu(rsi_ble_event_mtu_t evt);
+    void HandleConnectEvent(sl_bt_msg_t * evt);
+    void HandleConnectionCloseEvent(sl_bt_msg_t * evt);
+    void HandleWriteEvent(sl_bt_msg_t * evt);
+    void UpdateMtu(sl_bt_msg_t * evt);
     void HandleTxConfirmationEvent(BLE_CONNECTION_OBJECT conId);
-    void HandleTXCharCCCDWrite(rsi_ble_event_write_t * evt);
-    void HandleSoftTimerEvent(void);
+    void HandleTXCharCCCDWrite(sl_bt_msg_t * evt);
+    void HandleSoftTimerEvent(sl_bt_msg_t * evt);
     CHIP_ERROR StartAdvertising(void);
-#else
-    void HandleConnectEvent(volatile sl_bt_msg_t * evt);
-    void HandleConnectionCloseEvent(volatile sl_bt_msg_t * evt);
-    void HandleWriteEvent(volatile sl_bt_msg_t * evt);
-    void UpdateMtu(volatile sl_bt_msg_t * evt);
-    void HandleTxConfirmationEvent(BLE_CONNECTION_OBJECT conId);
-    void HandleTXCharCCCDWrite(volatile sl_bt_msg_t * evt);
-    void HandleSoftTimerEvent(volatile sl_bt_msg_t * evt);
-    CHIP_ERROR StartAdvertising(void);
-#endif // RSI_BLE_ENABLE
 
 #if CHIP_ENABLE_ADDITIONAL_DATA_ADVERTISING
-#ifdef RSI_BLE_ENABLE
-    static void HandleC3ReadRequest(void);
-#else
-#if CHIP_ENABLE_ADDITIONAL_DATA_ADVERTISING
-    static void HandleC3ReadRequest(volatile sl_bt_msg_t * evt);
-#endif
-#endif
-#endif
+    void HandleC3ReadRequest(sl_bt_msg_t * evt);
+#endif // CHIP_ENABLE_ADDITIONAL_DATA_ADVERTISING
 
 protected:
     virtual void ProofOfConcept() = 0;
@@ -188,11 +150,7 @@ private:
     CHIP_ERROR EncodeAdditionalDataTlv();
 #endif
 
-#ifdef RSI_BLE_ENABLE
-    void HandleRXCharWrite(rsi_ble_event_write_t * evt);
-#else
-    void HandleRXCharWrite(volatile sl_bt_msg_t * evt);
-#endif
+    void HandleRXCharWrite(sl_bt_msg_t * evt);
     bool RemoveConnection(uint8_t connectionHandle);
     void AddConnection(uint8_t connectionHandle, uint8_t bondingHandle);
     void StartBleAdvTimeoutTimer(uint32_t aTimeoutInMs);
@@ -203,12 +161,12 @@ private:
     uint8_t GetTimerHandle(uint8_t connectionHandle, bool allocate);
 };
 
-inline BleLayer * BleManagerHelper::_GetBleLayer()
+inline BleLayer * BleManagerAbstraction::_GetBleLayer()
 {
     return this;
 }
 
-inline bool BleManagerHelper::_IsAdvertisingEnabled(void)
+inline bool BleManagerAbstraction::_IsAdvertisingEnabled(void)
 {
     return mFlags.Has(Flags::kAdvertisingEnabled);
 }

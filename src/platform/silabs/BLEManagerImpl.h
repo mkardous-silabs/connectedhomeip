@@ -22,13 +22,13 @@
  */
 #pragma once
 #include <platform/internal/CHIPDeviceLayerInternal.h>
-#include <platform/silabs/BleManagerHelper.h>
+#include <platform/silabs/BleManagerAbstraction.h>
 
 namespace chip {
 namespace DeviceLayer {
 namespace Internal {
 
-class BLEManagerImpl final : public BleManagerHelper
+class BLEManagerImpl final : public BleManagerAbstraction
 {
 
 public:

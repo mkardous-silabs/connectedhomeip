@@ -1,4 +1,3 @@
-
 /*
  *
  *    Copyright (c) 2023 Project CHIP Authors
@@ -16,11 +15,11 @@
  *    limitations under the License.
  */
 #include <platform/internal/CHIPDeviceLayerInternal.h>
-
 #include "rail.h"
 extern "C" {
 #include "sl_bluetooth.h"
 }
+#include "gatt_db.h"
 
 namespace chip {
 namespace DeviceLayer {
