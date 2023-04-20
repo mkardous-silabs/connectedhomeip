@@ -14,8 +14,8 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-#include <platform/internal/CHIPDeviceLayerInternal.h>
 #include "rail.h"
+#include <platform/internal/CHIPDeviceLayerInternal.h>
 extern "C" {
 #include "sl_bluetooth.h"
 }
@@ -52,8 +52,6 @@ void BLEManagerImpl::ProofOfConcept()
 } // namespace Internal
 } // namespace DeviceLayer
 } // namespace chip
-
-
 
 /**********************************************************
  * Gecko SDK Bluetooth Callback
@@ -129,12 +127,6 @@ extern "C" void sl_bt_on_event(sl_bt_msg_t * evt)
         {
             chip::DeviceLayer::Internal::BLEMgrImpl().HandleTXCharCCCDWrite(evt);
         }
-    }
-    break;
-
-    /* Software Timer event */
-    case sl_bt_evt_system_soft_timer_id: {
-        chip::DeviceLayer::Internal::BLEMgrImpl().HandleSoftTimerEvent(evt);
     }
     break;
 

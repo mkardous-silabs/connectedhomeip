@@ -72,17 +72,15 @@ namespace {
 // Convert msec to timer ticks.
 #define TIMER_S_2_TIMERTICK(s) (TIMER_CLK_FREQ * s)
 
-
-
 TimerHandle_t sbleAdvTimeoutTimer; // FreeRTOS sw timer.
 
 constexpr uint8_t UUID_CHIPoBLEService[]       = { 0xFB, 0x34, 0x9B, 0x5F, 0x80, 0x00, 0x00, 0x80,
-                                         0x00, 0x10, 0x00, 0x00, 0xF6, 0xFF, 0x00, 0x00 };
+                                             0x00, 0x10, 0x00, 0x00, 0xF6, 0xFF, 0x00, 0x00 };
 constexpr uint8_t ShortUUID_CHIPoBLEService[]  = { 0xF6, 0xFF };
-constexpr ChipBleUUID ChipUUID_CHIPoBLEChar_RX = { { 0x18, 0xEE, 0x2E, 0xF5, 0x26, 0x3D, 0x45, 0x59, 0x95, 0x9F, 0x4F, 0x9C, 0x42, 0x9F,
-                                                 0x9D, 0x11 } };
-constexpr ChipBleUUID ChipUUID_CHIPoBLEChar_TX = { { 0x18, 0xEE, 0x2E, 0xF5, 0x26, 0x3D, 0x45, 0x59, 0x95, 0x9F, 0x4F, 0x9C, 0x42, 0x9F,
-                                                 0x9D, 0x12 } };
+constexpr ChipBleUUID ChipUUID_CHIPoBLEChar_RX = { { 0x18, 0xEE, 0x2E, 0xF5, 0x26, 0x3D, 0x45, 0x59, 0x95, 0x9F, 0x4F, 0x9C, 0x42,
+                                                     0x9F, 0x9D, 0x11 } };
+constexpr ChipBleUUID ChipUUID_CHIPoBLEChar_TX = { { 0x18, 0xEE, 0x2E, 0xF5, 0x26, 0x3D, 0x45, 0x59, 0x95, 0x9F, 0x4F, 0x9C, 0x42,
+                                                     0x9F, 0x9D, 0x12 } };
 
 } // namespace
 
@@ -95,7 +93,6 @@ CHIP_ERROR BleManagerAbstraction::_Init()
     SuccessOrExit(err);
 
     memset(mBleConnections, 0, sizeof(mBleConnections));
-    memset(mIndConfId, kUnusedIndex, sizeof(mIndConfId));
     mServiceMode = ConnectivityManager::kCHIPoBLEServiceMode_Enabled;
 
     // Create FreeRTOS sw timer for BLE timeouts and interval change.
@@ -242,13 +239,15 @@ void BleManagerAbstraction::_OnPlatformEvent(const ChipDeviceEvent * event)
     }
 }
 
-bool BleManagerAbstraction::SubscribeCharacteristic(BLE_CONNECTION_OBJECT conId, const ChipBleUUID * svcId, const ChipBleUUID * charId)
+bool BleManagerAbstraction::SubscribeCharacteristic(BLE_CONNECTION_OBJECT conId, const ChipBleUUID * svcId,
+                                                    const ChipBleUUID * charId)
 {
     ChipLogProgress(DeviceLayer, "BleManagerAbstraction::SubscribeCharacteristic() not supported");
     return false;
 }
 
-bool BleManagerAbstraction::UnsubscribeCharacteristic(BLE_CONNECTION_OBJECT conId, const ChipBleUUID * svcId, const ChipBleUUID * charId)
+bool BleManagerAbstraction::UnsubscribeCharacteristic(BLE_CONNECTION_OBJECT conId, const ChipBleUUID * svcId,
+                                                      const ChipBleUUID * charId)
 {
     ChipLogProgress(DeviceLayer, "BleManagerAbstraction::UnsubscribeCharacteristic() not supported");
     return false;
@@ -279,19 +278,17 @@ uint16_t BleManagerAbstraction::GetMTU(BLE_CONNECTION_OBJECT conId) const
 }
 
 bool BleManagerAbstraction::SendIndication(BLE_CONNECTION_OBJECT conId, const ChipBleUUID * svcId, const ChipBleUUID * charId,
-                                    PacketBufferHandle data)
+                                           PacketBufferHandle data)
 {
     CHIP_ERROR err              = CHIP_NO_ERROR;
     CHIPoBLEConState * conState = GetConnectionState(conId);
     sl_status_t ret;
-    uint16_t cId        = (UUIDsMatch(&ChipUUID_CHIPoBLEChar_RX, charId) ? gattdb_CHIPoBLEChar_Rx : gattdb_CHIPoBLEChar_Tx);
-    uint8_t timerHandle = GetTimerHandle(conId, true);
+    uint16_t cId = (UUIDsMatch(&ChipUUID_CHIPoBLEChar_RX, charId) ? gattdb_CHIPoBLEChar_Rx : gattdb_CHIPoBLEChar_Tx);
 
     VerifyOrExit(((conState != NULL) && (conState->subscribed != 0)), err = CHIP_ERROR_INVALID_ARGUMENT);
-    VerifyOrExit(timerHandle != kMaxConnections, err = CHIP_ERROR_NO_MEMORY);
 
     // start timer for light indication confirmation. Long delay for spake2 indication
-    sl_bt_system_set_lazy_soft_timer(TIMER_S_2_TIMERTICK(6), 0, timerHandle, true);
+    SystemLayer().StartTimer(System::Clock::Seconds16(5), HandleSoftTimerEvent, conState);
 
     ret = sl_bt_gatt_server_send_indication(conId, cId, (data->DataLength()), data->Start());
     err = MapBLEError(ret);
@@ -307,22 +304,21 @@ exit:
 }
 
 bool BleManagerAbstraction::SendWriteRequest(BLE_CONNECTION_OBJECT conId, const ChipBleUUID * svcId, const ChipBleUUID * charId,
-                                      PacketBufferHandle pBuf)
+                                             PacketBufferHandle pBuf)
 {
     ChipLogProgress(DeviceLayer, "BleManagerAbstraction::SendWriteRequest() not supported");
     return false;
 }
 
-
 bool BleManagerAbstraction::SendReadRequest(BLE_CONNECTION_OBJECT conId, const ChipBleUUID * svcId, const ChipBleUUID * charId,
-                                     PacketBufferHandle pBuf)
+                                            PacketBufferHandle pBuf)
 {
     ChipLogProgress(DeviceLayer, "BleManagerAbstraction::SendReadRequest() not supported");
     return false;
 }
 
 bool BleManagerAbstraction::SendReadResponse(BLE_CONNECTION_OBJECT conId, BLE_READ_REQUEST_CONTEXT requestContext,
-                                      const ChipBleUUID * svcId, const ChipBleUUID * charId)
+                                             const ChipBleUUID * svcId, const ChipBleUUID * charId)
 {
     ChipLogProgress(DeviceLayer, "BleManagerAbstraction::SendReadResponse() not supported");
     return false;
@@ -754,42 +750,41 @@ exit:
 void BleManagerAbstraction::HandleTxConfirmationEvent(BLE_CONNECTION_OBJECT conId)
 {
     ChipDeviceEvent event;
-    uint8_t timerHandle = this->GetTimerHandle(conId, false);
+    ChipLogProgress(DeviceLayer, "Tx Confirmation Event Received - Stop Timer");
 
-    ChipLogProgress(DeviceLayer, "Tx Confirmation received");
+    CHIPoBLEConState * conState = GetConnectionState(conId);
+    VerifyOrReturn(conState != NULL);
 
-    // stop indication confirmation timer
-    if (timerHandle < kMaxConnections)
-    {
-        ChipLogProgress(DeviceLayer, " stop soft timer");
-        sl_bt_system_set_lazy_soft_timer(0, 0, timerHandle, false);
-    }
+    SystemLayer().CancelTimer(HandleSoftTimerEvent, conState);
 
     event.Type                          = DeviceEventType::kCHIPoBLEIndicateConfirm;
     event.CHIPoBLEIndicateConfirm.ConId = conId;
     PlatformMgr().PostEventOrDie(&event);
 }
 
-void BleManagerAbstraction::HandleSoftTimerEvent(sl_bt_msg_t * evt)
+void BleManagerAbstraction::HandleSoftTimerEvent(System::Layer * apSystemLayer, void * apAppState)
 {
-    // BLE Manager starts soft timers with timer handles less than kMaxConnections
-    // If we receive a callback for unknown timer handle ignore this.
-    if (evt->data.evt_system_soft_timer.handle < kMaxConnections)
-    {
-        ChipLogProgress(DeviceLayer, "BleManagerAbstraction::HandleSoftTimerEvent CHIPOBLE_PROTOCOL_ABORT");
-        ChipDeviceEvent event;
-        event.Type                                               = DeviceEventType::kCHIPoBLEConnectionError;
-        event.CHIPoBLEConnectionError.ConId                      = mIndConfId[evt->data.evt_system_soft_timer.handle];
-        this->mIndConfId[evt->data.evt_system_soft_timer.handle] = kUnusedIndex;
-        event.CHIPoBLEConnectionError.Reason                     = BLE_ERROR_CHIPOBLE_PROTOCOL_ABORT;
-        PlatformMgr().PostEventOrDie(&event);
-    }
+    VerifyOrReturn(apAppState != NULL);
+    CHIPoBLEConState * conState = static_cast<CHIPoBLEConState *>(apAppState);
+
+    // Verify that the connection state is still allocated
+    VerifyOrReturn(conState->allocated);
+
+    ChipLogProgress(DeviceLayer, "BleManagerAbstraction::HandleSoftTimerEvent - CHIPOBLE_PROTOCOL_ABORT");
+    ChipDeviceEvent event;
+    event.Type                           = DeviceEventType::kCHIPoBLEConnectionError;
+    event.CHIPoBLEConnectionError.ConId  = conState->connectionHandle;
+    event.CHIPoBLEConnectionError.Reason = BLE_ERROR_CHIPOBLE_PROTOCOL_ABORT;
+    PlatformMgr().PostEventOrDie(&event);
 }
 
 bool BleManagerAbstraction::RemoveConnection(uint8_t connectionHandle)
 {
     CHIPoBLEConState * bleConnState = GetConnectionState(connectionHandle, true);
     bool status                     = false;
+
+    // Cancel Timer before cleaning the pointer
+    SystemLayer().CancelTimer(HandleSoftTimerEvent, bleConnState);
 
     if (bleConnState != NULL)
     {
@@ -812,7 +807,6 @@ void BleManagerAbstraction::AddConnection(uint8_t connectionHandle, uint8_t bond
         bleConnState->bondingHandle    = bondingHandle;
     }
 }
-
 
 BleManagerAbstraction::CHIPoBLEConState * BleManagerAbstraction::GetConnectionState(uint8_t connectionHandle, bool allocate)
 {
@@ -893,37 +887,6 @@ void BleManagerAbstraction::HandleC3ReadRequest(sl_bt_msg_t * evt)
     }
 }
 #endif // CHIP_ENABLE_ADDITIONAL_DATA_ADVERTISING
-
-uint8_t BleManagerAbstraction::GetTimerHandle(uint8_t connectionHandle, bool allocate)
-{
-    uint8_t freeIndex = kMaxConnections;
-
-    for (uint8_t i = 0; i < kMaxConnections; i++)
-    {
-        if (mIndConfId[i] == connectionHandle)
-        {
-            return i;
-        }
-        else if (allocate)
-        {
-            if (i < freeIndex)
-            {
-                freeIndex = i;
-            }
-        }
-    }
-
-    if (freeIndex < kMaxConnections)
-    {
-        mIndConfId[freeIndex] = connectionHandle;
-    }
-    else
-    {
-        ChipLogError(DeviceLayer, "Failed to Save Conn Handle for indication");
-    }
-
-    return freeIndex;
-}
 
 void BleManagerAbstraction::BleAdvTimeoutHandler(TimerHandle_t xTimer)
 {

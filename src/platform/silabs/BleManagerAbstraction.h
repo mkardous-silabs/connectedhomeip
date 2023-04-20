@@ -18,15 +18,15 @@
 
 /**
  *    @file
- *          Provides an implementation of the BLEManager singleton object
- *          for the Silicon Labs EFR32 platforms.
+ *          Provides an Abstract Template class of the BLEManager singleton object
+ *          for the Silicon Labs platforms.
  */
 
 #pragma once
 #if CHIP_DEVICE_CONFIG_ENABLE_CHIPOBLE
 
-#include "sl_bt_api.h"
 #include "FreeRTOS.h"
+#include "sl_bt_api.h"
 #include "timers.h"
 
 namespace chip {
@@ -36,12 +36,12 @@ namespace Internal {
 using namespace chip::Ble;
 
 /**
- * Concrete implementation of the BLEManager singleton object for the EFR32 platforms.
+ * Abstract template implementation of the BLEManager singleton object for the Silabs platforms.
  */
 class BleManagerAbstraction : public BLEManager, private BleLayer, private BlePlatformDelegate, private BleApplicationDelegate
 {
-
 public:
+    // ===== Members that implement Silabs interface
     void HandleBootEvent(void);
     void HandleConnectEvent(sl_bt_msg_t * evt);
     void HandleConnectionCloseEvent(sl_bt_msg_t * evt);
@@ -49,7 +49,6 @@ public:
     void UpdateMtu(sl_bt_msg_t * evt);
     void HandleTxConfirmationEvent(BLE_CONNECTION_OBJECT conId);
     void HandleTXCharCCCDWrite(sl_bt_msg_t * evt);
-    void HandleSoftTimerEvent(sl_bt_msg_t * evt);
     CHIP_ERROR StartAdvertising(void);
 
 #if CHIP_ENABLE_ADDITIONAL_DATA_ADVERTISING
@@ -57,6 +56,7 @@ public:
 #endif // CHIP_ENABLE_ADDITIONAL_DATA_ADVERTISING
 
 protected:
+    // ===== Platform Abstraction Implementation Functions
     virtual void ProofOfConcept() = 0;
 
 private:
@@ -101,6 +101,10 @@ private:
 
     // ===== Private members reserved for use by this class only.
 
+    static constexpr uint8_t kMaxConnections      = BLE_LAYER_NUM_BLE_ENDPOINTS;
+    static constexpr uint8_t kMaxDeviceNameLength = 16;
+    static constexpr uint8_t kUnusedIndex         = 0xFF;
+
     enum class Flags : uint16_t
     {
         kAdvertisingEnabled     = 0x0001,
@@ -111,18 +115,8 @@ private:
         kDeviceNameSet          = 0x0020,
     };
 
-    enum
-    {
-        kMaxConnections      = BLE_LAYER_NUM_BLE_ENDPOINTS,
-        kMaxDeviceNameLength = 16,
-        kUnusedIndex         = 0xFF,
-    };
-
     struct CHIPoBLEConState
     {
-#ifndef RSI_BLE_ENABLE
-        bd_addr address;
-#endif
         uint16_t mtu : 10;
         uint16_t allocated : 1;
         uint16_t subscribed : 1;
@@ -132,12 +126,13 @@ private:
     };
 
     CHIPoBLEConState mBleConnections[kMaxConnections];
-    uint8_t mIndConfId[kMaxConnections];
     CHIPoBLEServiceMode mServiceMode;
     BitFlags<Flags> mFlags;
     char mDeviceName[kMaxDeviceNameLength + 1];
+
     // The advertising set handle allocated from Bluetooth stack.
     uint8_t advertising_set_handle = 0xff;
+
 #if CHIP_ENABLE_ADDITIONAL_DATA_ADVERTISING
     PacketBufferHandle c3AdditionalDataBufferHandle;
 #endif
@@ -146,10 +141,6 @@ private:
     void DriveBLEState(void);
     CHIP_ERROR ConfigureAdvertisingData(void);
     CHIP_ERROR StopAdvertising(void);
-#if CHIP_ENABLE_ADDITIONAL_DATA_ADVERTISING
-    CHIP_ERROR EncodeAdditionalDataTlv();
-#endif
-
     void HandleRXCharWrite(sl_bt_msg_t * evt);
     bool RemoveConnection(uint8_t connectionHandle);
     void AddConnection(uint8_t connectionHandle, uint8_t bondingHandle);
@@ -158,7 +149,11 @@ private:
     CHIPoBLEConState * GetConnectionState(uint8_t conId, bool allocate = false);
     static void DriveBLEState(intptr_t arg);
     static void BleAdvTimeoutHandler(TimerHandle_t xTimer);
-    uint8_t GetTimerHandle(uint8_t connectionHandle, bool allocate);
+    static void HandleSoftTimerEvent(System::Layer * apSystemLayer, void * apAppState);
+
+#if CHIP_ENABLE_ADDITIONAL_DATA_ADVERTISING
+    CHIP_ERROR EncodeAdditionalDataTlv();
+#endif
 };
 
 inline BleLayer * BleManagerAbstraction::_GetBleLayer()
