@@ -24,17 +24,16 @@
 
 /* this file behaves like a config.h, comes first */
 #include <platform/internal/CHIPDeviceLayerInternal.h>
+#define CHIP_DEVICE_CONFIG_ENABLE_CHIPOBLE 1
 #if CHIP_DEVICE_CONFIG_ENABLE_CHIPOBLE
 
 #include "sl_component_catalog.h"
 
 #include <platform/silabs/BleManagerAbstraction.h>
 
-extern "C" {
-#include "sl_bluetooth.h"
-}
-
+#include "sl_bt_api.h"
 #include "gatt_db.h"
+
 #include <ble/CHIPBleServiceData.h>
 #include <lib/support/CodeUtils.h>
 #include <lib/support/logging/CHIPLogging.h>
@@ -66,11 +65,6 @@ namespace {
 
 #define MAX_RESPONSE_DATA_LEN 31
 #define MAX_ADV_DATA_LEN 31
-
-// Timer Frequency used.
-#define TIMER_CLK_FREQ ((uint32_t) 32768)
-// Convert msec to timer ticks.
-#define TIMER_S_2_TIMERTICK(s) (TIMER_CLK_FREQ * s)
 
 TimerHandle_t sbleAdvTimeoutTimer; // FreeRTOS sw timer.
 
@@ -127,9 +121,7 @@ uint16_t BleManagerAbstraction::_NumConnections(void)
 
 CHIP_ERROR BleManagerAbstraction::_SetAdvertisingEnabled(bool val)
 {
-    CHIP_ERROR err = CHIP_NO_ERROR;
-
-    VerifyOrExit(mServiceMode != ConnectivityManager::kCHIPoBLEServiceMode_NotSupported, err = CHIP_ERROR_UNSUPPORTED_CHIP_FEATURE);
+    VerifyOrReturnError(mServiceMode != ConnectivityManager::kCHIPoBLEServiceMode_NotSupported, CHIP_ERROR_UNSUPPORTED_CHIP_FEATURE);
 
     if (mFlags.Has(Flags::kAdvertisingEnabled) != val)
     {
@@ -137,8 +129,7 @@ CHIP_ERROR BleManagerAbstraction::_SetAdvertisingEnabled(bool val)
         PlatformMgr().ScheduleWork(DriveBLEState, reinterpret_cast<intptr_t>(this));
     }
 
-exit:
-    return err;
+    return CHIP_NO_ERROR;
 }
 
 CHIP_ERROR BleManagerAbstraction::_SetAdvertisingMode(BLEAdvertisingMode mode)
@@ -154,17 +145,17 @@ CHIP_ERROR BleManagerAbstraction::_SetAdvertisingMode(BLEAdvertisingMode mode)
     default:
         return CHIP_ERROR_INVALID_ARGUMENT;
     }
+
     mFlags.Set(Flags::kRestartAdvertising);
     PlatformMgr().ScheduleWork(DriveBLEState, reinterpret_cast<intptr_t>(this));
+    
     return CHIP_NO_ERROR;
 }
 
 CHIP_ERROR BleManagerAbstraction::_GetDeviceName(char * buf, size_t bufSize)
 {
-    if (strlen(mDeviceName) >= bufSize)
-    {
-        return CHIP_ERROR_BUFFER_TOO_SMALL;
-    }
+    VerifyOrReturnError(strlen(mDeviceName) < bufSize, CHIP_ERROR_BUFFER_TOO_SMALL)
+
     strcpy(buf, mDeviceName);
     return CHIP_NO_ERROR;
 }
@@ -190,6 +181,7 @@ CHIP_ERROR BleManagerAbstraction::_SetDeviceName(const char * deviceName)
     {
         mDeviceName[0] = 0;
     }
+    
     PlatformMgr().ScheduleWork(DriveBLEState, reinterpret_cast<intptr_t>(this));
     return CHIP_NO_ERROR;
 }
@@ -256,17 +248,9 @@ bool BleManagerAbstraction::UnsubscribeCharacteristic(BLE_CONNECTION_OBJECT conI
 bool BleManagerAbstraction::CloseConnection(BLE_CONNECTION_OBJECT conId)
 {
     CHIP_ERROR err = CHIP_NO_ERROR;
-    sl_status_t ret;
 
     ChipLogProgress(DeviceLayer, "Closing BLE GATT connection (con %u)", conId);
-
-    ret = sl_bt_connection_close(conId);
-    err = MapBLEError(ret);
-
-    if (err != CHIP_NO_ERROR)
-    {
-        ChipLogError(DeviceLayer, "sl_bt_connection_close() failed: %s", ErrorStr(err));
-    }
+    err = SilabsConnectionClose(conId);
 
     return (err == CHIP_NO_ERROR);
 }
@@ -282,16 +266,15 @@ bool BleManagerAbstraction::SendIndication(BLE_CONNECTION_OBJECT conId, const Ch
 {
     CHIP_ERROR err              = CHIP_NO_ERROR;
     CHIPoBLEConState * conState = GetConnectionState(conId);
-    sl_status_t ret;
-    uint16_t cId = (UUIDsMatch(&ChipUUID_CHIPoBLEChar_RX, charId) ? gattdb_CHIPoBLEChar_Rx : gattdb_CHIPoBLEChar_Tx);
+    uint16_t cId                = (UUIDsMatch(&ChipUUID_CHIPoBLEChar_RX, charId) ? gattdb_CHIPoBLEChar_Rx : gattdb_CHIPoBLEChar_Tx);
 
     VerifyOrExit(((conState != NULL) && (conState->subscribed != 0)), err = CHIP_ERROR_INVALID_ARGUMENT);
 
-    // start timer for light indication confirmation. Long delay for spake2 indication
-    SystemLayer().StartTimer(System::Clock::Seconds16(5), HandleSoftTimerEvent, conState);
+    // start timer for indication confirmation
+    SystemLayer().StartTimer(System::Clock::Seconds16(1), HandleSoftTimerEvent, conState);
 
-    ret = sl_bt_gatt_server_send_indication(conId, cId, (data->DataLength()), data->Start());
-    err = MapBLEError(ret);
+    // Call Silabs Abstraction SendIndication command
+    err = SilabsSendIndication(conId, cId, (data->DataLength()), data->Start());
 
 exit:
     if (err != CHIP_NO_ERROR)
@@ -329,31 +312,12 @@ void BleManagerAbstraction::NotifyChipConnectionClosed(BLE_CONNECTION_OBJECT con
     // Nothing to do
 }
 
-CHIP_ERROR BleManagerAbstraction::MapBLEError(int bleErr)
-{
-    switch (bleErr)
-    {
-    case SL_STATUS_OK:
-        return CHIP_NO_ERROR;
-    case SL_STATUS_BT_ATT_INVALID_ATT_LENGTH:
-        return CHIP_ERROR_INVALID_STRING_LENGTH;
-    case SL_STATUS_INVALID_PARAMETER:
-        return CHIP_ERROR_INVALID_ARGUMENT;
-    case SL_STATUS_INVALID_STATE:
-        return CHIP_ERROR_INCORRECT_STATE;
-    case SL_STATUS_NOT_SUPPORTED:
-        return CHIP_ERROR_UNSUPPORTED_CHIP_FEATURE;
-    default:
-        return CHIP_ERROR(ChipError::Range::kPlatform, bleErr + CHIP_DEVICE_CONFIG_SILABS_BLE_ERROR_MIN);
-    }
-}
-
 void BleManagerAbstraction::DriveBLEState(void)
 {
     CHIP_ERROR err = CHIP_NO_ERROR;
 
     // Check if BLE stack is initialized
-    VerifyOrExit(mFlags.Has(Flags::kEFRBLEStackInitialized), /* */);
+    VerifyOrExit(mFlags.Has(Flags::kSilabsBLEStackInitialized), /* */);
 
     // Start advertising if needed...
     if (mServiceMode == ConnectivityManager::kCHIPoBLEServiceMode_Enabled && mFlags.Has(Flags::kAdvertisingEnabled) &&
@@ -367,7 +331,6 @@ void BleManagerAbstraction::DriveBLEState(void)
             SuccessOrExit(err);
         }
     }
-
     // Otherwise, stop advertising if it is enabled.
     else if (mFlags.Has(Flags::kAdvertising))
     {
@@ -385,12 +348,12 @@ exit:
 
 CHIP_ERROR BleManagerAbstraction::ConfigureAdvertisingData(void)
 {
-    sl_status_t ret;
+    CHIP_ERROR err = CHIP_NO_ERROR;
     ChipBLEDeviceIdentificationInfo mDeviceIdInfo;
-    CHIP_ERROR err;
     uint8_t responseData[MAX_RESPONSE_DATA_LEN];
     uint8_t advData[MAX_ADV_DATA_LEN];
-    uint32_t index              = 0;
+    uint32_t advDataIndex       = 0;
+    uint32_t responseDataIndex  = 0;
     uint32_t mDeviceNameLength  = 0;
     uint8_t mDeviceIdInfoLength = 0;
 
@@ -422,68 +385,31 @@ CHIP_ERROR BleManagerAbstraction::ConfigureAdvertisingData(void)
     static_assert(sizeof(mDeviceIdInfo) + CHIP_ADV_SHORT_UUID_LEN + 1 <= UINT8_MAX, "Our length won't fit in a uint8_t");
     static_assert(2 + CHIP_ADV_SHORT_UUID_LEN + sizeof(mDeviceIdInfo) + 1 <= MAX_ADV_DATA_LEN, "Our buffer is not big enough");
 
-    index            = 0;
-    advData[index++] = 0x02;                                                                    // length
-    advData[index++] = CHIP_ADV_DATA_TYPE_FLAGS;                                                // AD type : flags
-    advData[index++] = CHIP_ADV_DATA_FLAGS;                                                     // AD value
-    advData[index++] = static_cast<uint8_t>(mDeviceIdInfoLength + CHIP_ADV_SHORT_UUID_LEN + 1); // AD length
-    advData[index++] = CHIP_ADV_DATA_TYPE_SERVICE_DATA;                                         // AD type : Service Data
-    advData[index++] = ShortUUID_CHIPoBLEService[0];                                            // AD value
-    advData[index++] = ShortUUID_CHIPoBLEService[1];
-    memcpy(&advData[index], (void *) &mDeviceIdInfo, mDeviceIdInfoLength); // AD value
-    index += mDeviceIdInfoLength;
+    advData[advDataIndex++] = 0x02;                                                                    // length
+    advData[advDataIndex++] = CHIP_ADV_DATA_TYPE_FLAGS;                                                // AD type : flags
+    advData[advDataIndex++] = CHIP_ADV_DATA_FLAGS;                                                     // AD value
+    advData[advDataIndex++] = static_cast<uint8_t>(mDeviceIdInfoLength + CHIP_ADV_SHORT_UUID_LEN + 1); // AD length
+    advData[advDataIndex++] = CHIP_ADV_DATA_TYPE_SERVICE_DATA;                                         // AD type : Service Data
+    advData[advDataIndex++] = ShortUUID_CHIPoBLEService[0];                                            // AD value
+    advData[advDataIndex++] = ShortUUID_CHIPoBLEService[1];
+    memcpy(&advData[advDataIndex], (void *) &mDeviceIdInfo, mDeviceIdInfoLength); // AD value
+    advDataIndex += mDeviceIdInfoLength;
 
 #if CHIP_ENABLE_ADDITIONAL_DATA_ADVERTISING
     ReturnErrorOnFailure(EncodeAdditionalDataTlv());
 #endif
 
-    if (0xff != advertising_set_handle)
-    {
-        sl_bt_advertiser_delete_set(advertising_set_handle);
-        advertising_set_handle = 0xff;
-    }
+    responseData[responseDataIndex++] = CHIP_ADV_SHORT_UUID_LEN + 1;  // AD length
+    responseData[responseDataIndex++] = CHIP_ADV_DATA_TYPE_UUID;      // AD type : uuid
+    responseData[responseDataIndex++] = ShortUUID_CHIPoBLEService[0]; // AD value
+    responseData[responseDataIndex++] = ShortUUID_CHIPoBLEService[1];
 
-    ret = sl_bt_advertiser_create_set(&advertising_set_handle);
-    if (ret != SL_STATUS_OK)
-    {
-        err = MapBLEError(ret);
-        ChipLogError(DeviceLayer, "sl_bt_advertiser_create_set() failed: %s", ErrorStr(err));
-        ExitNow();
-    }
+    responseData[responseDataIndex++] = static_cast<uint8_t>(mDeviceNameLength + 1); // length
+    responseData[responseDataIndex++] = CHIP_ADV_DATA_TYPE_NAME;                     // AD type : name
+    memcpy(&responseData[responseDataIndex], mDeviceName, mDeviceNameLength);        // AD value
+    responseDataIndex += mDeviceNameLength;
 
-    ret = sl_bt_legacy_advertiser_set_data(advertising_set_handle, sl_bt_advertiser_advertising_data_packet, index,
-                                           (uint8_t *) advData);
-
-    if (ret != SL_STATUS_OK)
-    {
-        err = MapBLEError(ret);
-        ChipLogError(DeviceLayer, "sl_bt_legacy_advertiser_set_data() - Advertising Data failed: %s", ErrorStr(err));
-        ExitNow();
-    }
-
-    index = 0;
-
-    responseData[index++] = CHIP_ADV_SHORT_UUID_LEN + 1;  // AD length
-    responseData[index++] = CHIP_ADV_DATA_TYPE_UUID;      // AD type : uuid
-    responseData[index++] = ShortUUID_CHIPoBLEService[0]; // AD value
-    responseData[index++] = ShortUUID_CHIPoBLEService[1];
-
-    responseData[index++] = static_cast<uint8_t>(mDeviceNameLength + 1); // length
-    responseData[index++] = CHIP_ADV_DATA_TYPE_NAME;                     // AD type : name
-    memcpy(&responseData[index], mDeviceName, mDeviceNameLength);        // AD value
-    index += mDeviceNameLength;
-
-    ret = sl_bt_legacy_advertiser_set_data(advertising_set_handle, sl_bt_advertiser_scan_response_packet, index,
-                                           (uint8_t *) responseData);
-
-    if (ret != SL_STATUS_OK)
-    {
-        err = MapBLEError(ret);
-        ChipLogError(DeviceLayer, "sl_bt_legacy_advertiser_set_data() - Scan Response failed: %s", ErrorStr(err));
-        ExitNow();
-    }
-
-    err = MapBLEError(ret);
+    err = SilabsSetAdvertiserData(advDataIndex, (uint8_t *) advData, responseDataIndex, (uint8_t *) responseData);
 
 exit:
     return err;
@@ -491,28 +417,20 @@ exit:
 
 CHIP_ERROR BleManagerAbstraction::StartAdvertising(void)
 {
-    CHIP_ERROR err;
-    sl_status_t ret;
-    uint32_t interval_min;
-    uint32_t interval_max;
-    uint16_t numConnectionss = NumConnections();
-    uint8_t connectableAdv =
-        (numConnectionss < kMaxConnections) ? sl_bt_advertiser_connectable_scannable : sl_bt_advertiser_scannable_non_connectable;
+    CHIP_ERROR err        = CHIP_NO_ERROR;
+    uint32_t interval_min = 0;
+    uint32_t interval_max = 0;
 
     // If already advertising, stop it, before changing values
     if (mFlags.Has(Flags::kAdvertising))
     {
-        sl_bt_advertiser_stop(advertising_set_handle);
-    }
-    else
-    {
-        ChipLogDetail(DeviceLayer, "Start BLE advertissement");
+        SilabsStopAdvertising();
     }
 
-    const uint8_t kResolvableRandomAddrType = 2; // Private resolvable random address type
-    bd_addr unusedBdAddr;                        // We can ignore this field when setting random address.
-    sl_bt_advertiser_set_random_address(advertising_set_handle, kResolvableRandomAddrType, unusedBdAddr, &unusedBdAddr);
-    (void) unusedBdAddr;
+    ChipLogDetail(DeviceLayer, "Start BLE advertissement");
+
+    // Configure Random Address for BLE advertising
+    SilabsConfigureRandomAddress();
 
     err = ConfigureAdvertisingData();
     SuccessOrExit(err);
@@ -530,14 +448,9 @@ CHIP_ERROR BleManagerAbstraction::StartAdvertising(void)
         interval_max = CHIP_DEVICE_CONFIG_BLE_SLOW_ADVERTISING_INTERVAL_MAX;
     }
 
-    ret = sl_bt_advertiser_set_timing(advertising_set_handle, interval_min, interval_max, 0, 0);
-    err = MapBLEError(ret);
-    SuccessOrExit(err);
+    SilabsStartAdvertising(interval_min, interval_max);
 
-    sl_bt_advertiser_configure(advertising_set_handle, 1);
-    ret = sl_bt_legacy_advertiser_start(advertising_set_handle, connectableAdv);
-
-    if (SL_STATUS_OK == ret)
+    if (err == CHIP_NO_ERROR)
     {
         if (mFlags.Has(Flags::kFastAdvertisingEnabled))
         {
@@ -546,8 +459,6 @@ CHIP_ERROR BleManagerAbstraction::StartAdvertising(void)
         mFlags.Set(Flags::kAdvertising);
     }
 
-    err = MapBLEError(ret);
-
 exit:
     return err;
 }
@@ -555,17 +466,13 @@ exit:
 CHIP_ERROR BleManagerAbstraction::StopAdvertising(void)
 {
     CHIP_ERROR err = CHIP_NO_ERROR;
-    sl_status_t ret;
 
     if (mFlags.Has(Flags::kAdvertising))
     {
         mFlags.Clear(Flags::kAdvertising).Clear(Flags::kRestartAdvertising);
         mFlags.Set(Flags::kFastAdvertisingEnabled, true);
 
-        ret = sl_bt_advertiser_stop(advertising_set_handle);
-        sl_bt_advertiser_delete_set(advertising_set_handle);
-        advertising_set_handle = 0xff;
-        err                    = MapBLEError(ret);
+        err = SilabsStopAdvertising();
         SuccessOrExit(err);
 
         CancelBleAdvTimeoutTimer();
@@ -599,7 +506,7 @@ void BleManagerAbstraction::UpdateMtu(sl_bt_msg_t * evt)
 
 void BleManagerAbstraction::HandleBootEvent(void)
 {
-    mFlags.Set(Flags::kEFRBLEStackInitialized);
+    mFlags.Set(Flags::kSilabsBLEStackInitialized);
     PlatformMgr().ScheduleWork(DriveBLEState, reinterpret_cast<intptr_t>(this));
 }
 

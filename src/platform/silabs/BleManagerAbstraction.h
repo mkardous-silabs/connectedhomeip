@@ -57,7 +57,18 @@ public:
 
 protected:
     // ===== Platform Abstraction Implementation Functions
-    virtual void ProofOfConcept() = 0;
+    virtual CHIP_ERROR SilabsSendIndication(uint8_t connectionId, uint16_t characteristicId, size_t length, uint8_t * data) = 0;
+    virtual CHIP_ERROR MapBLEError(int bleErr)                                                                              = 0;
+    virtual CHIP_ERROR SilabsSetAdvertiserData(size_t advDataLength, uint8_t * advData, size_t responseDataLength,
+                                               uint8_t * responseData)                                                      = 0;
+    virtual CHIP_ERROR SilabsConfigureRandomAddress()                                                                       = 0;
+    virtual CHIP_ERROR SilabsStartAdvertising(uint32_t minInterval, uint32_t maxInterval)                                   = 0;
+    virtual CHIP_ERROR SilabsStopAdvertising()                                                                              = 0;
+    virtual CHIP_ERROR SilabsConnectionClose(BLE_CONNECTION_OBJECT conId)                                                   = 0;
+
+    static constexpr uint8_t kMaxConnections      = BLE_LAYER_NUM_BLE_ENDPOINTS;
+    static constexpr uint8_t kMaxDeviceNameLength = 16;
+    static constexpr uint8_t kUnusedIndex         = 0xFF;
 
 private:
     // Allow the BLEManager interface class to delegate method calls to
@@ -101,18 +112,14 @@ private:
 
     // ===== Private members reserved for use by this class only.
 
-    static constexpr uint8_t kMaxConnections      = BLE_LAYER_NUM_BLE_ENDPOINTS;
-    static constexpr uint8_t kMaxDeviceNameLength = 16;
-    static constexpr uint8_t kUnusedIndex         = 0xFF;
-
     enum class Flags : uint16_t
     {
-        kAdvertisingEnabled     = 0x0001,
-        kFastAdvertisingEnabled = 0x0002,
-        kAdvertising            = 0x0004,
-        kRestartAdvertising     = 0x0008,
-        kEFRBLEStackInitialized = 0x0010,
-        kDeviceNameSet          = 0x0020,
+        kAdvertisingEnabled        = 0x0001,
+        kFastAdvertisingEnabled    = 0x0002,
+        kAdvertising               = 0x0004,
+        kRestartAdvertising        = 0x0008,
+        kSilabsBLEStackInitialized = 0x0010,
+        kDeviceNameSet             = 0x0020,
     };
 
     struct CHIPoBLEConState
@@ -130,14 +137,10 @@ private:
     BitFlags<Flags> mFlags;
     char mDeviceName[kMaxDeviceNameLength + 1];
 
-    // The advertising set handle allocated from Bluetooth stack.
-    uint8_t advertising_set_handle = 0xff;
-
 #if CHIP_ENABLE_ADDITIONAL_DATA_ADVERTISING
     PacketBufferHandle c3AdditionalDataBufferHandle;
 #endif
 
-    CHIP_ERROR MapBLEError(int bleErr);
     void DriveBLEState(void);
     CHIP_ERROR ConfigureAdvertisingData(void);
     CHIP_ERROR StopAdvertising(void);

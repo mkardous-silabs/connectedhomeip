@@ -34,10 +34,18 @@ class BLEManagerImpl final : public BleManagerAbstraction
 public:
     ~BLEManagerImpl() = default;
 
-protected:
-    void ProofOfConcept();
-
 private:
+    CHIP_ERROR SilabsSendIndication(uint8_t connectionId, uint16_t characteristicId, size_t length, uint8_t * data);
+    CHIP_ERROR SilabsSetAdvertiserData(size_t advDataLength, uint8_t * advData, size_t responseDataLength, uint8_t * responseData);
+    CHIP_ERROR SilabsConfigureRandomAddress();
+    CHIP_ERROR SilabsStartAdvertising(uint32_t minInterval, uint32_t maxInterval);
+    CHIP_ERROR SilabsStopAdvertising();
+    CHIP_ERROR SilabsConnectionClose(BLE_CONNECTION_OBJECT conId);    
+    CHIP_ERROR MapBLEError(int bleErr);
+
+    // The advertising set handle allocated from Bluetooth stack.
+    uint8_t advertising_set_handle = 0xff;
+
     // Allow the BLEManager interface class to delegate method calls to
     // the implementation methods provided by this class.
     friend BLEManager;

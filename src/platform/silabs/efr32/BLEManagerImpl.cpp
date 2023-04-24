@@ -44,9 +44,154 @@ static constexpr uint16_t kBleConfigMaxCeLength = 0xFFFF; // Leave to max value
  * BLEManagerImpl Implementation
  *********************************************************/
 
-void BLEManagerImpl::ProofOfConcept()
+CHIP_ERROR BLEManagerImpl::SilabsSendIndication(uint8_t connectionId, uint16_t characteristicId, size_t length, uint8_t * data)
 {
-    // stuff
+    sl_status_t ret = sl_bt_gatt_server_send_indication(connectionId, characteristicId, length, data);
+    return MapBLEError(ret);
+}
+
+CHIP_ERROR BLEManagerImpl::SilabsSetAdvertiserData(size_t advDataLength, uint8_t * advData, size_t responseDataLength,
+                                                   uint8_t * responseData)
+{
+    sl_status_t ret = SL_STATUS_OK;
+
+    // Verify that we have not already any advertising data
+    if (advertising_set_handle != 0xff)
+    {
+        // Clear existing advertiser data
+        ret = sl_bt_advertiser_delete_set(advertising_set_handle);
+        if (ret != SL_STATUS_OK)
+        {
+            CHIP_ERROR error = MapBLEError(ret);
+            ChipLogError(DeviceLayer, "sl_bt_advertiser_delete_set() - Delete Adv Set failed: %s", ErrorStr(error));
+
+            return error;
+        }
+
+        advertising_set_handle = 0xff;
+    }
+
+    // Create a new set of advertiser data
+    ret = sl_bt_advertiser_create_set(&advertising_set_handle);
+    if (ret != SL_STATUS_OK)
+    {
+        CHIP_ERROR error = MapBLEError(ret);
+        ChipLogError(DeviceLayer, "sl_bt_advertiser_create_set() failed: %s", ErrorStr(error));
+
+        return error;
+    }
+
+    // Set Advertising Data
+    ret =
+        sl_bt_legacy_advertiser_set_data(advertising_set_handle, sl_bt_advertiser_advertising_data_packet, advDataLength, advData);
+    if (ret != SL_STATUS_OK)
+    {
+        CHIP_ERROR error = MapBLEError(ret);
+        ChipLogError(DeviceLayer, "sl_bt_legacy_advertiser_set_data() - Advertising Data failed: %s", ErrorStr(error));
+
+        return error;
+    }
+
+    ret = sl_bt_legacy_advertiser_set_data(advertising_set_handle, sl_bt_advertiser_scan_response_packet, responseDataLength,
+                                           responseData);
+    if (ret != SL_STATUS_OK)
+    {
+        CHIP_ERROR error = MapBLEError(ret);
+        ChipLogError(DeviceLayer, "sl_bt_legacy_advertiser_set_data() - Scan Response failed: %s", ErrorStr(error));
+
+        return error;
+    }
+
+    return MapBLEError(ret);
+}
+
+CHIP_ERROR BLEManagerImpl::SilabsConfigureRandomAddress()
+{
+    const uint8_t kResolvableRandomAddrType = 2; // Private resolvable random address type
+    bd_addr unusedBdAddr;                        // We can ignore this field when setting random address.
+    sl_bt_advertiser_set_random_address(advertising_set_handle, kResolvableRandomAddrType, unusedBdAddr, &unusedBdAddr);
+    (void) unusedBdAddr;
+
+    return CHIP_NO_ERROR;
+}
+
+CHIP_ERROR BLEManagerImpl::SilabsStartAdvertising(uint32_t minInterval, uint32_t maxInterval)
+{
+    sl_status_t ret = SL_STATUS_OK;
+
+    uint16_t numConnections = NumConnections();
+    uint8_t connectableAdv =
+        (numConnections < kMaxConnections) ? sl_bt_advertiser_connectable_scannable : sl_bt_advertiser_scannable_non_connectable;
+
+    // Set Advertising timings
+    ret = sl_bt_advertiser_set_timing(advertising_set_handle, minInterval, maxInterval, 0, 0);
+    if (ret != SL_STATUS_OK)
+    {
+        CHIP_ERROR error = MapBLEError(ret);
+        ChipLogError(DeviceLayer, "sl_bt_advertiser_set_timing() failed: %s", ErrorStr(error));
+
+        return error;
+    }
+
+    // Configure Advertiser
+    sl_bt_advertiser_configure(advertising_set_handle, 1);
+
+    // Start Advertising
+    ret = sl_bt_legacy_advertiser_start(advertising_set_handle, connectableAdv);
+    if (ret != SL_STATUS_OK)
+    {
+        CHIP_ERROR error = MapBLEError(ret);
+        ChipLogError(DeviceLayer, "sl_bt_legacy_advertiser_start() failed: %s", ErrorStr(error));
+
+        return error;
+    }
+
+    return CHIP_NO_ERROR;
+}
+
+CHIP_ERROR BLEManagerImpl::SilabsStopAdvertising()
+{
+    sl_status_t ret  = sl_bt_advertiser_stop(advertising_set_handle);
+    CHIP_ERROR error = MapBLEError(ret);
+
+    if (error != CHIP_NO_ERROR)
+    {
+        ChipLogError(DeviceLayer, "sl_bt_advertiser_set_timing() failed: %s", ErrorStr(error));
+    }
+
+    return error;
+}
+
+CHIP_ERROR BLEManagerImpl::SilabsConnectionClose(BLE_CONNECTION_OBJECT conId)
+{
+    sl_status_t ret  = sl_bt_connection_close(conId);
+    CHIP_ERROR error = MapBLEError(ret);
+
+    if (error != CHIP_NO_ERROR)
+    {
+        ChipLogError(DeviceLayer, "sl_bt_connection_close() failed: %s", ErrorStr(error));
+    }
+
+    return error;
+}
+
+CHIP_ERROR BLEManagerImpl::MapBLEError(int bleErr)
+{
+    switch (bleErr)
+    {
+    case SL_STATUS_OK:
+        return CHIP_NO_ERROR;
+    case SL_STATUS_BT_ATT_INVALID_ATT_LENGTH:
+        return CHIP_ERROR_INVALID_STRING_LENGTH;
+    case SL_STATUS_INVALID_PARAMETER:
+        return CHIP_ERROR_INVALID_ARGUMENT;
+    case SL_STATUS_INVALID_STATE:
+        return CHIP_ERROR_INCORRECT_STATE;
+    case SL_STATUS_NOT_SUPPORTED:
+        return CHIP_ERROR_UNSUPPORTED_CHIP_FEATURE;
+    default:
+        return CHIP_ERROR(ChipError::Range::kPlatform, bleErr + CHIP_DEVICE_CONFIG_SILABS_BLE_ERROR_MIN);
+    }
 }
 
 } // namespace Internal
