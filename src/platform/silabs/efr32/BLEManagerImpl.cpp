@@ -21,6 +21,22 @@ extern "C" {
 }
 #include "gatt_db.h"
 
+/**********************************************************
+ * Constant
+ *********************************************************/
+
+namespace {
+
+// Default Connection  parameters
+constexpr uint16_t kBleConfigMinInterval = 16; // Time = Value x 1.25 ms = 30ms
+constexpr uint16_t kBleConfigMaxInterval = 80; // Time = Value x 1.25 ms = 100ms
+constexpr uint16_t kBleConfigLatency     = 0;
+constexpr uint16_t kBleConfigTimeout     = 100;    // Time = Value x 10 ms = 1s
+constexpr uint16_t kBleConfigMinCeLength = 0;      // Leave to min value
+constexpr uint16_t kBleConfigMaxCeLength = 0xFFFF; // Leave to max value
+
+} // namespace
+
 namespace chip {
 namespace DeviceLayer {
 namespace Internal {
@@ -29,20 +45,14 @@ namespace Internal {
 BLEManagerImpl BLEManagerImpl::sInstance;
 
 /**********************************************************
- * Constant
- *********************************************************/
-
-// Default Connection  parameters
-static constexpr uint16_t kBleConfigMinInterval = 16; // Time = Value x 1.25 ms = 30ms
-static constexpr uint16_t kBleConfigMaxInterval = 80; // Time = Value x 1.25 ms = 100ms
-static constexpr uint16_t kBleConfigLatency     = 0;
-static constexpr uint16_t kBleConfigTimeout     = 100;    // Time = Value x 10 ms = 1s
-static constexpr uint16_t kBleConfigMinCeLength = 0;      // Leave to min value
-static constexpr uint16_t kBleConfigMaxCeLength = 0xFFFF; // Leave to max value
-
-/**********************************************************
  * BLEManagerImpl Implementation
  *********************************************************/
+
+CHIP_ERROR BleManagerAbstraction::SilabsInitBLEManager()
+{
+    // EFR32 Platform Does not require a platform init
+    return CHIP_NO_ERROR;
+}
 
 CHIP_ERROR BLEManagerImpl::SilabsSendIndication(uint8_t connectionId, uint16_t characteristicId, size_t length, uint8_t * data)
 {
@@ -219,10 +229,8 @@ extern "C" void sl_bt_on_event(sl_bt_msg_t * evt)
         RAIL_Version_t railVer;
         RAIL_GetVersion(&railVer, true);
         ChipLogProgress(DeviceLayer, "RAIL version:, v%d.%d.%d-b%d", railVer.major, railVer.minor, railVer.rev, railVer.build);
-        sl_bt_connection_set_default_parameters(
-            chip::DeviceLayer::Internal::kBleConfigMinInterval, chip::DeviceLayer::Internal::kBleConfigMaxInterval,
-            chip::DeviceLayer::Internal::kBleConfigLatency, chip::DeviceLayer::Internal::kBleConfigTimeout,
-            chip::DeviceLayer::Internal::kBleConfigMinCeLength, chip::DeviceLayer::Internal::kBleConfigMaxCeLength);
+        sl_bt_connection_set_default_parameters(kBleConfigMinInterval, kBleConfigMaxInterval, kBleConfigLatency, kBleConfigTimeout,
+                                                kBleConfigMinCeLength, kBleConfigMaxCeLength);
     }
     break;
 

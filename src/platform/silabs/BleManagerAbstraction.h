@@ -19,7 +19,7 @@
 /**
  *    @file
  *          Provides an Abstract Template class of the BLEManager singleton object
- *          for the Silicon Labs platforms.
+ *          for Silicon Labs platforms.
  */
 
 #pragma once
@@ -36,7 +36,7 @@ namespace Internal {
 using namespace chip::Ble;
 
 /**
- * Abstract template implementation of the BLEManager singleton object for the Silabs platforms.
+ * Abstract template implementation of the BLEManager singleton object for Silicon Labs platforms.
  */
 class BleManagerAbstraction : public BLEManager, private BleLayer, private BlePlatformDelegate, private BleApplicationDelegate
 {
@@ -57,6 +57,7 @@ public:
 
 protected:
     // ===== Platform Abstraction Implementation Functions
+    virtual CHIP_ERROR SilabsInitBLEManager()                                                                               = 0;
     virtual CHIP_ERROR SilabsSendIndication(uint8_t connectionId, uint16_t characteristicId, size_t length, uint8_t * data) = 0;
     virtual CHIP_ERROR MapBLEError(int bleErr)                                                                              = 0;
     virtual CHIP_ERROR SilabsSetAdvertiserData(size_t advDataLength, uint8_t * advData, size_t responseDataLength,

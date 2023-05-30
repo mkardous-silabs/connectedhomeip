@@ -40,7 +40,7 @@ private:
     CHIP_ERROR SilabsConfigureRandomAddress();
     CHIP_ERROR SilabsStartAdvertising(uint32_t minInterval, uint32_t maxInterval);
     CHIP_ERROR SilabsStopAdvertising();
-    CHIP_ERROR SilabsConnectionClose(BLE_CONNECTION_OBJECT conId);    
+    CHIP_ERROR SilabsConnectionClose(BLE_CONNECTION_OBJECT conId);
     CHIP_ERROR MapBLEError(int bleErr);
 
     // The advertising set handle allocated from Bluetooth stack.

@@ -31,8 +31,8 @@
 
 #include <platform/silabs/BleManagerAbstraction.h>
 
-#include "sl_bt_api.h"
 #include "gatt_db.h"
+#include "sl_bt_api.h"
 
 #include <ble/CHIPBleServiceData.h>
 #include <lib/support/CodeUtils.h>
@@ -82,6 +82,10 @@ CHIP_ERROR BleManagerAbstraction::_Init()
 {
     CHIP_ERROR err;
 
+    // BLE Manager Platform Init
+    err = SilabsInitBLEManager();
+    SuccessOrExit(err);
+
     // Initialize the CHIP BleLayer.
     err = BleLayer::Init(this, this, &DeviceLayer::SystemLayer());
     SuccessOrExit(err);
@@ -121,7 +125,8 @@ uint16_t BleManagerAbstraction::_NumConnections(void)
 
 CHIP_ERROR BleManagerAbstraction::_SetAdvertisingEnabled(bool val)
 {
-    VerifyOrReturnError(mServiceMode != ConnectivityManager::kCHIPoBLEServiceMode_NotSupported, CHIP_ERROR_UNSUPPORTED_CHIP_FEATURE);
+    VerifyOrReturnError(mServiceMode != ConnectivityManager::kCHIPoBLEServiceMode_NotSupported,
+                        CHIP_ERROR_UNSUPPORTED_CHIP_FEATURE);
 
     if (mFlags.Has(Flags::kAdvertisingEnabled) != val)
     {
@@ -148,7 +153,7 @@ CHIP_ERROR BleManagerAbstraction::_SetAdvertisingMode(BLEAdvertisingMode mode)
 
     mFlags.Set(Flags::kRestartAdvertising);
     PlatformMgr().ScheduleWork(DriveBLEState, reinterpret_cast<intptr_t>(this));
-    
+
     return CHIP_NO_ERROR;
 }
 
@@ -156,7 +161,7 @@ CHIP_ERROR BleManagerAbstraction::_GetDeviceName(char * buf, size_t bufSize)
 {
     VerifyOrReturnError(strlen(mDeviceName) < bufSize, CHIP_ERROR_BUFFER_TOO_SMALL)
 
-    strcpy(buf, mDeviceName);
+        strcpy(buf, mDeviceName);
     return CHIP_NO_ERROR;
 }
 
@@ -181,7 +186,7 @@ CHIP_ERROR BleManagerAbstraction::_SetDeviceName(const char * deviceName)
     {
         mDeviceName[0] = 0;
     }
-    
+
     PlatformMgr().ScheduleWork(DriveBLEState, reinterpret_cast<intptr_t>(this));
     return CHIP_NO_ERROR;
 }
