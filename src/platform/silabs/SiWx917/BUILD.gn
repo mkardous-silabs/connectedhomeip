@@ -91,10 +91,7 @@ static_library("SiWx917") {
       sources += [ "${silabs_platform_dir}/efr32/CHIPCryptoPALPsaEfr32.cpp" ]
     }
 
-    public_deps += [
-      "${chip_root}/src/crypto",
-      "${mbedtls_root}:mbedtls",
-    ]
+    public_deps += [ "${chip_root}/src/crypto" ]
   }
 
   sources += [

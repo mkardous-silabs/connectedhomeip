@@ -19,6 +19,7 @@
  *    @file
  *      mbedTLS based implementation of CHIP crypto primitives
  */
+#define MBEDTLS_ALLOW_PRIVATE_ACCESS
 
 #include <crypto/CHIPCryptoPAL.h>
 
@@ -85,6 +86,8 @@ namespace Crypto {
 #define CHIP_CRYPTO_PAL_PRIVATE_X509(x) x
 #endif
 
+namespace {
+
 typedef struct
 {
     bool mInitialized;
@@ -93,9 +96,15 @@ typedef struct
     mbedtls_entropy_context mEntropy;
 } EntropyContext;
 
-static EntropyContext gsEntropyContext;
+typedef struct
+{
+    uint8_t private_key[NUM_ECC_BYTES];
+    uint8_t public_key[2 * NUM_ECC_BYTES];
+} mbedtls_uecc_keypair;
 
-static void _log_mbedTLS_error(int error_code)
+EntropyContext gsEntropyContext;
+
+void _log_mbedTLS_error(int error_code)
 {
     if (error_code != 0 && error_code != UECC_SUCCESS)
     {
@@ -110,7 +119,7 @@ static void _log_mbedTLS_error(int error_code)
     }
 }
 
-static bool _isValidTagLength(size_t tag_length)
+bool _isValidTagLength(size_t tag_length)
 {
     if (tag_length == 8 || tag_length == 12 || tag_length == 16)
     {
@@ -118,6 +127,13 @@ static bool _isValidTagLength(size_t tag_length)
     }
     return false;
 }
+
+inline mbedtls_uecc_keypair * mbedtls_pk_uecc(const mbedtls_pk_context pk)
+{
+    return ((mbedtls_uecc_keypair *) (pk).pk_ctx);
+}
+
+} // namespace
 
 CHIP_ERROR AES_CCM_encrypt(const uint8_t * plaintext, size_t plaintext_length, const uint8_t * aad, size_t aad_length,
                            const Aes128KeyHandle & key, const uint8_t * nonce, size_t nonce_length, uint8_t * ciphertext,

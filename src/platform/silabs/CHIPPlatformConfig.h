@@ -45,7 +45,7 @@
 #if CHIP_HAVE_CONFIG_H
 #include <crypto/CryptoBuildConfig.h>
 #endif
-#if (CHIP_CRYPTO_PLATFORM == 1)
+#if (CHIP_CRYPTO_PLATFORM == 1) && (SL_MBEDTLS_USE_TINYCRYPT == 0)
 #include "psa/crypto.h"
 
 #if !defined(CHIP_CONFIG_SHA256_CONTEXT_SIZE)
@@ -56,7 +56,7 @@
 #define CHIP_CONFIG_SHA256_CONTEXT_ALIGN psa_hash_operation_t
 #endif
 
-#endif // CHIP_CRYPTO_PLATFORM
+#endif // CHIP_CRYPTO_PLATFORM && (SL_MBEDTLS_USE_TINYCRYPT == 0)
 
 // ==================== General Configuration Overrides ====================
 

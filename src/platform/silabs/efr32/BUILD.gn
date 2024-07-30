@@ -111,10 +111,7 @@ static_library("efr32") {
       "Efr32PsaOperationalKeystore.h",
     ]
 
-    public_deps += [
-      "${chip_root}/src/crypto",
-      "${mbedtls_root}:mbedtls",
-    ]
+    public_deps += [ "${chip_root}/src/crypto" ]
   }
 
   if (chip_enable_openthread) {

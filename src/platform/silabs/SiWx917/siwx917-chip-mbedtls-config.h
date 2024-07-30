@@ -100,6 +100,10 @@
 typedef void mbedtls_ecp_restart_ctx;
 #endif
 
+#define MBEDTLS_CAN_ECDH
+#define MBEDTLS_PK_CAN_ECDSA_SIGN
+#define MBEDTLS_PK_HAVE_ECC_KEYS
+
 #endif // SL_MBEDTLS_USE_TINYCRYPT
 
 // SLC GENERATED
