@@ -230,6 +230,11 @@ source_set("siwx917-common") {
     }
   }
 
+  if (chip_enable_icd_server) {
+    public_deps +=
+        [ "${silabs_common_plat_dir}/SiWx917/icd:siwx-sleep-manager" ]
+  }
+
   # DIC
   if (enable_dic) {
     public_deps +=
