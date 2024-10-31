@@ -15,7 +15,10 @@
 import("//build_overrides/chip.gni")
 
 config("siwx-sleep-manager-config") {
-  include_dirs = [ "." ]
+  include_dirs = [
+    ".",
+    "${chip_root}/platform/silabs/wifi",
+  ]
   defines = []
 }
 
@@ -26,7 +29,9 @@ source_set("siwx-sleep-manager") {
   ]
 
   public_deps = [
+    "${chip_root}/examples/platform/silabs/SiWx917:wifi-interface",
     "${chip_root}/src/app:app",
+    "${chip_root}/src/app/icd/server:icd-server-config",
     "${chip_root}/src/app/icd/server:manager",
     "${chip_root}/src/app/icd/server:observer",
     "${chip_root}/src/lib/core",

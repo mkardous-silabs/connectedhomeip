@@ -15,6 +15,8 @@
  */
 
 #include "SiWxSleepManager.h"
+#include "wifi/WifiInterfaceAbstraction.h"
+#include <lib/support/logging/CHIPLogging.h>
 
 using namespace chip::app;
 
@@ -34,7 +36,10 @@ void SiWxSleepManager::OnEnterActiveMode()
 
 void SiWxSleepManager::OnEnterIdleMode()
 {
-    // Execution logic for entering idle mode
+    if (sl_matter_wifi_disconnect() != SL_STATUS_OK)
+    {
+        ChipLogError(AppServer, "SiWxSleepManager failed to disconnect from the Wi-Fi Network!");
+    }
 }
 
 void SiWxSleepManager::OnSubscriptionEstablished(ReadHandler & aReadHandler)
