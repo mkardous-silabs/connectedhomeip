@@ -48,6 +48,14 @@ public:
 
     typedef void (*Callback_fn_initiated)(OperationalStateEnum action);
     typedef void (*Callback_fn_completed)();
+
+    /**
+     * @brief Set the application callbacks to be executed by the Dishwasher manager.
+     *        The operations are executed within the Chip task. They do not need to aqcuire the chip task lock nor should they.
+     *
+     * @param aActionInitiated_CB Callback is called during the Cycle operation with the cycle to execute
+     * @param aActionCompleted_CB Callback is called when this operation is completed
+     */
     void SetCallbacks(Callback_fn_initiated aActionInitiated_CB, Callback_fn_completed aActionCompleted_CB);
 
     DeviceEnergyManagementDelegate * GetDEMDelegate()
@@ -86,6 +94,8 @@ private:
 
     Callback_fn_initiated mActionInitiated_CB;
     Callback_fn_completed mActionCompleted_CB;
+
+    OperationalStateEnum GetNextOperationalState();
 
     // DEM Manufacturer Delegate
     DeviceEnergyManagementManager * mDEMInstance;

@@ -20,6 +20,7 @@
 #include <headers/ProvisionEncoder.h>
 #include <headers/ProvisionStorage.h>
 #include <lib/core/CHIPEncoding.h>
+#include <lib/support/BytesToHex.h>
 #include <lib/support/CHIPMemString.h>
 #include <lib/support/CodeUtils.h>
 #include <platform/CHIPDeviceConfig.h>
@@ -733,9 +734,35 @@ CHIP_ERROR Storage::SetOtaTlvEncryptionKey(const ByteSpan & value)
 CHIP_ERROR Storage::GetTestEventTriggerKey(MutableByteSpan & keySpan)
 {
 #ifdef SL_MATTER_TEST_EVENT_TRIGGER_ENABLED
-    // TODO: Implement Getter
-    // Adding the same return twice to have the function structure
-    return CHIP_ERROR_NOT_IMPLEMENTED;
+    constexpr size_t kEnableKeyLength = 16; // Expected byte size of the EnableKey
+    CHIP_ERROR err                    = CHIP_NO_ERROR;
+    size_t keyLength                  = 0;
+
+    VerifyOrReturnError(keySpan.size() >= kEnableKeyLength, CHIP_ERROR_BUFFER_TOO_SMALL);
+
+    // TODO : Use the correct Flash::Get to get the test event trigger key
+    // err = Flash::Get(Parameters::ID::kTestEventTriggerKey, keySpan.data(), keySpan.size(), keyLength);
+    err = CHIP_DEVICE_ERROR_CONFIG_NOT_FOUND;
+
+#ifndef NDEBUG
+#ifdef SL_MATTER_TEST_EVENT_TRIGGER_ENABLE_KEY
+    if (err == CHIP_DEVICE_ERROR_CONFIG_NOT_FOUND)
+    {
+
+        constexpr char enableKey[] = SL_MATTER_TEST_EVENT_TRIGGER_ENABLE_KEY;
+        if (chip::Encoding::HexToBytes(enableKey, strlen(enableKey), keySpan.data(), kEnableKeyLength) != kEnableKeyLength)
+        {
+            // enableKey Hex String doesn't have the correct length
+            memset(keySpan.data(), 0, keySpan.size());
+            return CHIP_ERROR_INTERNAL;
+        }
+        err = CHIP_NO_ERROR;
+    }
+#endif // SL_MATTER_TEST_EVENT_TRIGGER_ENABLE_KEY
+#endif // NDEBUG
+
+    keySpan.reduce_size(kEnableKeyLength);
+    return err;
 #else
     return CHIP_ERROR_NOT_IMPLEMENTED;
 #endif // SL_MATTER_TEST_EVENT_TRIGGER_ENABLED

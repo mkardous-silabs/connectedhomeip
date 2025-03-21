@@ -204,9 +204,7 @@ void AppTask::ActionInitiated(OperationalStateEnum action)
         action = OperationalStateEnum::kError;
     }
 
-    PlatformMgr().LockChipStack();
     CHIP_ERROR err = Clusters::OperationalState::GetInstance()->SetOperationalState(to_underlying(action));
-    PlatformMgr().UnlockChipStack();
     if (err != CHIP_NO_ERROR)
     {
         SILABS_LOG("ERR: updating Operational state %x", err);

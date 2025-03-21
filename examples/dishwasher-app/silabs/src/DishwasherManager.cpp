@@ -91,29 +91,38 @@ void DishwasherManager::SetCallbacks(Callback_fn_initiated aActionInitiated_CB, 
     mActionCompleted_CB = aActionCompleted_CB;
 }
 
+OperationalStateEnum DishwasherManager::GetNextOperationalState()
+{
+    OperationalStateEnum action;
+    switch (mState)
+    {
+    case OperationalStateEnum::kRunning:
+        action = OperationalStateEnum::kPaused;
+        break;
+    case OperationalStateEnum::kPaused:
+        action = OperationalStateEnum::kStopped;
+        break;
+    case OperationalStateEnum::kStopped:
+        action = OperationalStateEnum::kRunning;
+        break;
+    case OperationalStateEnum::kError:
+        action = OperationalStateEnum::kStopped;
+        break;
+    default:
+        break;
+    }
+
+    return action;
+}
+
 void DishwasherManager::CycleOperationalState()
 {
     if (mActionInitiated_CB)
     {
-        OperationalStateEnum action;
-        switch (mState)
-        {
-        case OperationalStateEnum::kRunning:
-            action = OperationalStateEnum::kPaused;
-            break;
-        case OperationalStateEnum::kPaused:
-            action = OperationalStateEnum::kStopped;
-            break;
-        case OperationalStateEnum::kStopped:
-            action = OperationalStateEnum::kRunning;
-            break;
-        case OperationalStateEnum::kError:
-            action = OperationalStateEnum::kStopped;
-            break;
-        default:
-            break;
-        }
-        mActionInitiated_CB(action);
+        DeviceLayer::PlatformMgr().ScheduleWork([](intptr_t) {
+            OperationalStateEnum action = GetDishwasherManager()->GetNextOperationalState();
+            GetDishwasherManager()->mActionInitiated_CB(action);
+        });
     }
 }
 
@@ -124,7 +133,7 @@ void DishwasherManager::UpdateOperationState(OperationalStateEnum state)
 
     if (mActionCompleted_CB)
     {
-        mActionCompleted_CB();
+        DeviceLayer::PlatformMgr().ScheduleWork([](intptr_t) { GetDishwasherManager()->mActionCompleted_CB(); });
     }
 }
 
