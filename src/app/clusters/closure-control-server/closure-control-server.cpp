@@ -61,59 +61,65 @@ bool Instance::SupportsOptAttr(OptionalAttribute aOptionalAttrs) const
     return mOptionalAttrs.Has(aOptionalAttrs);
 }
 
-bool Instance::IsSupportedState(MainStateEnum aMainState)
+bool Instance::IsSupportedMainState(MainStateEnum aMainState)
 {
+    bool isSupported = false;
+
     switch (aMainState)
     {
     case MainStateEnum::kCalibrating:
-        return HasFeature(Feature::kCalibration);
+        isSupported = HasFeature(Feature::kCalibration);
+        break;
     case MainStateEnum::kProtected:
-        return HasFeature(Feature::kProtection);
+        isSupported = HasFeature(Feature::kProtection);
+        break;
     case MainStateEnum::kDisengaged:
-        return HasFeature(Feature::kManuallyOperable);
+        isSupported = HasFeature(Feature::kManuallyOperable);
+        break;
     default:
-        // Remaining MainState have Mandatory conformance,so will be supported.
-        return true;
+        // Remaining MainState have Mandatory conformance, so will be supported.
+        isSupported = true;
+        break;
     }
-    return true;
+
+    return isSupported;
 }
 
 CHIP_ERROR Instance::SetMainState(MainStateEnum aMainState)
 {
-    if (!IsSupportedState(aMainState))
-    {
-        return CHIP_ERROR_INVALID_ARGUMENT;
-    }
+    // Where is the validation for the main state transition? The attribute defines the state machines that needs to be implemented
+
+    VerifyOrReturnError(IsSupportedMainState(aMainState), CHIP_ERROR_INVALID_ARGUMENT);
+
     // If the Main State has changed, trigger the attribute change callback
-    if (mMainState != aMainState)
-    {
-        mMainState = aMainState;
-        MatterReportingAttributeChangeCallback(mDelegate.GetEndpointId(), ClosureControl::Id, Attributes::MainState::Id);
-        UpdateCountdownTimeFromClusterLogic();
-    }
+    VerifyOrReturnError(mMainState != aMainState, CHIP_NO_ERROR);
+
+    mMainState = aMainState;
+    MatterReportingAttributeChangeCallback(mDelegate.GetEndpointId(), ClosureControl::Id, Attributes::MainState::Id);
+    UpdateCountdownTimeFromClusterLogic();
+
     return CHIP_NO_ERROR;
 }
 
 CHIP_ERROR Instance::SetOverallState(const GenericOverallState & aOverallState)
 {
     // If the overall state has changed, trigger the attribute change callback
-    if (!(mOverallState == aOverallState))
-    {
-        mOverallState = aOverallState;
-        MatterReportingAttributeChangeCallback(mDelegate.GetEndpointId(), ClosureControl::Id, Attributes::OverallState::Id);
-    }
+    VerifyOrReturnError(mOverallState != aOverallState, CHIP_NO_ERROR);
+
+    mOverallState = aOverallState;
+    MatterReportingAttributeChangeCallback(mDelegate.GetEndpointId(), ClosureControl::Id, Attributes::OverallState::Id);
 
     return CHIP_NO_ERROR;
 }
 
 CHIP_ERROR Instance::SetOverallTarget(const GenericOverallTarget & aOverallTarget)
 {
+
     // If the overall target has changed, trigger the attribute change callback
-    if (!(mOverallTarget == aOverallTarget))
-    {
-        mOverallTarget = aOverallTarget;
-        MatterReportingAttributeChangeCallback(mDelegate.GetEndpointId(), ClosureControl::Id, Attributes::OverallTarget::Id);
-    }
+    VerifyOrReturnError(mOverallTarget != aOverallTarget, CHIP_NO_ERROR);
+
+    mOverallTarget = aOverallTarget;
+    MatterReportingAttributeChangeCallback(mDelegate.GetEndpointId(), ClosureControl::Id, Attributes::OverallTarget::Id);
 
     return CHIP_NO_ERROR;
 }
@@ -135,8 +141,10 @@ const GenericOverallTarget & Instance::GetOverallTarget() const
 
 void Instance::UpdateCountdownTime(bool fromDelegate)
 {
-    app::DataModel::Nullable<uint32_t> newCountdownTime = mDelegate.GetCountdownTime();
-    auto now                                            = System::SystemClock().GetMonotonicTimestamp();
+
+    app::DataModel::Nullable<uint32_t> newCountdownTime /* isnt the best name since it is not garanteed that the value is new */ =
+        mDelegate.GetCountdownTime();
+    auto now = System::SystemClock().GetMonotonicTimestamp();
 
     bool markDirty = false;
 
@@ -163,17 +171,14 @@ void Instance::UpdateCountdownTime(bool fromDelegate)
 // AttributeAccessInterface
 CHIP_ERROR Instance::Read(const ConcreteReadAttributePath & aPath, AttributeValueEncoder & aEncoder)
 {
-    VerifyOrDie(aPath.mClusterId == ClosureControl::Id);
+    VerifyOrReturnError(aPath.mClusterId == ClosureControl::Id, CHIP_ERROR_INVALID_PATH_LIST);
 
     switch (aPath.mAttributeId)
     {
     case CountdownTime::Id:
         // Optional Attribute
-        if (SupportsOptAttr(OptionalAttribute::kCountdownTime))
-        {
-            return aEncoder.Encode(mDelegate.GetCountdownTime());
-        }
-        return CHIP_IM_GLOBAL_STATUS(UnsupportedAttribute);
+        VerifyOrReturnError(SupportsOptAttr(OptionalAttribute::kCountdownTime), CHIP_IM_GLOBAL_STATUS(UnsupportedAttribute));
+        return aEncoder.Encode(mDelegate.GetCountdownTime());
 
     case MainState::Id:
         return aEncoder.Encode(GetMainState());
@@ -187,8 +192,8 @@ CHIP_ERROR Instance::Read(const ConcreteReadAttributePath & aPath, AttributeValu
     case OverallTarget::Id:
         return aEncoder.Encode(GetOverallTarget());
 
-    /* FeatureMap - is held locally */
     case FeatureMap::Id:
+        // FeatureMap - is held locally
         return aEncoder.Encode(mFeatures);
     }
 
@@ -197,42 +202,43 @@ CHIP_ERROR Instance::Read(const ConcreteReadAttributePath & aPath, AttributeValu
 
 CHIP_ERROR Instance::EncodeCurrentErrorList(const AttributeValueEncoder::ListEncodeHelper & encoder)
 {
-    CHIP_ERROR err = CHIP_NO_ERROR;
-
     ReturnErrorOnFailure(mDelegate.StartCurrentErrorListRead());
-    for (size_t i = 0; true; i++)
+
+    size_t index = 0;
+
+    do
     {
-        ClosureErrorEnum error;
+        ClosureErrorEnum error = kUnknownEnumValue;
+        CHIP_ERROR err         = mDelegate.GetCurrentErrorListAtIndex(index++, error);
 
-        err = mDelegate.GetCurrentErrorListAtIndex(i, error);
-        // Convert end of list to CHIP_NO_ERROR
-        VerifyOrExit(err != CHIP_ERROR_PROVIDER_LIST_EXHAUSTED, err = CHIP_NO_ERROR);
+        if (err == CHIP_ERROR_PROVIDER_LIST_EXHAUSTED)
+        {
+            break; // End of list, return success
+        }
 
-        // Check if another error occurred before trying to encode
-        SuccessOrExit(err);
+        ReturnErrorOnFailure(err); // Return if another error occurred
 
-        err = encoder.Encode(error);
-        SuccessOrExit(err);
-    }
+        // TODO: How do we validate that there are not duplciates?
+        ReturnErrorOnFailure(encoder.Encode(error)); // Return if encoding fails
+    } while (true);
 
-exit:
-    // Tell the delegate the read is complete
-    ReturnErrorOnFailure(mDelegate.EndCurrentErrorListRead());
-    return err;
+    return mDelegate.EndCurrentErrorListRead();
 }
 
 CHIP_ERROR Instance::Write(const ConcreteDataAttributePath & aPath, AttributeValueDecoder & aDecoder)
 {
-    VerifyOrDie(aPath.mClusterId == ClosureControl::Id);
+    VerifyOrReturnError(aPath.mClusterId == ClosureControl::Id, CHIP_ERROR_INVALID_PATH_LIST);
 
+    // Optional Attribute Write Management
+    if (aPath.mAttributeId == CountdownTime::Id && SupportsOptAttr(OptionalAttribute::kCountdownTime))
+    {
+        return CHIP_IM_GLOBAL_STATUS(UnsupportedWrite);
+    }
+
+    // Default Attribute Write Management
     switch (aPath.mAttributeId)
     {
     case CountdownTime::Id:
-        if (SupportsOptAttr(OptionalAttribute::kCountdownTime))
-        {
-            return CHIP_IM_GLOBAL_STATUS(UnsupportedWrite);
-        }
-        return CHIP_IM_GLOBAL_STATUS(UnsupportedAttribute);
     case MainState::Id:
     case CurrentErrorList::Id:
     case OverallState::Id:
@@ -281,13 +287,15 @@ void Instance::InvokeCommand(HandlerContext & handlerContext)
 
 void Instance::HandleStop(HandlerContext & ctx, const Commands::Stop::DecodableType & commandData)
 {
+    // I don't think it is a resonable expectation that all the specification rqeuirements be in the app.
     Status status = mDelegate.Stop();
-
     ctx.mCommandHandler.AddStatus(ctx.mRequestPath, status);
 }
 
 void Instance::HandleMoveTo(HandlerContext & ctx, const Commands::MoveTo::DecodableType & commandData)
 {
+
+    // I don't think it is a resonable expectation that all the specification rqeuirements be in the app.
     Status status = mDelegate.MoveTo(commandData.position, commandData.latch, commandData.speed);
 
     ctx.mCommandHandler.AddStatus(ctx.mRequestPath, status);
@@ -295,8 +303,8 @@ void Instance::HandleMoveTo(HandlerContext & ctx, const Commands::MoveTo::Decoda
 
 void Instance::HandleCalibrate(HandlerContext & ctx, const Commands::Calibrate::DecodableType & commandData)
 {
+    // I don't think it is a resonable expectation that all the specification rqeuirements be in the app.
     Status status = mDelegate.Calibrate();
-
     ctx.mCommandHandler.AddStatus(ctx.mRequestPath, status);
 }
 

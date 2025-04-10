@@ -50,26 +50,40 @@ public:
 
     // ------------------------------------------------------------------
     // Commands
-    virtual Protocols::InteractionModel::Status Stop()                                                      = 0;
+
+    // TODO: Comments with specifiquement requirements, expected errors
+    virtual Protocols::InteractionModel::Status Stop() = 0;
+
+    // TODO: Comments with specifiquement requirements, expected errors
     virtual Protocols::InteractionModel::Status MoveTo(const Optional<TargetPositionEnum> & position,
                                                        const Optional<TargetLatchEnum> & latch,
                                                        const Optional<Globals::ThreeLevelAutoEnum> & speed) = 0;
-    virtual Protocols::InteractionModel::Status Calibrate()                                                 = 0;
+
+    // TODO: Comments with specifiquement requirements, expected errors
+    virtual Protocols::InteractionModel::Status Calibrate() = 0;
 
     // ------------------------------------------------------------------
     // Get attribute methods
+
     virtual DataModel::Nullable<uint32_t> GetCountdownTime() = 0;
 
-    /* These functions are called by the ReadAttribute handler to iterate through lists
+    /*
+     * These functions are called by the ReadAttribute handler to iterate through lists.
      * The cluster server will call Start<Type>Read to allow the delegate to create a temporary
      * lock on the data.
      * The delegate is expected to not change these values once Start<Type>Read has been called
      * until the End<Type>Read() has been called (i.e. releasing a lock on the data)
      */
+
+    // TODO: Comments with specifiquement requirements, expected errors
     virtual CHIP_ERROR StartCurrentErrorListRead() = 0;
+
+    // TODO: Comments with specifiquement requirements, expected errors
     // The delegate is expected to return CHIP_ERROR_PROVIDER_LIST_EXHAUSTED to indicate end of list.
     virtual CHIP_ERROR GetCurrentErrorListAtIndex(size_t, ClosureErrorEnum &) = 0;
-    virtual CHIP_ERROR EndCurrentErrorListRead()                              = 0;
+
+    // TODO: Comments with specifiquement requirements, expected errors
+    virtual CHIP_ERROR EndCurrentErrorListRead() = 0;
 
 protected:
     EndpointId mEndpointId = chip::kInvalidEndpointId;
@@ -86,23 +100,27 @@ public:
     /**
      * @brief Creates a closure control cluster instance. The Init() function needs to be called for
      *        this instance to be registered and called by the interaction model at the appropriate times.
+     *
      * @param[in] aEndpointId The endpoint on which this cluster exists.
      * @param[in] aDelegate The Delegate used by this Instance.
      * @param[in] aFeatures The bitmask value that identifies which features are supported by this instance.
      * @param[in] aOptionalAttrs The bitmask Value that identifies which optional attributes are supported by this instance.
      */
-    Instance(EndpointId aEndpointId, Delegate & aDelegate, BitMask<Feature> aFeatures, BitMask<OptionalAttribute> aOptionalAttrs) :
+    Instance(EndpointId aEndpointId, Delegate & aDelegate /* this should be const if it is only in? */, BitMask<Feature> aFeatures,
+             BitMask<OptionalAttribute> aOptionalAttrs) :
         AttributeAccessInterface(MakeOptional(aEndpointId), ClosureControl::Id),
         CommandHandlerInterface(MakeOptional(aEndpointId), ClosureControl::Id), mDelegate(aDelegate), mFeatures(aFeatures),
         mOptionalAttrs(aOptionalAttrs)
     {
-        /* set the base class delegates endpointId */
+        // Set the base class delegates endpointId
         mDelegate.SetEndpointId(aEndpointId);
-        /* set Countdown Time quiet reporting policy as per reporting requirements in specification */
+
+        // Set Countdown Time quiet reporting policy as per reporting requirements in specification
         mCountdownTime.policy()
             .Set(QuieterReportingPolicyEnum::kMarkDirtyOnIncrement)
             .Set(QuieterReportingPolicyEnum::kMarkDirtyOnChangeToFromZero);
     }
+
     ~Instance() { Shutdown(); }
 
     CHIP_ERROR Init();
@@ -112,10 +130,13 @@ public:
     bool SupportsOptAttr(OptionalAttribute aOptionalAttrs) const;
 
     // Attribute setters
+
     /**
      * @brief Set Main State.
      * @param[in] aMainState The Main state that should now be the current one.
+     *
      * @return CHIP_NO_ERROR if set was successful.
+     *         TODO: ADD error cases as well
      */
     CHIP_ERROR SetMainState(MainStateEnum aMainState);
 
@@ -163,9 +184,10 @@ public:
      * @param[in] aMainState MainState
      * @return true if State is supported, false if State is not supported
      */
-    bool IsSupportedState(MainStateEnum aMainState);
+    bool IsSupportedMainState(
+        MainStateEnum aMainState); // Why is this public or in the class? This should be in an anounymous namespace in the .cpp
 
-protected:
+protected: // Why is there a protected section, do we expect something to inherit this class?
     /**
      * @brief Causes reporting/udpating of CountdownTime attribute from driver if sufficient changes have
      *        occurred (based on Q quality definition for operational state). Calls the Delegate::GetCountdownTime() method.
@@ -178,17 +200,22 @@ protected:
      * @brief Whenever cluster logic wants to trigger an update to report a new updated time,
      *        call this method.
      */
-    inline void UpdateCountdownTimeFromClusterLogic() { UpdateCountdownTime(/* fromDelegate=*/false); }
+    inline void UpdateCountdownTimeFromClusterLogic() { UpdateCountdownTime(/* fromDelegate= */ false); }
 
 private:
     Delegate & mDelegate;
     BitMask<Feature> mFeatures;
     BitMask<OptionalAttribute> mOptionalAttrs;
 
-    app::QuieterReportingAttribute<uint32_t> mCountdownTime{ DataModel::NullNullable };
+    // How is the fallback mechanism supported for the cluster attributes?
+
+    app::QuieterReportingAttribute<uint32_t> mCountdownTime{
+        DataModel::NullNullable
+    }; // Maximum constraint validation isn't present
+
     MainStateEnum mMainState;
-    GenericOverallState mOverallState;
-    GenericOverallTarget mOverallTarget;
+    GenericOverallState mOverallState;   // Does not seem possible to set this attribute to null which is necessary
+    GenericOverallTarget mOverallTarget; // Does not seem possible to set this attribute to null which is necessary
 
     // AttributeAccessInterface
     CHIP_ERROR Read(const ConcreteReadAttributePath & aPath, AttributeValueEncoder & aEncoder) override;

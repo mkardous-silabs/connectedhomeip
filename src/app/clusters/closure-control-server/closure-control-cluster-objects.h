@@ -29,6 +29,7 @@ namespace ClosureControl {
 /**
  * Structure represents the overall state of a closure control cluster derivation instance.
  */
+// How is the conformance for the members of this struct managed?
 struct GenericOverallState : public Structs::OverallStateStruct::Type
 {
     GenericOverallState(Optional<DataModel::Nullable<PositioningEnum>> positioningValue       = NullOptional,
@@ -50,7 +51,8 @@ struct GenericOverallState : public Structs::OverallStateStruct::Type
     void Set(Optional<DataModel::Nullable<PositioningEnum>> positioningValue       = NullOptional,
              Optional<DataModel::Nullable<LatchingEnum>> latchingValue             = NullOptional,
              Optional<DataModel::Nullable<Globals::ThreeLevelAutoEnum>> speedValue = NullOptional,
-             Optional<DataModel::Nullable<uint32_t>> extraInfoValue                = NullOptional)
+             Optional<DataModel::Nullable<uint32_t>> extraInfoValue                = NullOptional) // This isn't in the spec anymore
+                                                                                    // Missing the SecureState
     {
         positioning = positioningValue;
         latching    = latchingValue;
@@ -69,6 +71,7 @@ struct GenericOverallState : public Structs::OverallStateStruct::Type
  */
 struct GenericOverallTarget : public Structs::OverallTargetStruct::Type
 {
+    // How is the conformance for the members of this struct managed?
     GenericOverallTarget(Optional<TargetPositionEnum> targetPositionValue = NullOptional,
                          Optional<TargetLatchEnum> targetLatchValue       = NullOptional,
                          Optional<Globals::ThreeLevelAutoEnum> speedValue = NullOptional)
