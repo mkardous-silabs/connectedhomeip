@@ -19,6 +19,20 @@ import("${chip_root}/build/chip/chip_test_group.gni")
 import("${chip_root}/build/chip/chip_test_suite.gni")
 import("${chip_root}/src/platform/silabs/tests/args.gni")
 
+if (sl_build_unit_tests) {
+  chip_test_suite("platform_tests") {
+    output_name = "libSilabsPlatformTests"
+
+    test_sources = [ "TestKeyValueStoreManagerImpl.cpp" ]
+
+    public_deps = [
+      "${chip_root}/src/lib/core:string-builder-adapters",
+      "${chip_root}/src/lib/support:testing",
+      "${chip_root}/src/platform/silabs/efr32:efr32",
+    ]
+  }
+}
+
 chip_test_group("silabs_platform_tests") {
   tests = []
 
@@ -26,6 +40,7 @@ chip_test_group("silabs_platform_tests") {
     tests += [
       "${chip_root}/examples/platform/silabs/tests:examples_tests",
       "${chip_root}/src/platform/silabs/wifi/icd/tests:wifi_icd_tests",
+      ":platform_tests",
     ]
   }
 }
