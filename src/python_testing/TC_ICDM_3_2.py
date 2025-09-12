@@ -152,26 +152,29 @@ class TC_ICDM_3_2(MatterBaseTest):
     def steps_TC_ICDM_3_2(self) -> list[TestStep]:
         steps = [
             TestStep(0, "Commissioning, already done", is_commissioning=True),
-            TestStep(1, "TH reads from the DUT the RegisteredClients attribute. RegisteredClients is empty."),
-            TestStep("2a", "TH sends RegisterClient command."),
-            TestStep("2b", "TH reads from the DUT the RegisteredClients attribute."),
-            TestStep("2c", "Power cycle DUT."),
-            TestStep("2d", "TH waits for {PIXIT.WAITTIME.REBOOT}"),
-            TestStep("2e", "TH reads from the DUT the RegisteredClients attribute."),
-            TestStep("3a", "TH sends RegisterClient command with same CheckInNodeID1 as in Step 1a and different MonitorSubID2 and Key2."),
-            TestStep("3b", "TH reads from the DUT the RegisteredClients attribute."),
-            TestStep("4a", "TH sends RegisterClient command with same CheckInNodeID1 as in Step 1a and different MonitorSubID3 and Key3, and an invalid VerificationKey3."),
+            TestStep(1, "TH reads from the DUT the FeatureMap. If the CIP feature is not supported on the cluster, skip all remaining steps."),
+            TestStep("2a", "TH reads TestEventTriggersEnabled attribute from General Diagnostics Cluster."),
+            TestStep("2b", "TH sends TestEventTrigger command to General Diagnostics Cluster on Endpoint 0 with EnableKey field set to PIXIT.ICDM.S.TEST_EVENT_TRIGGER_KEY and EventTrigger field set to PIXIT.ICDM.S.TEST_EVENT_TRIGGER for the Active Mode requirement."),
+            TestStep(3, "TH reads from the DUT the RegisteredClients attribute. RegisteredClients is empty."),
+            TestStep("4a", "TH sends RegisterClient command."),
             TestStep("4b", "TH reads from the DUT the RegisteredClients attribute."),
-            TestStep("5a", "TH sends RegisterClient command with same CheckInNodeID1 as in Step 1a and different MonitorSubID4 and Key4, and a valid wrong VerificationKey4."),
+            TestStep("4c", "Power cycle DUT."),
+            TestStep("4d", "TH sends TestEventTrigger command to General Diagnostics Cluster on Endpoint 0 with EnableKey field set to PIXIT.ICDM.S.TEST_EVENT_TRIGGER_KEY and EventTrigger field set to PIXIT.ICDM.S.TEST_EVENT_TRIGGER for the Active Mode requirement."),
+            TestStep("4e", "TH reads from the DUT the RegisteredClients attribute."),
+            TestStep("5a", "TH sends RegisterClient command with same CheckInNodeID1 as in Step 4a and different MonitorSubID2 and Key2."),
             TestStep("5b", "TH reads from the DUT the RegisteredClients attribute."),
-            TestStep("6a", "TH sends UnregisterClient command with CheckInNodeID1."),
+            TestStep("6a", "TH sends RegisterClient command with same CheckInNodeID1 as in Step 4a and different MonitorSubID3 and Key3, and an invalid VerificationKey3."),
             TestStep("6b", "TH reads from the DUT the RegisteredClients attribute."),
-            TestStep(7, "Set the TH to Manage privilege for ICDM cluster."),
-            TestStep("8a", "TH sends RegisterClient command."),
-            TestStep("8b", "TH sends RegisterClient command with same CheckInNodeID5 as in Step 6a and different MonitorSubID6 and Key6, and an invalid VerificationKey6."),
-            TestStep("8c", "TH sends RegisterClient command with same CheckInNodeID5 as in Step 6a and different MonitorSubID7 and Key7, and an valid wrong VerificationKey7."),
-            TestStep("8d", "TH sends RegisterClient command with same CheckInNodeID5 and VerificationKey5 as in Step 6a and different MonitorSubID9 and Key9."),
-            TestStep(9, "TH sends UnregisterClient command with the CheckInNodeID5 and VerificationKey5."),
+            TestStep("7a", "TH sends RegisterClient command with same CheckInNodeID1 as in Step 4a and different MonitorSubID4 and Key4, and a valid wrong VerificationKey4."),
+            TestStep("7b", "TH reads from the DUT the RegisteredClients attribute."),
+            TestStep("8a", "TH sends UnregisterClient command with CheckInNodeID1."),
+            TestStep("8b", "TH reads from the DUT the RegisteredClients attribute."),
+            TestStep(9, "Set the TH to Manage privilege for ICDM cluster."),
+            TestStep("10a", "TH sends RegisterClient command."),
+            TestStep("10b", "TH sends RegisterClient command with same CheckInNodeID5 as in Step 6a and different MonitorSubID6 and Key6, and an invalid VerificationKey6."),
+            TestStep("10c", "TH sends RegisterClient command with same CheckInNodeID5 as in Step 6a and different MonitorSubID7 and Key7, and an valid wrong VerificationKey7."),
+            TestStep("10d", "TH sends RegisterClient command with same CheckInNodeID5 and VerificationKey5 as in Step 6a and different MonitorSubID9 and Key9."),
+            TestStep(11, "TH sends UnregisterClient command with the CheckInNodeID5 and VerificationKey5."),
         ]
         return steps
 
@@ -190,15 +193,6 @@ class TC_ICDM_3_2(MatterBaseTest):
     @async_test_body
     async def test_TC_ICDM_3_2(self):
         is_ci = self.check_pics("PICS_SDK_CI_ONLY")
-
-        if not is_ci:
-            asserts.assert_true('PIXIT.WAITTIME.REBOOT' in self.matter_test_config.global_test_params,
-                                "PIXIT.WAITTIME.REBOOT must be included on the command line in "
-                                "the --int-arg flag as PIXIT.WAITTIME.REBOOT:<wait time>")
-
-            wait_time_reboot = self.matter_test_config.global_test_params['PIXIT.WAITTIME.REBOOT']
-            if wait_time_reboot == 0:
-                asserts.fail("PIXIT.WAITTIME.REBOOT shall be higher than 0.")
 
         # Pre-Condition: Commissioning
         self.step(0)
